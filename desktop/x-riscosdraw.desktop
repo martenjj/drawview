@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-riscosdraw
+Patterns=*.aff;*.AFF
+Comment=RiscOS Draw/DrawPlus drawing
+Icon=fileAFF

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-compressdraw
+Patterns=*.c4b;*.C4B
+Comment=RiscOS compressed 4Mation drawing
+Icon=fileC4B

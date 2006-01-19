@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-riscosposter
+Patterns=*.cc3;*.CC3
+Comment=RiscOS Poster drawing
+Icon=fileCC3

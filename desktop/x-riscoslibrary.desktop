@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-riscoslibrary
+Patterns=*.810;*.553
+Comment=RiscOS Vector/DrawPLus library
+Icon=file810

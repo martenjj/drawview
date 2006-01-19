@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=DrawView
+GenericName=RiscOS Draw file viewer
+Exec=drawview
+Icon=drawview
+Terminal=0
+Type=Application
+Categories=Application;Graphics;
+#MimeType=application/x-compressdraw;application/x-riscosdraw;application/x-riscosgridpro;application/x-riscoslibrary;application/x-riscosposter;application/x-riscosvector
+MimeType=application/x-compressdraw;application/x-riscosdraw;application/x-riscosposter;application/x-riscosvector

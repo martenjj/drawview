@@ -1,0 +1,91 @@
+################################################ -*- mode:simple; -*- ####
+##									##
+##  Project:	DrawView - Configuration				##
+##  SCCS:	<%Z% %M% %I%>					##
+##  Edit:	17-Jan-06						##
+##									##
+##########################################################################
+##									##
+##  Standard RiscOS palette data, for displaying sprites that do not	##
+##  have one.								##
+##									##
+##  Format of this file:						##
+##									##
+##    [bpp]  index  colour						##
+##									##
+##  bpp		Start of palette data for a new mode with that many	##
+##		bits per pixel.						##
+##									##
+##  index	Palette index, in range 0..(2^bpp-1)			##
+##									##
+##  colour	RGB palette colour, in form BBGGRRXX			##
+##									##
+##########################################################################
+##									##
+##  Copyright (c) 2006 Jonathan Marten <jjm@keelhaul.demon.co.uk>	##
+##  Home & download:  http://www.keelhaul.demon.co.uk/acorn/drawview/	##
+##									##
+##  This program is free software; you can redistribute it and/or	##
+##  modify it under the terms of the GNU General Public License as	##
+##  published by the Free Software Foundation; either version 2 of	##
+##  the License, or (at your option) any later version.			##
+##									##
+##  It is distributed in the hope that it will be useful, but		##
+##  WITHOUT ANY WARRANTY; without even the implied warranty of		##
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	##
+##  GNU General Public License for more details.			##
+##									##
+##  You should have received a copy of the GNU General Public		##
+##  License along with this program; see the file COPYING for further	##
+##  details.  If not, write to the Free Software Foundation, Inc.,	##
+##  59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.		##
+##									##
+##########################################################################
+
+
+# 1 bpp: black white
+1	0	00000000
+	1	FFFFFF00
+
+# 2 bpp: black red yellow white
+2	0	00000000
+	1	0000FF00
+	2	00FFFF00
+	3	FFFFFF00
+
+# 4 bpp, desktop
+4	0	FFFFFF00
+	1	DDDDDD00
+	2	BBBBBB00
+	3	99999900
+	4	77777700
+	5	55555500
+	6	33333300
+	7	00000000
+	8	99440000
+	9	00EEEE00
+	10	00CC0000
+	11	0000DD00
+	12	BBEEEE00
+	13	00885500
+	14	00BBFF00
+	15	FFBB0000
+
+# For the standard palette, use this instead:
+# 4 bpp, standard: black red green yellow blue magenta cyan white (twice)
+# 4	0	00000000
+# 	1	0000FF00
+# 	2	00FF0000
+# 	3	00FFFF00
+# 	4	FF000000
+# 	5	FF00FF00
+# 	6	FFFF0000
+# 	7	FFFFFF00
+# 	8	00000000
+# 	9	0000FF00
+# 	10	00FF0000
+# 	11	00FFFF00
+# 	12	FF000000
+# 	13	FF00FF00
+# 	14	FFFF0000
+# 	15	FFFFFF00

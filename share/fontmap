@@ -1,0 +1,75 @@
+################################################ -*- mode:simple; -*- ####
+##									##
+##  Project:	DrawView - Configuration				##
+##  SCCS:	<%Z% %M% %I%>					##
+##  Edit:	19-Jan-06						##
+##									##
+##########################################################################
+##									##
+##  RiscOS font data, for mapping a Draw file font name to a platform	##
+##  font.								##
+##									##
+##  Format of this file:						##
+##									##
+##    riscosname   fontname[,fontname...]   [adjusth adjustv]		##
+##									##
+##  riscosname	RiscOS font name, or one of the special names "SYSTEM"	##
+##		or "DEFAULT".						##
+##									##
+##  fontname	Platform font name, or a list of alternatives tried	##
+##		in order.						##
+##									##
+##  adjusth	Horizontal adjustment factor, multiplier for font	##
+##		width to hopefully achieve the same metrics as the	##
+##		original RiscOS font.  Not currently implemented,	##
+##		except for the "SYSTEM" font.				##
+##									##
+##  adjustv	Vertical adjustment factor.  As above, but not		##
+##		currently implemented at all.				##
+##									##
+##  All font name comparisons are case insensitive.			##
+##									##
+##########################################################################
+##									##
+##  Copyright (c) 2006 Jonathan Marten <jjm@keelhaul.demon.co.uk>	##
+##  Home & download:  http://www.keelhaul.demon.co.uk/acorn/drawview/	##
+##									##
+##  This program is free software; you can redistribute it and/or	##
+##  modify it under the terms of the GNU General Public License as	##
+##  published by the Free Software Foundation; either version 2 of	##
+##  the License, or (at your option) any later version.			##
+##									##
+##  It is distributed in the hope that it will be useful, but		##
+##  WITHOUT ANY WARRANTY; without even the implied warranty of		##
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	##
+##  GNU General Public License for more details.			##
+##									##
+##  You should have received a copy of the GNU General Public		##
+##  License along with this program; see the file COPYING for further	##
+##  details.  If not, write to the Free Software Foundation, Inc.,	##
+##  59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.		##
+##									##
+##########################################################################
+
+
+# System font
+SYSTEM		"lucidatypewriter","fixed"				79 100
+
+# Last resort fallback
+DEFAULT		"arial","helvetica"
+
+# Standard Acorn fonts
+homerton	"arial","helvetica"
+newhall		"century schoolbook l","new century schoolbook"
+corpus		"courier new","courier"
+trinity		"times new roman","times"
+
+# 4Mation fonts
+montclair	"arial","helvetica"
+tabloid		"times new roman","times"
+
+# Others
+helvswiss	"arial","helvetica"
+transport	"arial","helvetica"
+newschbook	"century schoolbook l","new century schoolbook"
+plantin		"book antiqua","palatino"
