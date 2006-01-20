@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Sprites					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	05-Dec-05						//
+//  Edit:	20-Jan-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -67,15 +67,15 @@ public:
 	QImage getImage() const		{ return (img); }
 	QString getError() const	{ return (errstr); }
 
-	drawuint getMode() const { return (mode); }
-	int getBpp() const { return (bpp); }
-	int getColours() const { return (cols); }
-	int getXsize() const { return (xpixels); }
-	int getYsize() const { return (ypixels); }
+	drawuint getMode() const	{ return (mode); }
+	int getBpp() const		{ return (bpp); }
+	int getColours() const		{ return (cols); }
+	int getXsize() const		{ return (xpixels); }
+	int getYsize() const		{ return (ypixels); }
 
-	bool hadPalette() const { return (hadpalette); }
-	bool hasPalette() const { return (palent>0); }
-	bool hasMask() const { return (hasmask); }
+	bool hadPalette() const		{ return (hadpalette); }
+	bool hasPalette() const		{ return (palent>0); }
+	bool hasMask() const		{ return (hasmask); }
 
 private:
 	bool decodeMode();
