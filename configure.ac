@@ -2,7 +2,7 @@
 ##									##
 ##  Project:	DrawView						##
 ##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	18-Jan-06						##
+##  Edit:	20-Jan-06						##
 ##									##
 ##########################################################################
 ##									##
@@ -99,7 +99,7 @@ CPPFLAGS="-W -Wall -Wredundant-decls -Wunused-macros"
 CXXFLAGS="-Wno-deprecated -fno-exceptions"
 
 # Checks for Qt
-AC_PATH_PROG([qt4binprog],[qt3to4],[],[${with_qt4:+${with_qt4}/bin:}$PATH:/usr/qt/4/bin:/usr/lib/qt4/bin:${srcdir}/qt4/bin:${srcdir}/../qt4/bin])
+AC_PATH_PROG([qt4binprog],[qt3to4],[],[${with_qt4:+${with_qt4}/bin:}$PATH:/usr/qt/4/bin:/usr/lib/qt4/bin:${srcdir}/qt4/bin:${srcdir}/../qt4/bin:${prefix}/bin])
 
 AC_MSG_CHECKING([Qt 4 installation])
 if test "${qt4binprog}" = ""
