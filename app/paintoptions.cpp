@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	18-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -55,7 +55,9 @@
 
 PaintOptions::PaintOptions()
 {
-	mFlags = PaintOptions::EnableClipping|PaintOptions::DisplaySkeletonObjects;
+	mFlags = PaintOptions::EnableClipping |
+	         PaintOptions::DisplaySkeletonObjects |
+	         PaintOptions::AntiAlias;
 }
 
 
