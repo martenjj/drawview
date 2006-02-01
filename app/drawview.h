@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	19-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -89,6 +89,7 @@ protected slots:
 	void slotFileMenuAboutToShow();
 
 	void slotToggleClipping(bool on);
+	void slotToggleAntiAlias(bool on);
 	void slotToggleBoxes(bool on);
 	void slotToggleSkeletons(bool on);
 	void slotZoomSelected(QAction *act);
