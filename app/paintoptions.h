@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	15-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -57,7 +57,8 @@ public:
 		DisplayBoundingBoxes	= 0x02,
 		DisplaySkeletonObjects	= 0x04,
 		DrawSkeletonOnly	= 0x08,
-		Preview			= 0x10
+		Preview			= 0x10,
+		AntiAlias		= 0x20,
 	};
 #ifdef QT4
 	Q_DECLARE_FLAGS(PaintFlags,PaintFlag);
