@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	18-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -127,6 +127,8 @@ void DrawWidget::paintEvent(QPaintEvent *pe)
 
 	if (diag!=NULL)					// render the diagram
 	{
+		if (paintopts.flags() & PaintOptions::AntiAlias) p.setRenderHint(QPainter::Antialiasing);
+
 		DrawCoord::begin(this,zoom);		// set for coordinate conversions
 		paintopts.setClippingBox(pe->rect());	// must come after that
 		diag->draw(p,&paintopts);		// draw the diagram
