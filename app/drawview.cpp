@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	19-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -221,6 +221,12 @@ void DrawView::setupActions()
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::EnableClipping);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleClipping(bool)));
+	mview->addAction(act);
+
+	act = new QAction("&Antialiasing",this);
+	act->setCheckable(true);
+	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::AntiAlias);
+	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleAntiAlias(bool)));
 	mview->addAction(act);
 
 	act = new QAction("&Bounding boxes",this);
@@ -456,6 +462,13 @@ void DrawView::setDrawingSize(QPrinter::PageSize size,QPrinter::Orientation orie
 void DrawView::slotToggleClipping(bool on)
 {
 	wDrawing->paintOptions()->setFlags(PaintOptions::EnableClipping,on);
+}
+
+
+void DrawView::slotToggleAntiAlias(bool on)
+{
+	wDrawing->paintOptions()->setFlags(PaintOptions::AntiAlias,on);
+	wDrawing->update();
 }
 
 
