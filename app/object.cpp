@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	01-Feb-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -119,6 +119,7 @@ bool DrawObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *op
 			p.save();			// don't change drawing setup
 			p.setBrush(Qt::NoBrush);
 			p.setPen(Qt::green);
+			p.setRenderHint(QPainter::Antialiasing,false);
 			p.drawRect(DrawCoord::toPixelX(mBbox.x0())-1,DrawCoord::toPixelY(mBbox.y1())-1,
 				   DrawCoord::toPixelH(mBbox.x1()-mBbox.x0())+1,DrawCoord::toPixelV(mBbox.y1()-mBbox.y0())+1);
 			p.restore();
@@ -126,10 +127,13 @@ bool DrawObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *op
 
 		if (opts->flags() & PaintOptions::DrawSkeletonOnly)
 		{					// show skeleton box
+			p.save();			// don't change drawing setup
 			p.setBrush(Qt::NoBrush);
 			p.setPen(Qt::cyan);
+			p.setRenderHint(QPainter::Antialiasing,false);
 			p.drawRect(DrawCoord::toPixelX(mBbox.x0()),DrawCoord::toPixelY(mBbox.y1()),
 				   DrawCoord::toPixelH(mBbox.x1()-mBbox.x0())-1,DrawCoord::toPixelV(mBbox.y1()-mBbox.y0())-1);
+			p.restore();
 		}
 	}
 
