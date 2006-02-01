@@ -2,7 +2,7 @@
 ##									##
 ##  Project:	DrawView						##
 ##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	20-Jan-06						##
+##  Edit:	01-Feb-06						##
 ##									##
 ##########################################################################
 ##									##
@@ -34,7 +34,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([DrawView],[1.00],[jjm@keelhaul.demon.co.uk])
+AC_INIT([DrawView],[1.01],[jjm@keelhaul.demon.co.uk])
 AC_DEFINE([PACKAGE_URL],["http://www.keelhaul.demon.co.uk/acorn/drawview"],[The package's home page URL])
 
 AC_CONFIG_SRCDIR([config.h.in])
