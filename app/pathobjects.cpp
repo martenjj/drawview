@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	24-Apr-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -39,6 +39,10 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "global.h"
+
+#ifdef HAVE_MATH_H
+#include <math.h>
+#endif
 
 #include <qtextstream.h>
 #include <qvector.h>
@@ -171,8 +175,8 @@ class DrawPathElement
 {
 public:
 	DrawPathElement(drawint xx = -1,drawint yy = -1)	{ x = xx; y = yy; }
-	virtual operator QString() = NULL;
-	virtual void draw(QPainterPath &pp) = NULL;
+	virtual operator QString() = 0;
+	virtual void draw(QPainterPath &pp) = 0;
 	virtual bool isStroke()		{ return (false); }
 	virtual bool hasCoords()	{ return (true); }
 	virtual void drawStartCap(QPainter &p,drawint px,drawint py,Draw::startcaptyp type,int w,int l = 0)	{}
