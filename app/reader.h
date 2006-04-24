@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	24-Apr-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -79,11 +79,11 @@ public:
 	DrawReader::status getStatus() const		{ return (errstat); }
 	DrawErrorList *getErrorList() const		{ return (errlist); }
 
-	virtual bool getWord(drawword *wp,bool expecteof = false) = NULL;
-	virtual bool getByte(drawbyte *cp,drawuint len = 1) = NULL;
-	virtual bool getString(QByteArray *bp,unsigned char terminator = '\0') = NULL;
-	virtual bool discardWordAlign() = NULL;
-	virtual bool discardRest() = NULL;
+	virtual bool getWord(drawword *wp,bool expecteof = false) = 0;
+	virtual bool getByte(drawbyte *cp,drawuint len = 1) = 0;
+	virtual bool getString(QByteArray *bp,unsigned char terminator = '\0') = 0;
+	virtual bool discardWordAlign() = 0;
+	virtual bool discardRest() = 0;
 
 	void addError(const QString &msg,Draw::error lvl = Draw::errorFATAL);
 

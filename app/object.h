@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	24-Apr-06						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -58,8 +58,8 @@ class DrawObject
 public:
 	DrawObject(Draw::objflags flag,int layer = 0);
 	virtual ~DrawObject()					{}
-	virtual Draw::object type() const = NULL;
-	virtual QString typeName() const = NULL;
+	virtual Draw::object type() const = 0;
+	virtual QString typeName() const = 0;
 
 	const DrawBox *bbox() const				{ return (&mBbox); }
 
