@@ -2,7 +2,7 @@
 ##									##
 ##  Project:	DrawView						##
 ##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	01-Feb-06						##
+##  Edit:	07-Jul-06						##
 ##									##
 ##########################################################################
 ##									##
@@ -42,7 +42,10 @@ AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
 
 # Additional arguments accepted
-AC_ARG_WITH([qt4],[  --with-qt4=DIR          specify Qt 4 library location])
+AC_ARG_WITH([qt4],[  --with-qt4=DIR          specify Qt 4 base location])
+AC_ARG_WITH([qt4-libs],[  --with-qt4-libs=DIR     specify Qt 4 library location])
+AC_ARG_WITH([qt4-includes],[  --with-qt4-includes=DIR specify Qt 4 include location])
+
 AC_ARG_WITH([cmdutils],[  --with-cmdutils=DIR     specify command utilities source location])
 AC_ARG_WITH([riscos],[  --with-riscos=DIR       specify RiscOS library source location])
 AC_ARG_WITH([kde],[  --with-kde=DIR          specify KDE integration install location])
@@ -101,7 +104,7 @@ CXXFLAGS="-Wno-deprecated -fno-exceptions"
 # Checks for Qt
 AC_PATH_PROG([qt4binprog],[qt3to4],[],[${with_qt4:+${with_qt4}/bin:}$PATH:/usr/qt/4/bin:/usr/lib/qt4/bin:${srcdir}/qt4/bin:${srcdir}/../qt4/bin:${prefix}/bin])
 
-AC_MSG_CHECKING([Qt 4 installation])
+AC_MSG_CHECKING([where Qt 4 is installed])
 if test "${qt4binprog}" = ""
 then
 	AC_MSG_ERROR([Qt 4 not found - specify with '--with-qt4'])
@@ -116,10 +119,45 @@ AC_MSG_RESULT([${qt4dir}])
 AC_SUBST([qt4dir])
 
 AC_CHECK_FILE([${qt4dir}/bin],,AC_MSG_ERROR([Qt 4 binary directory not found - check installation]))
-AC_CHECK_FILE([${qt4dir}/lib],,AC_MSG_ERROR([Qt 4 library directory not found - check installation]))
-AC_CHECK_FILE([${qt4dir}/include],,AC_MSG_ERROR([Qt 4 include directory not found - check installation]))
-AC_CHECK_FILE([${qt4dir}/include/Qt/QObject],,AC_MSG_ERROR([Qt 4 include file <Qt/QObject> not found - check installation]))
-AC_CHECK_FILE([${qt4dir}/include/Qt/QWidget],,AC_MSG_ERROR([Qt 4 include file <Qt/QWidget> not found - check installation]))
+AC_PATH_PROG([MOC],[moc],AC_MSG_ERROR([Qt 4 'moc' program not found - check installation]),[${qt4dir}/bin])
+AC_PATH_PROG([UIC],[uic],AC_MSG_ERROR([Qt 4 'uic' program not found - check installation]),[${qt4dir}/bin])
+
+AC_PATH_PROG([qt4lib],[libQtCore.so],[],[${with-qt4-libs:+${with_qt4_libs}:}${with_qt4:+${with_qt4}/lib:}/usr/qt/4/lib:/usr/lib/qt4:${srcdir}/qt4/lib:${srcdir}/../qt4/lib:${prefix}/lib])
+if test "${qt4lib}" = ""
+then
+	AC_MSG_ERROR([Qt 4 library directory not found - specify with '--with-qt4-libs'])
+fi
+
+AC_MSG_CHECKING([for Qt 4 library directory])
+qt4lib1=`echo "${qt4lib}" | sed -e 's,/[[^/]]*$,,'`
+qt4lib=`cd ${qt4lib1} && pwd`
+if test "${qt4lib}" = ""
+then
+	AC_MSG_ERROR([Qt 4 library directory '${qt4lib1}' not accessible - check permissions])
+fi
+AC_MSG_RESULT([${qt4lib}])
+AC_SUBST([qt4lib])
+
+
+AC_PATH_PROG([qt4inc],[Qt/QtCore],[],[${with-qt4-includes:+${with_qt4_includes}:}${with_qt4:+${with_qt4}/include:}/usr/qt/4/include:/usr/include/qt4:/usr/include:${srcdir}/qt4/include:${srcdir}/../qt4/include:${prefix}/include])
+if test "${qt4inc}" = ""
+then
+	AC_MSG_ERROR([Qt 4 include directory not found - specify with '--with-qt4-includes'])
+fi
+
+AC_MSG_CHECKING([for Qt 4 include directory])
+qt4inc1=`echo "${qt4inc}" | sed -e 's,/[[^/]]*$,,'`
+qt4inc=`cd ${qt4inc1} && pwd`
+if test "${qt4inc}" = ""
+then
+	AC_MSG_ERROR([Qt 4 include directory '${qt4inc1}' not accessible - check permissions])
+fi
+AC_MSG_RESULT([${qt4inc}])
+AC_SUBST([qt4inc])
+
+#AC_CHECK_FILE([${qt4inc}/QtCore],,AC_MSG_ERROR([Qt 4 include directory not found - check installation]))
+AC_CHECK_FILE([${qt4inc}/QtCore],,AC_MSG_ERROR([Qt 4 include file <QtCore> not found - check installation]))
+AC_CHECK_FILE([${qt4inc}/QtGui],,AC_MSG_ERROR([Qt 4 include file <QtGui> not found - check installation]))
 
 AC_PATH_PROG([pkgconfigprog],[pkg-config],[])
 if test "${pkgconfigprog}" = ""
@@ -170,9 +208,6 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 done
 AC_MSG_RESULT([${qt4ldflags}])
 AC_SUBST([qt4ldflags])
-
-AC_PATH_PROG([MOC],[moc],AC_MSG_ERROR([Qt 4 'moc' program not found - check installation]),[${qt4dir}/bin])
-AC_PATH_PROG([UIC],[uic],AC_MSG_ERROR([Qt 4 'uic' program not found - check installation]),[${qt4dir}/bin])
 
 # Checks for external sources
 AC_MSG_CHECKING([location of command utility sources])
