@@ -34,7 +34,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([DrawView],[1.02],[jjm@keelhaul.me.uk])
+AC_INIT([DrawView],[1.03],[jjm@keelhaul.me.uk])
 AC_DEFINE([PACKAGE_URL],["http://www.keelhaul.me.uk/acorn/drawview"],[The package's home page URL])
 
 AC_CONFIG_SRCDIR([config.h.in])
@@ -186,6 +186,10 @@ CXXFLAGS="${CXXFLAGS} -DQT4 ${qt4cxxflags}"
 AC_MSG_CHECKING([required Qt 4 linker flags])
 temp=`PKG_CONFIG_PATH=${qt4dir}/lib; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs QtGui`
 qt4ldflags=
+
+qt4inplace=
+qt4libseen=
+
 for arg in ${temp} ""
 do
 	if test "X${arg}" != "X"
@@ -195,7 +199,12 @@ do
 X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 			if test -d "${dir}/../src/corelib"
 			then
+				qt4inplace="${dir}"
 				continue
+			fi
+			if test "`ls -1 ${dir}/libQtCore* 2>/dev/null`" != ""
+			then
+				qt4libseen="yes"
 			fi
 			qt4ldflags="${qt4ldflags} -L${dir}"
 			test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${dir}"
@@ -208,6 +217,19 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 done
 AC_MSG_RESULT([${qt4ldflags}])
 AC_SUBST([qt4ldflags])
+
+AC_MSG_CHECKING([whether Qt 4 installation was in-place])
+if test "X${qt4libseen}" = "Xyes"
+then
+	AC_MSG_RESULT([no])
+else
+	AC_MSG_RESULT([yes])
+
+	AC_MSG_CHECKING([additional Qt 4 linker flags])
+	qt4ldflags="${qt4ldflags} -L${qt4inplace}"
+	test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${qt4inplace}"
+	AC_MSG_RESULT([${qt4ldflags}])
+fi
 
 # Checks for external sources
 AC_MSG_CHECKING([location of command utility sources])
