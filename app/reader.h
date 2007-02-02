@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	24-Apr-06						//
+//  Edit:	02-Feb-07						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -90,7 +90,7 @@ public:
 protected:
 	DrawReader(DrawErrorList *errl = NULL);
 
-	bool DrawReader::setError(DrawReader::status st,int num = 0,QString msg = QString::null);
+	bool setError(DrawReader::status st,int num = 0,QString msg = QString::null);
 
 	drawuint curpos;
 	drawuint expsize;
