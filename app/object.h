@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	24-Apr-06						//
+//  Edit:	10-Nov-07						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -85,7 +85,7 @@ private:
 class DrawObjectCreator
 {
 public:
-	virtual DrawObject *create(Draw::objflags flag,int layer = 0) = NULL;
+	virtual DrawObject *create(Draw::objflags flag,int layer = 0) = 0;
 };
 
 typedef DrawObjectCreator *(*ObjectCreatorFunction)();
