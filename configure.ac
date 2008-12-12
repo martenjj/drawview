@@ -2,7 +2,7 @@
 ##									##
 ##  Project:	DrawView						##
 ##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	13-Oct-06						##
+##  Edit:	11-Dec-08						##
 ##									##
 ##########################################################################
 ##									##
@@ -34,7 +34,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([DrawView],[1.03],[jjm@keelhaul.me.uk])
+AC_INIT([DrawView],[1.04],[jjm@keelhaul.me.uk])
 AC_DEFINE([PACKAGE_URL],["http://www.keelhaul.me.uk/acorn/drawview"],[The package's home page URL])
 
 AC_CONFIG_SRCDIR([config.h.in])
@@ -62,9 +62,12 @@ AC_PROG_RANLIB
 
 AC_CHECK_PROG([RMDIR],[rmdir],[rmdir])
 
+AC_ARG_VAR([MOC],[Qt 4 'moc' program])
+AC_ARG_VAR([UIC],[Qt 4 'uic' program])
+
 # Checks for header files
 AC_HEADER_STDC
-AC_CHECK_HEADERS([errno.h fcntl.h strings.h math.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([errno.h fcntl.h strings.h math.h sys/time.h unistd.h limits.h])
 
 # Checks for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
@@ -119,18 +122,44 @@ AC_MSG_RESULT([${qt4dir}])
 AC_SUBST([qt4dir])
 
 AC_CHECK_FILE([${qt4dir}/bin],,AC_MSG_ERROR([Qt 4 binary directory not found - check installation]))
-AC_PATH_PROG([MOC],[moc],AC_MSG_ERROR([Qt 4 'moc' program not found - check installation]),[${qt4dir}/bin])
-AC_PATH_PROG([UIC],[uic],AC_MSG_ERROR([Qt 4 'uic' program not found - check installation]),[${qt4dir}/bin])
 
-AC_PATH_PROG([qt4lib],[libQtCore.so],[],[${with-qt4-libs:+${with_qt4_libs}:}${with_qt4:+${with_qt4}/lib:}/usr/qt/4/lib:/usr/lib/qt4:${srcdir}/qt4/lib:${srcdir}/../qt4/lib:${prefix}/lib])
+#                         here on FC9 x64 ----------------------+
+#              presumably here on FC9 32-bit --+                |
+#                                              |                |
+#                                              v                v
+AC_PATH_PROG([MOC],[moc],,[${qt4dir}/bin:$PATH:/usr/lib/qt4/bin:/usr/lib64/qt4/bin])
+test "X${MOC}" != "X" || AC_MSG_ERROR([Qt 4 'moc' program not found - check installation])
+AC_PATH_PROG([UIC],[uic],,[${qt4dir}/bin:$PATH:/usr/lib/qt4/bin:/usr/lib64/qt4/bin])
+test "X${UIC}" != "X" || AC_MSG_ERROR([Qt 4 'uic' program not found - check installation])
+
+# AC_PATH_PROG checks that the found target is executable.  This may fail for libraries
+# and include files.
+#AC_PATH_PROG([qt4lib],[libQtCore.so],[],[${with_qt4_libs:+${with_qt4_libs}:}${with_qt4:+${with_qt4}/lib:}/usr/qt/4/lib:/usr/lib/qt4:/usr/lib:/usr/lib64:${srcdir}/qt4/lib:${srcdir}/../qt4/lib:${prefix}/lib])
+
+qtcorelib="libQtCore.so"
+qt4lib=
+for dir in ${with_qt4_libs:+${with_qt4_libs}} ${with_qt4:+${with_qt4}/lib} /usr/qt/4/lib /usr/lib/qt4 /usr/lib /usr/lib64 ${srcdir}/qt4/lib ${srcdir}/../qt4/lib ${prefix}/lib
+do
+	test "X${dir}" = "X" && continue
+	test -d "${dir}" || continue
+	AC_MSG_CHECKING([for ${dir}/${qtcorelib}])
+	if test -f "${dir}/${qtcorelib}"
+	then
+		qt4lib="${dir}"
+		AC_MSG_RESULT([yes])
+		break
+	else
+		AC_MSG_RESULT([no])
+	fi
+done
 if test "${qt4lib}" = ""
 then
 	AC_MSG_ERROR([Qt 4 library directory not found - specify with '--with-qt4-libs'])
 fi
 
-AC_MSG_CHECKING([for Qt 4 library directory])
-qt4lib1=`echo "${qt4lib}" | sed -e 's,/[[^/]]*$,,'`
-qt4lib=`cd ${qt4lib1} && pwd`
+AC_MSG_CHECKING([Qt 4 library directory])
+#qt4lib1=`echo "${qt4lib}" | sed -e 's,/[[^/]]*$,,'`
+qt4lib=`cd ${qt4lib} && pwd`
 if test "${qt4lib}" = ""
 then
 	AC_MSG_ERROR([Qt 4 library directory '${qt4lib1}' not accessible - check permissions])
@@ -139,15 +168,32 @@ AC_MSG_RESULT([${qt4lib}])
 AC_SUBST([qt4lib])
 
 
-AC_PATH_PROG([qt4inc],[Qt/QtCore],[],[${with-qt4-includes:+${with_qt4_includes}:}${with_qt4:+${with_qt4}/include:}/usr/qt/4/include:/usr/include/qt4:/usr/include:${srcdir}/qt4/include:${srcdir}/../qt4/include:${prefix}/include])
+# See above
+#AC_PATH_PROG([qt4inc],[Qt/QtCore],[],[${with_qt4_includes:+${with_qt4_includes}:}${with_qt4:+${with_qt4}/include:}/usr/qt/4/include:/usr/include/qt4:/usr/include:${srcdir}/qt4/include:${srcdir}/../qt4/include:${prefix}/include])
+qtcoreinc="Qt/QtCore"
+qt4inc=
+for dir in ${with_qt4_includes:+${with_qt4_includes}} ${with_qt4:+${with_qt4}/include } /usr/qt/4/include /usr/include/qt4 /usr/include ${srcdir}/qt4/include ${srcdir}/../qt4/include ${prefix}/include
+do
+	test "X${dir}" = "X" && continue
+	test -d "${dir}" || continue
+	AC_MSG_CHECKING([for ${dir}/${qtcoreinc}])
+	if test -f "${dir}/${qtcoreinc}"
+	then
+		qt4inc="${dir}"
+		AC_MSG_RESULT([yes])
+		break
+	else
+		AC_MSG_RESULT([no])
+	fi
+done
 if test "${qt4inc}" = ""
 then
 	AC_MSG_ERROR([Qt 4 include directory not found - specify with '--with-qt4-includes'])
 fi
 
-AC_MSG_CHECKING([for Qt 4 include directory])
-qt4inc1=`echo "${qt4inc}" | sed -e 's,/[[^/]]*$,,'`
-qt4inc=`cd ${qt4inc1} && pwd`
+AC_MSG_CHECKING([Qt 4 include directory])
+#qt4inc1=`echo "${qt4inc}" | sed -e 's,/[[^/]]*$,,'`
+qt4inc=`cd ${qt4inc} && pwd`
 if test "${qt4inc}" = ""
 then
 	AC_MSG_ERROR([Qt 4 include directory '${qt4inc1}' not accessible - check permissions])
@@ -166,16 +212,18 @@ then
 fi
 
 AC_MSG_CHECKING([required Qt 4 compiler flags])
-temp=`PKG_CONFIG_PATH=${qt4dir}/lib; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags QtGui`
-qt4cxxflags=
+temp=`PKG_CONFIG_PATH=${qt4lib}/pkgconfig:${qt4dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags QtGui QtCore`
+qt4cxxflags="-I${qt4inc} -I${qt4inc}/Qt"
 for arg in ${temp} ""
 do
 	if test "X${arg}" != "X"
 	then
 		case "X${arg}"
 		in
-X-I*)			qt4cxxflags="${qt4cxxflags} ${arg} ${arg}/Qt"	;;
-*)			qt4cxxflags="${qt4cxxflags} ${arg}"		;;
+X-I*)			arg=`echo "${arg}" | sed -e 's,^-I,,'`
+			test -d "${arg}" && qt4cxxflags="${qt4cxxflags} -I${arg}"
+			test -d "${arg}/Qt" && qt4cxxflags="${qt4cxxflags} -I${arg}/Qt"	;;
+*)			qt4cxxflags="${qt4cxxflags} ${arg}"				;;
 		esac
 	fi
 done
@@ -184,11 +232,12 @@ AC_SUBST([qt4cxxflags])
 CXXFLAGS="${CXXFLAGS} -DQT4 ${qt4cxxflags}"
 
 AC_MSG_CHECKING([required Qt 4 linker flags])
-temp=`PKG_CONFIG_PATH=${qt4dir}/lib; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs QtGui`
-qt4ldflags=
+temp=`PKG_CONFIG_PATH=${qt4lib}/pkgconfig:${qt4dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs QtGui QtCore`
+qt4ldflags="-L${qt4lib}"
+test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${qt4lib}"
 
 qt4inplace=
-qt4libseen=
+#qt4libseen=
 
 for arg in ${temp} ""
 do
@@ -202,10 +251,10 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 				qt4inplace="${dir}"
 				continue
 			fi
-			if test "`ls -1 ${dir}/libQtCore* 2>/dev/null`" != ""
-			then
-				qt4libseen="yes"
-			fi
+#			if test "`ls -1 ${dir}/libQtCore* 2>/dev/null`" != ""
+#			then
+#				qt4libseen="yes"
+#			fi
 			qt4ldflags="${qt4ldflags} -L${dir}"
 			test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${dir}"
 			;;
@@ -219,7 +268,7 @@ AC_MSG_RESULT([${qt4ldflags}])
 AC_SUBST([qt4ldflags])
 
 AC_MSG_CHECKING([whether Qt 4 installation was in-place])
-if test "X${qt4libseen}" = "Xyes"
+if test "X${qt4inplace}" = "X"
 then
 	AC_MSG_RESULT([no])
 else
