@@ -1,8 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	11-Dec-08						##
+##  Edit:	05-Dec-15						##
 ##									##
 ##########################################################################
 ##									##
@@ -39,7 +38,7 @@ AC_DEFINE([PACKAGE_URL],["http://www.keelhaul.me.uk/acorn/drawview"],[The packag
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall foreign])
 
 # Additional arguments accepted
 AC_ARG_WITH([qt4],[  --with-qt4=DIR          specify Qt 4 base location])
@@ -93,7 +92,7 @@ AC_CHECK_LIB([m],[ldexp],,AC_MSG_ERROR([Library function 'ldexp' is required]))
 
 # Checks for linker syntax
 AC_MSG_CHECKING([how to pass runpath option to the linker])
-case "${CXX}"
+case "`basename ${CXX}`"
 in
 g++)	rpathopt="-Wl,-R"		;;
 *)	rpathopt="-R"			;;
@@ -351,13 +350,20 @@ else
 	AC_PATH_PROG([kdeconfig],[kde-config],[],[${kdeinst:+${kdeinst}/bin:}$PATH:/usr/local/kde/bin:/usr/kde/bin])
 	if test "$kdeconfig" = ""
 	then
-		if test "${with_kde}" != ""
+		AC_PATH_PROG([kdeconfig],[kde4-config],[],[${kdeinst:+${kdeinst}/bin:}$PATH:/usr/local/kde/bin:/usr/kde/bin])
+		if test "$kdeconfig" = ""
 		then
-			AC_MSG_ERROR([KDE 'kde-config' program not found for '--with-kde'])
+			if test "${with_kde}" != ""
+			then
+				AC_MSG_ERROR([KDE 'kde-config' or 'kde4-config' program not found for '--with-kde'])
+			fi
+			kdeicons=
+			kdemime=
 		fi
-		kdeicons=
-		kdemime=
-	else
+	fi
+
+	if test "$kdeconfig" != ""
+	then
 		AC_MSG_CHECKING([location for KDE icons])
 		kdeicons=`${kdeconfig} --expandvars --install icon`
 		AC_MSG_RESULT([${kdeicons}])
@@ -378,10 +384,18 @@ else
 		AC_MSG_RESULT([maybe])
 	fi
 fi
-AC_SUBST([kdeicons])
-AC_SUBST([kdemime])
-AC_SUBST([kdeapps])
-CPPFLAGS="${CPPFLAGS} -DKDEICONS=\\\"${kdeicons}\\\""
+
+AC_MSG_CHECKING([whether KDE integration will be installed])
+if test "${kdeicons}" = ""
+then
+	AC_MSG_RESULT([no])
+else
+	AC_MSG_RESULT([yes])
+	AC_SUBST([kdeicons])
+	AC_SUBST([kdemime])
+	AC_SUBST([kdeapps])
+	CPPFLAGS="${CPPFLAGS} -DKDEICONS=\\\"${kdeicons}\\\""
+fi
 
 # Checks for desktop install
 AC_MSG_CHECKING([whether to install desktop integration])
@@ -416,9 +430,17 @@ else
 	desktopicons="${desktop}/icons"
 	AC_MSG_RESULT([${desktopicons}])
 fi
-AC_SUBST([desktopapps])
-AC_SUBST([desktopicons])
-CPPFLAGS="${CPPFLAGS} -DDESKTOPICONS=\\\"${desktopicons}\\\""
+
+AC_MSG_CHECKING([whether desktop integration will be installed])
+if test "${desktopicons}" = ""
+then
+	AC_MSG_RESULT([no])
+else
+	AC_MSG_RESULT([yes])
+	AC_SUBST([desktopapps])
+	AC_SUBST([desktopicons])
+	CPPFLAGS="${CPPFLAGS} -DDESKTOPICONS=\\\"${desktopicons}\\\""
+fi
 
 # Output files
 AC_CONFIG_FILES([Makefile
