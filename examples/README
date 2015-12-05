@@ -1,0 +1,37 @@
+README file for DrawView example files
+--------------------------------------
+
+These are drawing files in various application formats, which should
+all load and display in DrawView.
+
+  'Ttnkhamun' is by Hans Rijnen and was originally included in the
+  Vector package.  Try viewing with and without "Antialiasing" to
+  see the difference.
+
+  'Backdrop' is by Steven Haslam, downloaded from a BBS (probably
+  Arcade, currently at http://arcade.demon.co.uk) a long time ago.
+
+  'Spitfire' and 'Hurricane' were drawn by someone else, but I don't
+  have a record of whom.
+
+  'MultiPlay' and 'GraphicEq' are by Geoff Preston and were originally
+  included in the Vector package.
+
+  'Metro' and 'Barcelona' were drawn by myself after visits there.
+
+  'Viking', as far as I can recall, is by Mike Matson and was
+  originally included in the Vector package.
+
+  'Coupons' was produced by ESM, as credited within the file, and was
+  originally included in the Vector package.
+
+  'AllCaps' and 'AllJoins' are test files for the Qt line drawing
+  capabilities.  Some of the caps (in the 12 cases where the start and
+  end caps are different) may look irregular compared with the others;
+  this is because they are drawn "by hand" using different algorithms.
+  The RiscOS Draw module is far more versatile...
+
+  All the other files are by myself.
+
+Any material here which ought not to be distributed will be removed on
+request.

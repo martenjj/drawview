@@ -1,0 +1,32 @@
+Version 1.04 - December 2008
+----------------------------
+Further fix Qt library detection and compilation for newer installations
+(Fedora 9 and 64-bit)
+
+
+Version 1.03 - October 2006
+---------------------------
+
+Fix Qt library detection for split up installation (Gentoo and Ubuntu),
+Qt 4.2 include directory structure, and to work if the installation is
+in-place (for KDE qt-copy)
+
+
+Version 1.02
+------------
+
+There wasn't one
+
+
+Version 1.01 - April 2006
+-------------------------
+
+Use Qt's antialiasing when painting - suggested by David Boddie <david@boddie.org.uk>
+Add "View - Antialiasing" option to disable that if performance is a problem
+GCC 3.4.5 compile fixes
+
+	
+Version 1.00 - January 2006
+---------------------------
+
+Initial release

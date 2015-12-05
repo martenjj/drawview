@@ -1,0 +1,46 @@
+TODO list for DrawView
+----------------------
+
+Improve text display accuracy: use the bounding box to adjust the
+size/aspect of the platform font so that the overall object size comes
+out correct.  Unfortunately Qt can only select fonts in integer point
+sizes.
+
+Improve text area display accuracy too.  Not much that can be done
+about the font metrics (see above), but it has been observed that
+sometimes line breaks and even column breaks can appear in different
+places at various zoom factors, or when exporting.  It may be possible
+to at least achieve consistent results regardless of how the text area
+is viewed, by internally laying out the text at a large scale (so that
+the integer-only point size does not matter) and saving the
+line/column break points as properties within the text.  (Or eliminate
+the QTextDocument representation entirely once the layout has been
+done, and convert to a direct line/column representation).
+
+Printing (this is essentially the same as exporting for a single
+page).  Multi-page printing and export.
+
+Generate a font report listing the original fonts used in the file,
+and the platform equivalents used for display.
+
+Use user-defined dash patterns (new in Qt 4.1) for line patterns not
+supported by the built-in Qt pen styles.
+
+Expand the font mapping list to include more of the original Acorn
+font names.
+
+Support GridPro files too (this needs a lot more work than would seem
+at first glance, because it would need to regenerate the Draw objects
+from the pattern parameters).
+
+Support DrawPlus/Vector library files (same file format, but a
+different viewer GUI).
+
+Faithfully reproduce the RiscOS "System Font" (does anyone ever use
+this?).  Possibly by incorporating the bitmaps from a RiscOS system -
+would there be copyright issues with that?
+
+Turn the viewer into a full implementation of Draw (or DrawPlus, or
+Vector, or...).  Something that I'm not planning to do in the
+immediate short term, but someone is sure to suggest it!
+

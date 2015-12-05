@@ -25,3 +25,11 @@ admin
 *.moc.cpp
 *ui.cpp
 *ui.h
+drawview
+drawfilter
+nondist/
+*.tar.gz
+*~
+config.h
+config.status
+config.h.in
