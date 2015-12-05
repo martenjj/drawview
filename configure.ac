@@ -100,8 +100,8 @@ esac
 AC_MSG_RESULT([${rpathopt}])
 
 # Global compiler flags
-CPPFLAGS="-W -Wall -Wredundant-decls -Wunused-macros"
-CXXFLAGS="-Wno-deprecated -fno-exceptions"
+CPPFLAGS="${CPPFLAGS} -W -Wall -Wredundant-decls -Wunused-macros"
+CXXFLAGS="${CXXFLAGS} -Wno-deprecated -fno-exceptions"
 
 # Checks for Qt
 AC_PATH_PROG([qt4binprog],[qt3to4],[],[${with_qt4:+${with_qt4}/bin:}$PATH:/usr/qt/4/bin:/usr/lib/qt4/bin:${srcdir}/qt4/bin:${srcdir}/../qt4/bin:${prefix}/bin])

@@ -5882,8 +5882,8 @@ esac
 $as_echo "${rpathopt}" >&6; }
 
 # Global compiler flags
-CPPFLAGS="-W -Wall -Wredundant-decls -Wunused-macros"
-CXXFLAGS="-Wno-deprecated -fno-exceptions"
+CPPFLAGS="${CPPFLAGS} -W -Wall -Wredundant-decls -Wunused-macros"
+CXXFLAGS="${CXXFLAGS} -Wno-deprecated -fno-exceptions"
 
 # Checks for Qt
 # Extract the first word of "qt3to4", so it can be a program name with args.
