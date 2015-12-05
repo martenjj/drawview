@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	01-Feb-06						//
+//  Edit:	05-Dec-15						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -149,6 +149,7 @@ void DrawView::setupActions()
         QMenu *mfile = menuBar()->addMenu("&File");
         QMenu *mview = menuBar()->addMenu("&View");
         QMenu *msett = menuBar()->addMenu("&Settings");
+        menuBar()->addSeparator();
         QMenu *mhelp = menuBar()->addMenu("&Help");
 
 	QAction *act = new QAction("&Open...",this);
