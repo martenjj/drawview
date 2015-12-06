@@ -377,9 +377,32 @@ else
 		AC_MSG_CHECKING([location for KDE mimetypes])
 		kdemime=`${kdeconfig} --expandvars --install mime`
 		AC_MSG_RESULT([${kdemime}])
+
+		AC_MSG_CHECKING([whether KDE uses the freedesktop MIME database])
+		if test -d "${kdemime}/../mime"
+		then
+			AC_MSG_RESULT([yes])
+
+			AC_MSG_CHECKING([location for KDE freedesktop MIME database])
+			# Using "${kdeconfig} --install xdgdata-apps" returns nothing
+			kdemimedb="`dirname ${kdemime}`/mime/packages/"
+			AC_MSG_RESULT([${kdemimedb}])
+			kdemime=
+		else
+			AC_MSG_RESULT([no])
+		fi
+
 		AC_MSG_CHECKING([location for KDE applications])
 		kdeapps=`${kdeconfig} --expandvars --install xdgdata-apps`
 		AC_MSG_RESULT([${kdeapps}])
+
+		AC_MSG_CHECKING([whether to install KDE desktop files for MIME])
+		if test "$kdemime" != ""
+		then
+			AC_MSG_RESULT([yes])
+		else
+			AC_MSG_RESULT([no])
+		fi
 	fi
 
 	AC_MSG_CHECKING([whether to install desktop integration in addition to KDE])
@@ -400,6 +423,7 @@ else
 	AC_MSG_RESULT([yes])
 	AC_SUBST([kdeicons])
 	AC_SUBST([kdemime])
+	AC_SUBST([kdemimedb])
 	AC_SUBST([kdeapps])
 	CPPFLAGS="${CPPFLAGS} -DKDEICONS=\\\"${kdeicons}\\\""
 fi

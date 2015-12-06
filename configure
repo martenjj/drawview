@@ -628,6 +628,7 @@ LTLIBOBJS
 desktopicons
 desktopapps
 kdeapps
+kdemimedb
 kdemime
 kdeicons
 kdeconfig
@@ -6589,11 +6590,42 @@ $as_echo_n "checking location for KDE mimetypes... " >&6; }
 		kdemime=`${kdeconfig} --expandvars --install mime`
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${kdemime}" >&5
 $as_echo "${kdemime}" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether KDE uses the freedesktop MIME database" >&5
+$as_echo_n "checking whether KDE uses the freedesktop MIME database... " >&6; }
+		if test -d "${kdemime}/../mime"
+		then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking location for KDE freedesktop MIME database" >&5
+$as_echo_n "checking location for KDE freedesktop MIME database... " >&6; }
+			# Using "${kdeconfig} --install xdgdata-apps" returns nothing
+			kdemimedb="`dirname ${kdemime}`/mime/packages/"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${kdemimedb}" >&5
+$as_echo "${kdemimedb}" >&6; }
+			kdemime=
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking location for KDE applications" >&5
 $as_echo_n "checking location for KDE applications... " >&6; }
 		kdeapps=`${kdeconfig} --expandvars --install xdgdata-apps`
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${kdeapps}" >&5
 $as_echo "${kdeapps}" >&6; }
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to install KDE desktop files for MIME" >&5
+$as_echo_n "checking whether to install KDE desktop files for MIME... " >&6; }
+		if test "$kdemime" != ""
+		then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
 	fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to install desktop integration in addition to KDE" >&5
@@ -6618,6 +6650,7 @@ $as_echo "no" >&6; }
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+
 
 
 

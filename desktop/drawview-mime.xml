@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+
+	<mime-type type="application/x-compressdraw">
+		<glob pattern="*.c4b" />
+		<comment>RiscOS compressed 4Mation drawing</comment>
+		<generic-icon name="fileC4B"/>
+	</mime-type>
+
+	<mime-type type="application/x-riscosdraw">
+		<glob pattern="*.aff" />
+		<glob pattern="*.draw" />
+		<comment>RiscOS Draw/DrawPlus drawing</comment>
+		<generic-icon name="fileAFF"/>
+	</mime-type>
+
+	<mime-type type="application/x-riscosgridpro">
+		<glob pattern="*.bbb" />
+		<comment>RiscOS GridPro drawing</comment>
+		<generic-icon name="fileBBB"/>
+	</mime-type>
+
+	<mime-type type="application/x-riscoslibrary">
+		<glob pattern="*.810" />
+		<glob pattern="*.553" />
+		<comment>RiscOS Vector/DrawPlus library</comment>
+		<generic-icon name="file810"/>
+	</mime-type>
+
+	<mime-type type="application/x-riscosposter">
+		<glob pattern="*.cc3" />
+		<comment>RiscOS Poster drawing</comment>
+		<generic-icon name="fileCC3"/>
+	</mime-type>
+
+	<mime-type type="application/x-riscosvector">
+		<glob pattern="*.vec" />
+		<glob pattern="*.c56" />
+		<comment>RiscOS Vector drawing</comment>
+		<generic-icon name="fileC56"/>
+	</mime-type>
+
+</mime-info>

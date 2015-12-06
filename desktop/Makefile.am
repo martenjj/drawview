@@ -1,8 +1,7 @@
 ############################################## -*- mode:makefile; -*- ####
 ##									##
 ##  Project:	DrawView - Desktop integration				##
-##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	17-Jan-06						##
+##  Edit:	06-Dec-15						##
 ##									##
 ##########################################################################
 ##									##
@@ -47,20 +46,23 @@ MIMETYPES =		x-compressdraw.desktop x-riscosdraw.desktop		\
 			x-riscosgridpro.desktop x-riscoslibrary.desktop		\
 			x-riscosposter.desktop x-riscosvector.desktop
 
+MIMEXML=		drawview-mime.xml
+
 APPLICS =		drawview.desktop
 
 KDEICONS =		@kdeicons@
 KDEMIME =		@kdemime@
+KDEMIMEDB =		@kdemimedb@
 KDEAPPS =		@kdeapps@
 
 DESKTOPAPPS =		@desktopapps@
 DESKTOPICONS =		@desktopicons@
 
 
-EXTRA_DIST =		$(MIMEICONS) $(APPICONS) $(MIMETYPES) $(APPLICS)
+EXTRA_DIST =		$(MIMEICONS) $(APPICONS) $(MIMETYPES) $(APPLICS) $(MIMEXML)
 
 
-install-data-local:	$(MIMEICONS) $(APPICONS) $(MIMETYPES) $(APPLICS)
+install-data-local:	$(MIMEICONS) $(APPICONS) $(MIMETYPES) $(APPLICS) $(MIMEXML)
 			p1=`basename $(prefix)`;								\
 			d2=`dirname $(prefix)`;									\
 			p2=`basename $${d2}`;									\
@@ -97,6 +99,14 @@ install-data-local:	$(MIMEICONS) $(APPICONS) $(MIMETYPES) $(APPLICS)
 					do									\
 						$(INSTALL) $(srcdir)/$${i} $${d};				\
 					done;									\
+				else										\
+					true;									\
+				fi;										\
+				if test "$(KDEMIMEDB)" != "";							\
+				then										\
+					d="$(DESTDIR)$(KDEMIMEDB)";						\
+					$(INSTALL) -d $${d};							\
+					$(INSTALL) -m 644 $(srcdir)/$(MIMEXML) $${d};				\
 				else										\
 					true;									\
 				fi;										\
