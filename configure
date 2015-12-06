@@ -634,6 +634,7 @@ kdeconfig
 hostdefs
 riscosrc
 utilsrc
+qt4libs
 qt4ldflags
 qt4cxxflags
 pkgconfigprog
@@ -6280,6 +6281,9 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 			test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${dir}"
 			;;
 
+X-l*)			qt4libs="${qt4libs} ${arg}"
+			;;
+
 *)			qt4ldflags="${qt4ldflags} ${arg}"
 			;;
 		esac
@@ -6288,6 +6292,13 @@ done
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${qt4ldflags}" >&5
 $as_echo "${qt4ldflags}" >&6; }
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking required Qt 4 libraries" >&5
+$as_echo_n "checking required Qt 4 libraries... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${qt4libs}" >&5
+$as_echo "${qt4libs}" >&6; }
+
+LIBS="${qt4libs} ${LIBS}"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether Qt 4 installation was in-place" >&5
 $as_echo_n "checking whether Qt 4 installation was in-place... " >&6; }

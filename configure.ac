@@ -258,6 +258,9 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 			test "X${rpathopt}" != "X" && qt4ldflags="${qt4ldflags} ${rpathopt}${dir}"
 			;;
 
+X-l*)			qt4libs="${qt4libs} ${arg}"
+			;;
+
 *)			qt4ldflags="${qt4ldflags} ${arg}"
 			;;
 		esac
@@ -265,6 +268,11 @@ X-L*)			dir=`echo "${arg}" | sed -e 's,^-L,,'`
 done
 AC_MSG_RESULT([${qt4ldflags}])
 AC_SUBST([qt4ldflags])
+
+AC_MSG_CHECKING([required Qt 4 libraries])
+AC_MSG_RESULT([${qt4libs}])
+AC_SUBST([qt4libs])
+LIBS="${qt4libs} ${LIBS}"
 
 AC_MSG_CHECKING([whether Qt 4 installation was in-place])
 if test "X${qt4inplace}" = "X"
