@@ -1,5 +1,5 @@
-README file for DrawView version 1.00
-=====================================
+README file for DrawView
+========================
 
 DrawView is an application that allows Draw files created by the
 Acorn/RiscOS application Draw, and other compatible applications, to
@@ -7,11 +7,8 @@ be displayed on a Linux or other Unix system.  It is written in C++
 and released under the GNU GPL.
 
 DrawView requires the Qt 4 libraries (version 4.1.0 or later),
-available from www.trolltech.com or included in many Linux
-distributions.  Qt/X11 is free for use and development of open-source
-applications.  It may in theory be possible to run DrawView under
-Windows or MacOS using the appropriate Qt package; however, these
-may require a separate licence.
+available from www.qt.io or included in many Linux distributions.
+Qt/X11 is free for use and development of open-source applications.
 
 The file is displayed in a desktop window which can be scrolled and
 zoomed as required.  The drawing can be exported in PDF or PostScript
@@ -39,7 +36,11 @@ font names and available fonts is configurable.
 
 
 The source download (with some example files) and further information
-is available from the home page:
+is available from GitHub at:
+
+  https://github.com/martenjj/drawview
+
+More information and documentation is available from the home page:
 
    http://www.keelhaul.me.uk/acorn/drawview/
 
@@ -47,7 +48,7 @@ See the INSTALL file within the source archive for installation
 instructions.  In fewer words, this follows the standard GNU
 build/install system:
 
-   unpack the source archive
+   clone the source repository or unpack the download archive
    ./configure [options...]
    make
    make install
@@ -56,7 +57,3 @@ build/install system:
 
 This is a work in progress; further facilities and improvements are
 planned.  Reasonable suggestions, bug or problem reports are welcome.
-
-
-Jonathan Marten
-jjm@keelhaul.me.uk
