@@ -6298,7 +6298,6 @@ $as_echo_n "checking required Qt 4 libraries... " >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${qt4libs}" >&5
 $as_echo "${qt4libs}" >&6; }
 
-LIBS="${qt4libs} ${LIBS}"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether Qt 4 installation was in-place" >&5
 $as_echo_n "checking whether Qt 4 installation was in-place... " >&6; }

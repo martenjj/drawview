@@ -1,8 +1,7 @@
 ############################################## -*- mode:makefile; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  SCCS:	<%Z% %M% %I%>					##
-##  Edit:	17-Jan-06						##
+##  Edit:	06-Dec-15						##
 ##									##
 ##########################################################################
 ##									##
@@ -41,6 +40,7 @@ drawview_SOURCES =	main.cpp drawview.cpp paper.cpp				\
 			textarea.cpp replicates.cpp radiate.cpp
 
 drawview_LDFLAGS =	$(qt4ldflags)
+drawview_LDADD =	$(qt4libs)
 
 noinst_HEADERS =	global.h drawtypes.h drawview.h paper.h			\
 			drawwidget.h diagram.h object.h coord.h			\

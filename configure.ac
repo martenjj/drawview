@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	05-Dec-15						##
+##  Edit:	06-Dec-15						##
 ##									##
 ##########################################################################
 ##									##
@@ -272,7 +272,6 @@ AC_SUBST([qt4ldflags])
 AC_MSG_CHECKING([required Qt 4 libraries])
 AC_MSG_RESULT([${qt4libs}])
 AC_SUBST([qt4libs])
-LIBS="${qt4libs} ${LIBS}"
 
 AC_MSG_CHECKING([whether Qt 4 installation was in-place])
 if test "X${qt4inplace}" = "X"
