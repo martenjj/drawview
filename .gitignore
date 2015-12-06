@@ -32,5 +32,4 @@ nondist/
 *~
 config.h
 config.status
-config.h.in
 Makefile
