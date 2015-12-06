@@ -1,8 +1,7 @@
 /* Emacs:          -*- mode:c; mode:riscos-file; c-basic-offset: 4; -*- */
 /************************************************************************/
 /*									*/
-/*	File:		decompress.c		Edit:  17-Jan-06	*/
-/*	SCCS:		<@(#) decompress.c 1.7>				*/
+/*	File:		decompress.c		Edit:  05-Dec-15	*/
 /*	Language:	ANSI C						*/
 /*	Project:	Draw file compression library			*/
 /*	Developed on:	Vector						*/
@@ -193,7 +192,11 @@ static os_error *drawcomp_decompress_draw_object(draw_diag *diag_in,int *o_in,
 
     to[p++] = obj_type;					/* Store object type */
     orig_size_p = p++;					/* Note where to put expanded size */
+#ifndef RISCOS
+    c = (unsigned char *) &to[p];
+#else
     c = (char *) &to[p];
+#endif
 
     if (obj_comp_vers<CC_SPECIALS_START)		/* General compression type */
     {
@@ -404,7 +407,11 @@ case draw_objTAGGED:
 	    from = diag_in->data;
 	    to = (int *) diag_out->data;
 #endif
+#ifndef RISCOS
+	    c = (unsigned char *) &to[p];
+#else
 	    c = (char *) &to[p];
+#endif
 	    obj_comp_size = get4(from,o_in);		/* Get 'compressed size of extra data' word */
 	    obj_end = *o_in + obj_comp_size;
 
@@ -458,8 +465,11 @@ case draw_objTEXTAREA:
 	    from = diag_in->data;
 	    to = (int *) diag_out->data;
 #endif
+#ifndef RISCOS
+	    c = (unsigned char *) &to[p];
+#else
 	    c = (char *) &to[p];
-
+#endif
 	    to[p++] = 0;				/* Add a zero word as an 'end of columns' indicator */
 	    c += 4;
 	    *o_in += 1;					/* Skip the compressed version of this indicator */
@@ -519,7 +529,11 @@ static BOOL drawcomp_midextend(register draw_diag *diag,int offset,int size)
 
 static os_error *drawcomp_decompress_in_place(draw_diag *diag_in,int *o_in,int cflags,BOOL *more)
 {
+#ifndef RISCOS
+    unsigned char *from = diag_in->data;		/* Source pointer */
+#else
     char *from = diag_in->data;				/* Source pointer */
+#endif
     int o_temp = *o_in+mid_diag_gap;
     os_error *ep = NULL;				/* For error return */
 

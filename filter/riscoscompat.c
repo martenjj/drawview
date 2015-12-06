@@ -1,8 +1,7 @@
 /************************************************************************/
 /*									*/
 /*  Project:	DrawView - Decompression filter				*/
-/*  SCCS:	<%Z% %M% %I%>				*/
-/*  Edit:	17-Jan-06						*/
+/*  Edit:	05-Dec-15						*/
 /*									*/
 /************************************************************************/
 /*									*/
@@ -101,7 +100,7 @@ BOOL draw_setBBox(draw_diag *diag,draw_object object,BOOL recurse)
 /*  the input buffer.						 	*/
 /************************************************************************/
 
-int drawcomp_fetch4(char *from,int o_in)
+int drawcomp_fetch4(unsigned char *from,int o_in)
 {
 	int o_temp = o_in;
 	int got = drawcomp_get4(from,&o_temp);
@@ -113,7 +112,7 @@ int drawcomp_fetch4(char *from,int o_in)
 /*  the input buffer, and update the offset accordingly.	 	*/
 /************************************************************************/
 
-int drawcomp_get4(char *from,int *o_in)
+int drawcomp_get4(unsigned char *from,int *o_in)
 {
 	int got = 0;
 	int i;

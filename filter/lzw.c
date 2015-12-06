@@ -1,8 +1,7 @@
 /************************************************************************/
 /*									*/
 /*  Project:	DrawView - Decompression filter				*/
-/*  SCCS:	<%Z% %M% %I%>					*/
-/*  Edit:	17-Jan-06						*/
+/*  Edit:	05-Dec-15						*/
 /*									*/
 /************************************************************************/
 /*									*/
@@ -78,7 +77,9 @@
 /*						;             high 2 bytes = prefix code  */
 static unsigned int lzw_codetable[4<<MAX_BITS];
 
-static unsigned int r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr;
+static unsigned int r1,r3,r4,r5,r6,r8,r9,r10,r12,lr;	/* registers used for arithmetic */
+static unsigned char *r0, *r2, *r11;			/* registers used as byte pointers */
+static unsigned int *r7;				/* register used as word pointer */
 
 /************************************************************************/
 /*  lzw_init_bit_buffer -- Initialises input bit-buffer with the bytes	*/
@@ -90,7 +91,7 @@ static unsigned int r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,lr;
 static void lzw_init_bit_buffer()
 {
 /*		AND	r9, r2,#3		; r9 = from MOD 4  */
-	r9 = r2 & 3;
+	r9 = ((long) r2) & 3;
 /*		MOV	r9, r9,LSL #3		; convert to bits  */
 	r9 <<= 3;
 /*		LDR	r10, [r2]		; read a (possibly-non-aligned) word from input	*/
@@ -106,7 +107,7 @@ static void lzw_init_bit_buffer()
 		r10 = (r10<<8)+(*((unsigned char *) r2));
 		++r2;
 	}
-	while ((r2 & 3)!=0);
+	while ((((long) r2) & 3)!=0);
 	r10 <<= r9;
 
 /*		RSB	r9, r9,#32		; convert from 'excess bits' to 'bits read'  */
@@ -232,7 +233,7 @@ lzwd_read_more2:
 /* 									*/
 /*  ;  in: r0 (a1) - pointer to output buffer	(to)			*/
 /*  ;		r1 (a2) - size of output buffer (0 = dunno, don't care)	*/
-/*  ;		r2 (a3) - pointer to data to compress (from_size)	*/
+/*  ;		r2 (a3) - pointer to data to uncompress (from_size)	*/
 /* 									*/
 /*  ; out: r0 (a1) - updated 'to' pointer				*/
 /*  ;		Others preserved.					*/
@@ -266,11 +267,11 @@ lzwd_read_more2:
 
 /*	EXPORT	lzw_decompress			*/
 /*	lzw_decompress				*/
-int lzw_decompress(void *to,int max_out,const void *from)
+void *lzw_decompress(void *to,int max_out,const void *from)
 {
-	r0 = (int) to;
+	r0 = to;
 	r1 = max_out;
-	r2 = (int) from;
+	r2 = (unsigned char *) from;
 #ifdef DEBUG_DECOMP
 	fprintf(stderr,"\nlzw_decompress: %p -> %p max %d\n",from,to,max_out);
 #endif
@@ -286,7 +287,7 @@ int lzw_decompress(void *to,int max_out,const void *from)
 	if (r1==0)
 /*		BEQ	lzw_decompress2		; branch to faster no-overflow-checks version of code  */
 	goto lzw_decompress2;
-	return (-1);
+	return ((void *) -1);
 
 /*						; slightly different (and faster) version  */
 /*						; used when overflow checking is not required  */
@@ -294,7 +295,7 @@ int lzw_decompress(void *to,int max_out,const void *from)
 lzw_decompress2:
 /*						; setup/initialise all the other vars  */
 /*		LDR	r7, addr_of_codetable	*/
-	r7 = (int) &lzw_codetable;
+	r7 = &lzw_codetable[0];
 /*						; initialise the bit buffer and pointer	*/
 /*		BL	lzw_init_bit_buffer	*/
 	lzw_init_bit_buffer();

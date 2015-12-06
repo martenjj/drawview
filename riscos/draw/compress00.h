@@ -1,8 +1,7 @@
 /* For Emacs' benefit:                -*- mode:c; mode:riscos-file; -*- */
 /************************************************************************/
 /*									*/
-/*	File:		compress00.h		Edit:  23-Mar-05	*/
-/*	SCCS:		<@(#) compress00.h 1.4>				*/
+/*	File:		compress00.h		Edit:  05-Dec-15	*/
 /*	Language:	ANSI C						*/
 /*	Project:	Draw file compression library			*/
 /*	Developed on:	Vector						*/
@@ -120,10 +119,10 @@
 #define store4		drawcomp_store4
 #define put4		drawcomp_put4
 
-extern int get4(char *from,int *o_in);
-extern int fetch4(char *from,int o_in);
-extern void store4(char *to,int o_out,int word);
-extern void put4(char *to,int *o_out,int word);
+extern int get4(unsigned char *from,int *o_in);
+extern int fetch4(unsigned char *from,int o_in);
+extern void store4(unsigned char *to,int o_out,int word);
+extern void put4(unsigned char *to,int *o_out,int word);
 
 /************************************************************************/
 /*									*/
