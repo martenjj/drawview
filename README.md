@@ -17,11 +17,13 @@ format for printing or use in other applications.
 
 The file formats supported, and their original Acorn file types, are:
 
-   Plain Draw file                DrawFile (AFF)      Draw, many others
-   Draw file with extra data      DrawFile (AFF)      DrawPlus
-   Compressed Draw                CmprDraw (C4B)      Chameleon, Poster, Vector
-   Compressed with extras         VecFile  (C56)      Vector
-   Draw with tagged objects       Poster   (CC3)      Poster
+| File format               | Acorn file type | Applications              |
+| ------------------------- | --------------- | ------------------------- |
+| Plain Draw file           | DrawFile (AFF)  | Draw, many others         |
+| Draw file with extra data | DrawFile (AFF)  | DrawPlus                  |
+| Compressed Draw           | CmprDraw (C4B)  | Chameleon, Poster, Vector |
+| Compressed with extras    | VecFile  (C56)  | Vector                    |
+| Draw with tagged objects  | Poster   (CC3)  | Poster                    |
 
 All types of standard Draw objects, and the additional ones provided
 by Vector, are supported and displayed.  There are some features that
@@ -44,15 +46,24 @@ More information and documentation is available from the home page:
 
    http://www.keelhaul.me.uk/acorn/drawview/
 
-See the INSTALL file within the source archive for installation
-instructions.  In fewer words, this follows the standard GNU
-build/install system:
+To build and install the application, you will need GNU autotools
+installed on your system.  This may seem like an addition to the usual
+'download, untar, configure, make, install' process, but it is not a
+good idea to keep autotools-generated files in a VCS such as git.  See
+http://www.gnu.org/software/automake/manual/html_node/CVS.html for more
+information on why.
 
-   clone the source repository or unpack the download archive
-   ./configure [options...]
-   make
-   make install
-   drawview [file...]
+    # Clone the source repository from GitHub
+    git clone https://github.com/martenjj/drawview.git
+    cd drawview
+    # Generate the required configuration files and scripts
+    autoreconf -i
+    # Now follow the standard build steps, see the INSTALL file
+    # for more information.
+    ./configure [options...]
+    make
+    make install
+    drawview [file...]
 
 
 This is a work in progress; further facilities and improvements are
