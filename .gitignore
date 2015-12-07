@@ -10,7 +10,6 @@ save
 *.[oa]
 a.out
 Makefile.in
-po
 autom4te.cache
 acinclude.m4
 aclocal.m4
