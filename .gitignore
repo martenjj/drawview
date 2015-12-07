@@ -9,7 +9,6 @@ save
 *.zip
 *.[oa]
 a.out
-Makefile.in
 autom4te.cache
 acinclude.m4
 aclocal.m4
