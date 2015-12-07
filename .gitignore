@@ -31,3 +31,6 @@ nondist/
 config.h
 config.status
 Makefile
+Makefile.in
+configure
+configure.in
