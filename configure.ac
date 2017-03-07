@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	06-Dec-15						##
+##  Edit:	07-Mar-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -379,7 +379,7 @@ else
 		AC_MSG_RESULT([${kdemime}])
 
 		AC_MSG_CHECKING([whether KDE uses the freedesktop MIME database])
-		if test -d "${kdemime}/../mime"
+		if test -d "`dirname ${kdemime}`/mime"
 		then
 			AC_MSG_RESULT([yes])
 
