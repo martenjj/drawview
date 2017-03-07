@@ -1,5 +1,16 @@
+Current Git version - December 2015
+-----------------------------------
+
+Make the decompression work in 64-bit mode
+Install freedesktop XML MIME data
+
+Remove all of the autotools-generated files; they cause more problems
+than they solve.  Autotools are required to build from Git sources.
+
+
 Version 1.04 - December 2008
 ----------------------------
+
 Further fix Qt library detection and compilation for newer installations
 (Fedora 9 and 64-bit)
 
@@ -25,7 +36,7 @@ Use Qt's antialiasing when painting - suggested by David Boddie <david@boddie.or
 Add "View - Antialiasing" option to disable that if performance is a problem
 GCC 3.4.5 compile fixes
 
-	
+
 Version 1.00 - January 2006
 ---------------------------
 
