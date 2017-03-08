@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	05-Dec-15						//
+//  Edit:	08-Mar-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -386,7 +386,7 @@ void DrawView::fileExport()
 		return;
 	}
 
-	const QString sf = d.selectedFilter();		// see which filter was used
+	const QString sf = d.selectedNameFilter();	// see which filter was used
 	QString ext = QString::null;
 	QRegExp rx("\\(\\*\\.(\\w+)");
 	if (sf.indexOf(rx)>=0) ext = rx.cap(1);		// extract extension from that
@@ -421,6 +421,7 @@ void DrawView::optionsPageSize()
 	QPrinter pr;
 	pr.setPageSize(mPagesize);
 	pr.setOrientation(mOrient);
+	pr.setOutputFormat(QPrinter::PdfFormat);	// allow all known paper sizes
 
 	QPageSetupDialog pd(&pr,this);
 	pd.setWindowTitle("Page Size - "+qApp->applicationName());
@@ -546,6 +547,6 @@ void DrawView::slotZoomOut()
 void DrawView::aboutMe()
 {
 	QMessageBox::about(this,QString("About %1").arg(qApp->applicationName()),
-			   QString("<qt>RiscOS Draw file viewer using Qt 4, version <b>%1</b><p>Home and download page:<br><b>%3</b><p>Report bugs or suggestions to:<br><b>%2</b><p>Released under the <b>GNU GPL</b>;<br>see http://www.gnu.org/licenses/gpl.html")
+			   QString("<qt>RiscOS Draw file viewer using Qt 5, version <b>%1</b><p>Home and download page:<br><b>%3</b><p>Report bugs or suggestions to:<br><b>%2</b><p>Released under the <b>GNU GPL</b>;<br>see http://www.gnu.org/licenses/gpl.html")
 			   .arg(PACKAGE_VERSION).arg(PACKAGE_BUGREPORT).arg(PACKAGE_URL));
 }

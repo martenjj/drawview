@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	08-Mar-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -188,7 +188,7 @@ case Draw::justRIGHT:	x -= p.fontMetrics().width(*it);	break;
 default:							break;
 		}
 
-		p.drawText(x,yco,(*it));
+		p.drawText(x,yco,QString::fromLatin1(*it));
 		yco += linespace;			// move down to next line
 	}
 

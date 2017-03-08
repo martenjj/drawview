@@ -34,3 +34,10 @@ Makefile
 Makefile.in
 configure
 configure.in
+KTdata
+.dirstamp
+compile
+depcomp
+missing
+install-sh
+config.h.in

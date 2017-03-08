@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	07-Dec-15						//
+//  Edit:	08-Mar-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -84,20 +84,21 @@ int main(int argc,char *argv[])
  	if (!app.isSessionRestored())
 	{
 		bool ok = false;
-		const int n = app.argc();
-		if (n<=1)
+		const QStringList args = app.arguments();
+		const int n = args.count()-1;		// not including program name
+		if (n==0)
 		{
-			(void) new DrawView(NULL);
+			(void) new DrawView(QString::null);
 			ok = true;
 		}
 		else
 		{
-			for (int i = 1; i<n; ++i)
+			for (int i = 1; i<=n; ++i)
 			{
-				const char *file = app.argv()[i];
+				QString file = args[i];
+                                debugmsg(0) << file;
 				if (file[0]=='-' && file[1]=='\0') file = "/dev/stdin";
-				DrawView *v = new DrawView(QFile::decodeName(file));
-				// don't forget to convert to Unicode!
+				DrawView *v = new DrawView(file);
 				if (v->isValid()) ok = true;
 				else delete v;
 			}

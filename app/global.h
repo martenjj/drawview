@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView						//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	17-Jan-06						//
+//  Edit:	07-Mar-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -60,7 +60,7 @@
 #define debugmsg(n)	qDebug().nospace()
 #define warnmsg()	qWarning().nospace() << endl
 #else							// QT4
-#include <iostream.h>
+#include <iostream>
 #define debugmsg(n)	cerr
 #define warnmsg()	cerr << "\n" << "WARNING: "
 #endif							// QT4
