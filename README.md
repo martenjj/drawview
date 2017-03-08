@@ -6,9 +6,10 @@ Acorn/RiscOS application Draw, and other compatible applications, to
 be displayed on a Linux or other Unix system.  It is written in C++
 and released under the GNU GPL.
 
-DrawView requires the Qt 4 libraries (version 4.1.0 or later),
+DrawView requires the Qt 5 libraries (version 5.4 or later),
 available from www.qt.io or included in many Linux distributions.
 Qt/X11 is free for use and development of open-source applications.
+The 'qt4' branch works with the older Qt 4.
 
 The file is displayed in a desktop window which can be scrolled and
 zoomed as required.  The drawing can be exported in PDF or PostScript
