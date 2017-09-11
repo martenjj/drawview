@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	07-Mar-17						##
+##  Edit:	11-Sep-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -102,7 +102,7 @@ AC_MSG_RESULT([${rpathopt}])
 
 # Global compiler flags
 CPPFLAGS="${CPPFLAGS} -W -Wall -Wredundant-decls -Wunused-macros"
-CXXFLAGS="${CXXFLAGS} -Wno-deprecated -fno-exceptions"
+CXXFLAGS="${CXXFLAGS} --std=c++11 -Wno-deprecated -fno-exceptions"
 
 # Checks for Qt
 AC_PATH_PROG([qt5binprog],[qlalr],[],[${with_qt5:+${with_qt5}/bin:}$PATH:/usr/qt/5/bin:/usr/lib/qt5/bin:${srcdir}/qt5/bin:${srcdir}/../qt5/bin:${prefix}/bin])
