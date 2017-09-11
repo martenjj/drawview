@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	08-Mar-17						//
+//  Edit:	11-Sep-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -71,7 +71,7 @@ static bool tryIcon(const QString &where)
 
 int main(int argc,char *argv[])
 {
-	QT_REQUIRE_VERSION(argc,argv,"4.1.0");
+	QT_REQUIRE_VERSION(argc,argv,"5.6.0");
 	QApplication app(argc,argv);
 
 	app.setApplicationName(PACKAGE_NAME);
