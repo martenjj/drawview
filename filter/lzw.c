@@ -1,7 +1,7 @@
 /************************************************************************/
 /*									*/
 /*  Project:	DrawView - Decompression filter				*/
-/*  Edit:	05-Dec-15						*/
+/*  Edit:	11-Sep-17						*/
 /*									*/
 /************************************************************************/
 /*									*/
@@ -135,7 +135,7 @@ static void lzw_clear_table()
 /*	lzwc_clear_loop1			; initialise the preset codes  */
 lzwc_clear_loop1:
 /*		STR	r6, [r7, r8,LSL #2]	*/
-	*((int *) (r7+(r8<<2))) = r6;
+	*(r7+r8) = r6;
 /*		ADD	r8, r8,#1		*/
 	++r8;
 /*		ADD	r6, r6,#1		*/
@@ -150,7 +150,7 @@ lzwc_clear_loop1:
 /*	lzwc_clear_loop2			*/
 lzwc_clear_loop2:
 /*		STR	r6, [r7, r8,LSL #2]	*/
-	*((int *) (r7+(r8<<2))) = r6;
+	*(r7+r8) = r6;
 /*		ADD	r8, r8,#1		*/
 	++r8;
 /*		CMP	r8, #MAX_CODE		*/
@@ -353,7 +353,7 @@ lzwd_while_loop2:
 
 /*						; if read code is not in table  */
 /*		LDR	r3, [r7, r4,LSL #2]	; get entry from table  */
-	r3 = *((int *) (r7+(r4<<2)));
+	r3 = *(r7+r4);
 /*		MOV	r3, r3,LSL #12		; get 'size-of-string-to-this-point'  */
 /*						; out of bits 19..8  */
 	r3 <<= 12;
@@ -391,7 +391,7 @@ lzwd_was_in_table2:
 		goto lzwd_write_last2;
 	}
 /*		LDR	r5, [r7, r12,LSL #2]	; get entry from table  */
-	r5 = *((unsigned int *) (r7+(r12<<2)));
+	r5 = *(r7+r12);
 /*		MOV	r3, r5,LSL #12		; get 'size-of-string-to-this-point'  */
 /*						; out of bits 19..8  */
 	r3 = r5<<12;
@@ -403,7 +403,7 @@ lzwd_was_in_table2:
 /*	lzwd_backwd_copy_loop2			*/
 lzwd_backwd_copy_loop2:
 /*		LDR	r5, [r7, r12,LSL #2]	*/
-	r5 = *((unsigned int *) (r7+(r12<<2)));
+	r5 = *(r7+r12);
 /*		SUB	r3, r3,#1		*/
 	--r3;
 /*		CMP	r11, #0			; allowed to write?  */
@@ -421,7 +421,7 @@ lzwd_backwd_copy_loop2:
 /*						; done things right, r3 should be 1 at  */
 /*						; this point (meaning one char left)  */
 /*		LDR	r5, [r7, r12,LSL #2]	; get last char of string  */
-	r5 = *((unsigned int *) (r7+(r12<<2)));
+	r5 = *(r7+r12);
 /*		AND	r5, r5,#&ff		*/
 	r5 &= 0xFF;
 
@@ -431,7 +431,7 @@ lzwd_write_last2:
 /*						; to be written out (+bits 19-8 contain 'count')  */
 /*						; add new table entry  */
 /*		LDR	r3, [r7, r4,LSL #2]	; get entry for 'prefix code'  */
-	r3 = *((unsigned int *) (r7+(r4<<2)));
+	r3 = *(r7+r4);
 /*		MOV	r3, r3,LSL #12		; clear out top 12 bits...  */
 	r3 <<= 12;
 /*		MOV	r3, r3,LSR #20		; ... and bottom eight  */
@@ -443,7 +443,7 @@ lzwd_write_last2:
 /*		ORR	r12, r5,r4,LSL #20	; "new entry = 'string(oldcode)+firstchar({old}code)'"  */
 	r12 = r5 | (r4<<20);
 /*		STR	r12, [r7, r6,LSL #2]	*/
-	*((unsigned int *) (r7+(r6<<2))) = r12;
+	*(r7+r6) = r12;
 /*		ADD	r6, r6,#1		*/
 	++r6;
 /*						; check whether we need to increment 'code_bits'  */
