@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	17-Jan-06						//
+//  Edit:	11-Sep-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -153,8 +153,8 @@ DrawMatrix DrawMatrix::simplifyScale(bool *ix,bool *iy) const
 	double sx = mm[0];
 	double sy = mm[3];
 
-	if (*ix = (sx<0)) sx = -sx;
-	if (*iy = (sy<0)) sy = -sy;
+	if ((*ix = (sx<0))) sx = -sx;
+	if ((*iy = (sy<0))) sy = -sy;
 
 	return (DrawMatrix(sx,mm[1],mm[2],sy,dd[0],dd[1]));
 }

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	24-Apr-06						//
+//  Edit:	11-Sep-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -175,6 +175,7 @@ class DrawPathElement
 {
 public:
 	DrawPathElement(drawint xx = -1,drawint yy = -1)	{ x = xx; y = yy; }
+	virtual ~DrawPathElement()				{}
 	virtual operator QString() = 0;
 	virtual void draw(QPainterPath &pp) = 0;
 	virtual bool isStroke()		{ return (false); }
