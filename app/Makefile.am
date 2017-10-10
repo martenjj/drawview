@@ -1,7 +1,7 @@
 ############################################## -*- mode:makefile; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	06-Dec-15						##
+##  Edit:	10-Oct-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -39,8 +39,8 @@ drawview_SOURCES =	main.cpp drawview.cpp paper.cpp				\
 			taggedobject.cpp textobjects.cpp spriteobjects.cpp	\
 			textarea.cpp replicates.cpp radiate.cpp
 
-drawview_LDFLAGS =	$(qt4ldflags)
-drawview_LDADD =	$(qt4libs)
+drawview_LDFLAGS =	$(qt5ldflags)
+drawview_LDADD =	$(qt5libs)
 
 noinst_HEADERS =	global.h drawtypes.h drawview.h paper.h			\
 			drawwidget.h diagram.h object.h coord.h			\

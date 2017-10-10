@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	11-Sep-17						##
+##  Edit:	10-Oct-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -138,7 +138,7 @@ test "X${UIC}" != "X" || AC_MSG_ERROR([Qt 5 'uic' program not found - check inst
 
 qtcorelib="libQt5Core.so"
 qt5lib=
-for dir in ${with_qt5_libs:+${with_qt5_libs}} ${with_qt5:+${with_qt5}/lib} /usr/qt/4/lib /usr/lib/qt5 /usr/lib /usr/lib64 ${srcdir}/qt5/lib ${srcdir}/../qt5/lib ${prefix}/lib
+for dir in ${with_qt5_libs:+${with_qt5_libs}} ${with_qt5:+${with_qt5}/lib} ${qt5dir}/lib /usr/qt/4/lib /usr/lib/qt5 /usr/lib /usr/lib64 ${srcdir}/qt5/lib ${srcdir}/../qt5/lib ${prefix}/lib
 do
 	test "X${dir}" = "X" && continue
 	test -d "${dir}" || continue
@@ -158,7 +158,6 @@ then
 fi
 
 AC_MSG_CHECKING([Qt 5 library directory])
-#qt5lib1=`echo "${qt5lib}" | sed -e 's,/[[^/]]*$,,'`
 qt5lib=`cd ${qt5lib} && pwd`
 if test "${qt5lib}" = ""
 then
@@ -167,32 +166,23 @@ fi
 AC_MSG_RESULT([${qt5lib}])
 AC_SUBST([qt5lib])
 
-
-# See above
-#AC_PATH_PROG([qt5inc],[Qt/QtCore],[],[${with_qt5_includes:+${with_qt5_includes}:}${with_qt5:+${with_qt5}/include:}/usr/qt/4/include:/usr/include/qt5:/usr/include:${srcdir}/qt5/include:${srcdir}/../qt5/include:${prefix}/include])
-qtcoreinc="Qt/QtCore"
 qt5inc=
-for dir in ${with_qt5_includes:+${with_qt5_includes}} ${with_qt5:+${with_qt5}/include } /usr/qt/5/include /usr/include/qt5 /usr/include ${srcdir}/qt5/include ${srcdir}/../qt5/include ${prefix}/include
+for dir in ${with_qt5_includes:+${with_qt5_includes}} ${with_qt5:+${with_qt5}/include } ${qt5dir}/include /usr/qt/5/include /usr/include/qt5 /usr/include ${srcdir}/qt5/include ${srcdir}/../qt5/include ${prefix}/include
 do
 	test "X${dir}" = "X" && continue
 	test -d "${dir}" || continue
+
+	qtcoreinc="QtCore"
 	AC_MSG_CHECKING([for ${dir}/${qtcoreinc}])
-	if test -f "${dir}/${qtcoreinc}"
+	if test -d "${dir}/${qtcoreinc}"
 	then
 		qt5inc="${dir}"
 		AC_MSG_RESULT([yes])
 		break
 	else
 		AC_MSG_RESULT([no])
-	fi
-done
-if test "${qt5inc}" = ""
-then
-	qtcoreinc="QtCore"
-	for dir in ${with_qt5_includes:+${with_qt5_includes}} ${with_qt5:+${with_qt5}/include } /usr/qt/5/include /usr/include/qt5 /usr/include ${srcdir}/qt5/include ${srcdir}/../qt5/include ${prefix}/include
-	do
-		test "X${dir}" = "X" && continue
-		test -d "${dir}" || continue
+
+		qtcoreinc="Qt/QtCore"
 		AC_MSG_CHECKING([for ${dir}/${qtcoreinc}])
 		if test -d "${dir}/${qtcoreinc}"
 		then
@@ -202,11 +192,12 @@ then
 		else
 			AC_MSG_RESULT([no])
 		fi
-	done
-	if test "${qt5inc}" = ""
-	then
-		AC_MSG_ERROR([Qt 5 include directory not found - specify with '--with-qt5-includes'])
 	fi
+done
+
+if test "${qt5inc}" = ""
+then
+	AC_MSG_ERROR([Qt 5 include directory not found - specify with '--with-qt5-includes'])
 fi
 
 AC_MSG_CHECKING([Qt 5 include directory])
@@ -219,10 +210,13 @@ fi
 AC_MSG_RESULT([${qt5inc}])
 AC_SUBST([qt5inc])
 
-AC_CHECK_FILE([${qt5inc}/QtCore],,AC_MSG_ERROR([Qt 5 include directory <QtCore> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtGui],,AC_MSG_ERROR([Qt 5 include directory <QtGui> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtWidgets],,AC_MSG_ERROR([Qt 5 include directory <QtWidgets> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtPrintSupport],,AC_MSG_ERROR([Qt 5 include directory <QtPrintSupport> not found - check installation]))
+qtcomps="QtCore QtGui QtWidgets QtPrintSupport"
+for arg in ${qtcomps}
+do
+	AC_CHECK_FILE([${qt5inc}/${arg}],,AC_MSG_ERROR([Qt 5 include directory <${arg}> not found - check installation]))
+	arg=`echo "${arg}" | sed -e 's/Qt/Qt5/'`
+	qt5comps="${qt5comps} ${arg}"
+done
 
 AC_PATH_PROG([pkgconfigprog],[pkg-config],[])
 if test "${pkgconfigprog}" = ""
@@ -231,7 +225,7 @@ then
 fi
 
 AC_MSG_CHECKING([required Qt 5 compiler includes])
-temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags Qt5Widgets Qt5PrintSupport Qt5Gui Qt5Core`
+temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags ${qt5comps}`
 qt5cxxflags="-I${qt5inc} -I${qt5inc}/Qt"
 for arg in ${temp} ""
 do
@@ -270,7 +264,7 @@ AC_SUBST([qt5cxxflags])
 CXXFLAGS="${CXXFLAGS} ${qt5cxxflags}"
 
 AC_MSG_CHECKING([required Qt 5 linker flags])
-temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs Qt5Widgets Qt5PrintSupport Qt5Gui Qt5Core`
+temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs ${qt5comps}`
 qt5ldflags="-L${qt5lib}"
 test "X${rpathopt}" != "X" && qt5ldflags="${qt5ldflags} ${rpathopt}${qt5lib}"
 
