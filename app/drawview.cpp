@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	08-Mar-17						//
+//  Edit:	11-Oct-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -204,11 +204,13 @@ void DrawView::setupActions()
 	connect(mZoomacts,SIGNAL(triggered(QAction *)),this,SLOT(slotZoomSelected(QAction *)));
 	for (int i = 0; i<nzooms; ++i)
 	{
-		act = new QAction(QString("%1%").arg(zooms[i]),this);
+		const int z = zooms[i];
+		act = new QAction(QString("%1%").arg(z), this);
 		act->setCheckable(true);
+		act->setData(z);
 		mZoomacts->addAction(act);
 		mzoom->addAction(act);
-		if (zooms[i]==100)
+		if (z==100)
 		{
 			act->setShortcut(Qt::CTRL+Qt::Key_1);
 			act->setChecked(true);
@@ -496,7 +498,7 @@ void DrawView::slotToggleSkeletons(bool on)
 void DrawView::slotZoomSelected(QAction *act)
 {
 //TODO: can use QScrollArea::ensureVisible (with extended margins)?
-	int zoom = act->text().section('%',0,0).toInt();
+	int zoom = act->data().toInt();
 	if (zoom==0) return;
 
 	QWidget *v = wScroller->viewport();
