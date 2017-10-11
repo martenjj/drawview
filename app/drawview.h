@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	01-Feb-06						//
+//  Edit:	10-Oct-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -50,7 +49,6 @@
 
 class QWidget;
 class QScrollArea;
-class QPrinter;
 class QAction;
 class QActionGroup;
 
@@ -100,7 +98,6 @@ private:
 	bool loadFile(QString &file);
 	void setupActions();
 	void changeZoom(int incr);
-	QPrinter *printer();
 
 	QScrollArea *wScroller;
 	QWidget *wFrame;
@@ -112,7 +109,6 @@ private:
 	DrawDiagram *mDiagram;
 
 	QString mDocname;
-	QPrinter *mPrinter;
 	QPrinter::PageSize mPagesize;
 	QPrinter::Orientation mOrient;
 };

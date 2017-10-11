@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	11-Sep-17						##
+##  Edit:	11-Oct-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -219,10 +219,13 @@ fi
 AC_MSG_RESULT([${qt5inc}])
 AC_SUBST([qt5inc])
 
-AC_CHECK_FILE([${qt5inc}/QtCore],,AC_MSG_ERROR([Qt 5 include directory <QtCore> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtGui],,AC_MSG_ERROR([Qt 5 include directory <QtGui> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtWidgets],,AC_MSG_ERROR([Qt 5 include directory <QtWidgets> not found - check installation]))
-AC_CHECK_FILE([${qt5inc}/QtPrintSupport],,AC_MSG_ERROR([Qt 5 include directory <QtPrintSupport> not found - check installation]))
+qtcomps="QtCore QtGui QtWidgets QtPrintSupport QtSvg"
+for arg in ${qtcomps}
+do
+	AC_CHECK_FILE([${qt5inc}/${arg}],,AC_MSG_ERROR([Qt 5 include directory <${arg}> not found - check installation]))
+	arg=`echo "${arg}" | sed -e 's/Qt/Qt5/'`
+	qt5comps="${qt5comps} ${arg}"
+done
 
 AC_PATH_PROG([pkgconfigprog],[pkg-config],[])
 if test "${pkgconfigprog}" = ""
@@ -231,7 +234,7 @@ then
 fi
 
 AC_MSG_CHECKING([required Qt 5 compiler includes])
-temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags Qt5Widgets Qt5PrintSupport Qt5Gui Qt5Core`
+temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --cflags ${qt5comps}`
 qt5cxxflags="-I${qt5inc} -I${qt5inc}/Qt"
 for arg in ${temp} ""
 do
@@ -270,7 +273,7 @@ AC_SUBST([qt5cxxflags])
 CXXFLAGS="${CXXFLAGS} ${qt5cxxflags}"
 
 AC_MSG_CHECKING([required Qt 5 linker flags])
-temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs Qt5Widgets Qt5PrintSupport Qt5Gui Qt5Core`
+temp=`PKG_CONFIG_PATH=${qt5lib}/pkgconfig:${qt5dir}/lib/pkgconfig; export PKG_CONFIG_PATH; ${pkgconfigprog} --libs ${qt5comps}`
 qt5ldflags="-L${qt5lib}"
 test "X${rpathopt}" != "X" && qt5ldflags="${qt5ldflags} ${rpathopt}${qt5lib}"
 
