@@ -12,7 +12,7 @@ Qt/X11 is free for use and development of open-source applications.
 The 'qt4' branch works with the older Qt 4.
 
 The file is displayed in a desktop window which can be scrolled and
-zoomed as required.  The drawing can be exported in PDF or PostScript
+zoomed as required.  The drawing can be exported in PDF, SVG or PostScript
 format for printing or use in other applications.
 
 
