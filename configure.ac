@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	10-Oct-17						##
+##  Edit:	11-Oct-17						##
 ##									##
 ##########################################################################
 ##									##
@@ -210,7 +210,7 @@ fi
 AC_MSG_RESULT([${qt5inc}])
 AC_SUBST([qt5inc])
 
-qtcomps="QtCore QtGui QtWidgets QtPrintSupport"
+qtcomps="QtCore QtGui QtWidgets QtPrintSupport QtSvg"
 for arg in ${qtcomps}
 do
 	AC_CHECK_FILE([${qt5inc}/${arg}],,AC_MSG_ERROR([Qt 5 include directory <${arg}> not found - check installation]))

@@ -1,8 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Library					//
-//  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	01-Feb-06						//
+//  Edit:	10-Oct-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -147,13 +146,13 @@ void DrawWidget::paintEvent(QPaintEvent *pe)
 }
 
 
-void DrawWidget::printDiagram(QPrinter *pr)
+void DrawWidget::printDiagram(QPaintDevice *dev)
 {
-	debugmsg(0) << funcinfo << "start pagesize=" << pr->pageSize() << " orient=" << pr->orientation() << " format=" << pr->outputFormat();
+	debugmsg(0) << funcinfo << "start";
 	QTime start = QTime::currentTime();
 
 	QPainter p;
-	p.begin(pr);					// begin painting
+	p.begin(dev);					// begin painting
 
 	PaintOptions opts;				// don't need clipping here
 	opts.setFlags(PaintOptions::EnableClipping,false);

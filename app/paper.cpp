@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	11-Dec-08						//
+//  Edit:	11-Oct-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -146,8 +146,8 @@ bool PaperUtil::guessSize(const DrawBox *box,
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-void PaperUtil::getSize(QPrinter::PageSize size,QPrinter::Orientation orient,
-			unsigned int *width,unsigned int *height)
+void PaperUtil::getSize(QPrinter::PageSize size, QPrinter::Orientation orient,
+                        unsigned int *width, unsigned int *height, QPrinter::Unit unit)
 {
 	QPrinter pr(QPrinter::ScreenResolution);
 	pr.setPageSize(size);
@@ -156,11 +156,9 @@ void PaperUtil::getSize(QPrinter::PageSize size,QPrinter::Orientation orient,
 
 	debugmsg(0) << funcinfo
 		    << "for size=" << size << " orient=" << orient
-		    << " -> paperrect=" << pr.paperRect()
-		    << " pagerect=" << pr.pageRect()
-		    << " width=" << pr.width() << " height=" << pr.height()
+		    << " -> paperrect=" << pr.paperRect(unit)
 		    << " res=" << pr.resolution();
 
-	*width = pr.paperRect().width();
-	*height = pr.paperRect().height();
+	*width = qRound(pr.paperRect(unit).width());
+	*height = qRound(pr.paperRect(unit).height());
 }

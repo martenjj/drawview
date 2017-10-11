@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Library					//
-//  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	13-Jan-06						//
+//  Edit:	10-Oct-17						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -49,7 +48,7 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-class QPrinter;
+class QPaintDevice;
 
 class DrawDiagram;
 
@@ -71,7 +70,7 @@ public:
 	void setZoom(double scale = 1.0);
 	PaintOptions *paintOptions()			{ return (&paintopts); }
 
-	void printDiagram(QPrinter *pr);
+	void printDiagram(QPaintDevice *dev);
 
 protected:
 	void paintEvent(QPaintEvent *pe);
