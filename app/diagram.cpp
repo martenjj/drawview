@@ -408,7 +408,7 @@ void DrawDiagram::dump(QTextStream &str) const
 {
 	const QString line(78,'-');
 
-	str << Qt::endl << line << Qt::endl << Qt::endl << uppercasedigits;
+	str << Qt::endl << line << Qt::endl << Qt::endl << Qt::uppercasedigits;
 	str << "Diagram: objects " << objects.size() << " bbox " << bbox;
 	str << Qt::endl;
 
