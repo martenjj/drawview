@@ -116,14 +116,14 @@ DrawView::DrawView(const QString &file)
 	}
 
 	this->show();					// show us as window
-	debugmsg(0) << funcinfo << "done" << endl;
+	debugmsg(0) << funcinfo << "done" << Qt::endl;
 }
 
 
 DrawView::~DrawView()
 {
 	if (mDiagram!=NULL) delete mDiagram;
-	debugmsg(0) << funcinfo << "done" << endl;
+	debugmsg(0) << funcinfo << "done" << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////

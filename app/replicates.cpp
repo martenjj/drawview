@@ -137,7 +137,7 @@ void DrawSimpleReplicateBase::dump(QTextStream &str,const QString &indent1,const
 	str << indent << "type " << typ
 		<< " hornum " << hornum << " horsp " << horsp
 		<< " vernum " << vernum << " versp " << versp
-		<< " skeleton " << skeleton << endl;
+		<< " skeleton " << skeleton << Qt::endl;
 
 	object->dump(str,(indent1+indent2),"   ");
 }
@@ -261,7 +261,7 @@ void DrawGeneralInstanceObject::dump(QTextStream &str,const QString &indent1,con
 {
 	DrawObject::dump(str,indent1,indent2);
 #ifdef NEWGENREP
-	str << indent1 << indent2 << "transmat " << transmat << endl;
+	str << indent1 << indent2 << "transmat " << transmat << Qt::endl;
 #endif
 }
 

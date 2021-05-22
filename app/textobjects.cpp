@@ -203,14 +203,14 @@ void DrawTextObjectBase::dump1(QTextStream &str,const QString &indent1,const QSt
 
 	const QString indent = indent1+indent2;
 	str << indent << qSetPadChar('0')
-	    << "textcol " << hex << qSetFieldWidth(8) << textcolour << qSetFieldWidth(0) << dec
-	    << " backcol " << hex << qSetFieldWidth(8) << backcolour << qSetFieldWidth(0) << dec
-	    << " style " << textstyle << endl;
+	    << "textcol " << Qt::hex << qSetFieldWidth(8) << textcolour << qSetFieldWidth(0) << Qt::dec
+	    << " backcol " << Qt::hex << qSetFieldWidth(8) << backcolour << qSetFieldWidth(0) << Qt::dec
+	    << " style " << textstyle << Qt::endl;
 	str << indent
 	    << "size (" << xsize << "," << ysize << ")"
 	    << " point (" << (xsize/640) << "," << (ysize/640) << ")"
 	    << " coord (" << xcoord << "," << ycoord << ")"
-	    << endl;
+	    << Qt::endl;
 }
 
 
@@ -220,7 +220,7 @@ void DrawTextObjectBase::dump2(QTextStream &str,const QString &indent1,const QSt
 	str << indent1 << indent2
 	    << "text length " << tx.size()
 	    << " \"" << tx.replace('\n',"\\n") << "\""
-	    << endl;
+	    << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@ void DrawTransformedTextObject::dump(QTextStream &str,const QString &indent1,con
 	DrawTextObjectBase::dump1(str,indent1,indent2);
 
 	const QString indent = indent1+indent2;
-	str << indent << "matrix " << mat << " flags " << textflags << endl;
+	str << indent << "matrix " << mat << " flags " << textflags << Qt::endl;
 	DrawTextObjectBase::dump2(str,indent1,indent2);
 }
 

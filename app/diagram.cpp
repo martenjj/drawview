@@ -258,7 +258,7 @@ DrawDiagram::DrawDiagram(const QString &file)
 		data.clear();				// finished with the data
 	}
 
-	debugmsg(0) << funcinfo << "done valid=" << errors.level() << endl;
+	debugmsg(0) << funcinfo << "done valid=" << errors.level() << Qt::endl;
 }
 
 
@@ -408,9 +408,9 @@ void DrawDiagram::dump(QTextStream &str) const
 {
 	const QString line(78,'-');
 
-	str << endl << line << endl << endl << uppercasedigits;
+	str << Qt::endl << line << Qt::endl << Qt::endl << uppercasedigits;
 	str << "Diagram: objects " << objects.size() << " bbox " << bbox;
-	str << endl;
+	str << Qt::endl;
 
 	QString in2 = "|  ";
 	for (QList<DrawObject *>::const_iterator it = objects.begin();
@@ -420,5 +420,5 @@ void DrawDiagram::dump(QTextStream &str) const
 		(*it)->dump(str,"",in2);
 	}
 
-	str << endl << line << endl << endl;
+	str << Qt::endl << line << Qt::endl << Qt::endl;
 }

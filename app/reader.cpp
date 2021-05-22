@@ -188,7 +188,7 @@ default:	errstr = QString("Unknown error %1").arg(st);			break;
 void DrawReader::save()
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << endl << funcinfo << "stacking cp=0x" << hex << curpos << dec << " exp=" << expsize;
+	debugmsg(0) << Qt::endl << funcinfo << "stacking cp=0x" << Qt::hex << curpos << Qt::dec << " exp=" << expsize;
 #endif
 	savestack.push(curpos);				// save current position
 	savestack.push(expsize);			// save expected size
@@ -201,7 +201,7 @@ void DrawReader::restore()
 	drawuint ocp = savestack.pop();			// restore old position
 	expsize = oxs-(curpos-ocp);			// calculate new expected size
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "popped cp=0x" << hex << ocp << dec << " xs=" << oxs << "; new cp=0x" << hex << curpos << dec << " xs=" << expsize;
+	debugmsg(0) << funcinfo << "popped cp=0x" << Qt::hex << ocp << Qt::dec << " xs=" << oxs << "; new cp=0x" << Qt::hex << curpos << Qt::dec << " xs=" << expsize;
 #endif
 }
 
@@ -259,7 +259,7 @@ DrawFileReader::~DrawFileReader()
 bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=0x" << hex << curpos << dec;
+	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=0x" << Qt::hex << curpos << Qt::dec;
 #endif
 	if (!savestack.isEmpty()) expecteof = false;	// only at top level
 	if (str->atEnd())				// end of file, but is it to
@@ -274,7 +274,7 @@ bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 	{
 		*str >> w;
 #ifdef DEBUG_READER
-		debugmsg(0) << "  aligned read got " << w << "(0x" << hex << w << dec << ")";
+		debugmsg(0) << "  aligned read got " << w << "(0x" << Qt::hex << w << Qt::dec << ")";
 #endif
 	}
 	else
@@ -286,7 +286,7 @@ bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 			w |= c<<i;
 		}
 #ifdef DEBUG_READER
-		debugmsg(0) << "  unaligned read got " << w << "(0x" << hex << w << dec << ")";
+		debugmsg(0) << "  unaligned read got " << w << "(0x" << Qt::hex << w << Qt::dec << ")";
 #endif
 	}
 
@@ -308,7 +308,7 @@ bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 bool DrawFileReader::getByte(drawbyte *cp,drawuint len)
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << hex << curpos << dec << " len=" << len;
+	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec << " len=" << len;
 #endif
 	checkStreamEof();
 	checkStreamShort(len);
@@ -336,7 +336,7 @@ bool DrawFileReader::getByte(drawbyte *cp,drawuint len)
 bool DrawFileReader::getString(QByteArray *b,unsigned char terminator)
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << hex << curpos << dec;
+	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
 #endif
 	b->clear();
 	quint8 c;
@@ -367,7 +367,7 @@ bool DrawFileReader::getString(QByteArray *b,unsigned char terminator)
 bool DrawFileReader::discardWordAlign()
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << hex << curpos << dec;
+	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
 #endif
 	qint8 c;
 	while ((curpos % 4)!=0)
@@ -394,7 +394,7 @@ bool DrawFileReader::discardWordAlign()
 bool DrawFileReader::discardRest()
 {
 #ifdef DEBUG_READER
-	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << hex << curpos << dec;
+	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
 #endif
 	qint8 c;
 	while (expsize>0)

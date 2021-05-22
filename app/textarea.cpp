@@ -594,9 +594,9 @@ void DrawTextAreaObject::dump(QTextStream &str,const QString &indent1,const QStr
 	const QString indent = indent1+indent2;
 
 	str << indent << qSetPadChar('0')
-	    << "textcol " << hex << qSetFieldWidth(8) << textcolour << qSetFieldWidth(0) << dec
-	    << " backcol " << hex << qSetFieldWidth(8) << backcolour << qSetFieldWidth(0) << dec
-	    << endl;
+	    << "textcol " << Qt::hex << qSetFieldWidth(8) << textcolour << qSetFieldWidth(0) << Qt::dec
+	    << " backcol " << Qt::hex << qSetFieldWidth(8) << backcolour << qSetFieldWidth(0) << Qt::dec
+	    << Qt::endl;
 
 	for (QList<DrawTextColumnObject *>::const_iterator it = columns.begin();
 	     it!=columns.end(); ++it)
@@ -605,11 +605,11 @@ void DrawTextAreaObject::dump(QTextStream &str,const QString &indent1,const QStr
 	}
 
 	QByteArray tx(text);				// because 'replace()' modifies
-	str << indent << "|" << endl;
+	str << indent << "|" << Qt::endl;
 	str << indent
 	    << "+- Text length " << tx.size()
-	    << endl;
-	str << indent << "   " << tx.replace('\n',("\n"+indent+"   ")) << endl;
+	    << Qt::endl;
+	str << indent << "   " << tx.replace('\n',("\n"+indent+"   ")) << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////

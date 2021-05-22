@@ -208,7 +208,7 @@ SpriteReader::SpriteReader(DrawReader &rdr)
 
 	if (!rdr.getWord(&mode)) return;		// read 'sprite_mode mode'
 #ifdef DEBUG_SPRITEREADER
-	debugmsg(0) << "  mode=" << mode << "(" << hex << mode << dec << ")";
+	debugmsg(0) << "  mode=" << mode << "(" << Qt::hex << mode << Qt::dec << ")";
 #endif
 	if (!decodeMode()) return;
 
@@ -378,7 +378,7 @@ default:		errstr = QString("Unsupported sprite type %1").arg(type);
 	ypixels = height+1;				// height in pixels = lines
 
 #ifdef DEBUG_SPRITEREADER
-	debugmsg(0) << funcinfo << endl << "  eig=(" << xeig << "," << yeig << ")"
+	debugmsg(0) << funcinfo << Qt::endl << "  eig=(" << xeig << "," << yeig << ")"
 		   << " cols=" << cols << " bpp=" << bpp << " pix=" << pix
 		   << " linesize=" << linesize << " pixels=(" << xpixels << "," << ypixels << ")";
 #endif

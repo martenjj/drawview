@@ -143,13 +143,13 @@ bool DrawObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *op
 
 void DrawObject::dump(QTextStream &str,const QString &indent1,const QString &indent2) const
 {
-	str << indent1 << ((indent2.simplified().isEmpty()) ? "|  " : indent2) << endl;
+	str << indent1 << ((indent2.simplified().isEmpty()) ? "|  " : indent2) << Qt::endl;
 	str << indent1 << "+- Object at " << mAddress
-	    << " (" << hex << qSetFieldWidth(6) << qSetPadChar('0') << mAddress << dec << qSetFieldWidth(0) << "):"
+	    << " (" << Qt::hex << qSetFieldWidth(6) << qSetPadChar('0') << mAddress << Qt::dec << qSetFieldWidth(0) << "):"
 	    << " type " << this->typeName()
-	    << " flags " << hex << qSetFieldWidth(2) << qSetPadChar('0') << mFlags
-	    << " layer " << dec << qSetFieldWidth(0) << qSetPadChar(' ') << mLayer << endl;
-	if (mBbox.isValid()) str << indent1 << indent2 << "bbox " << mBbox << endl;
+	    << " flags " << Qt::hex << qSetFieldWidth(2) << qSetPadChar('0') << mFlags
+	    << " layer " << Qt::dec << qSetFieldWidth(0) << qSetPadChar(' ') << mLayer << Qt::endl;
+	if (mBbox.isValid()) str << indent1 << indent2 << "bbox " << mBbox << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ DrawObject *DrawObjectManager::create(DrawReader &rdr,DrawDiagram *diag,DrawObje
 
 #ifdef DEBUG_CREATE
 	debugmsg(0) << funcinfo << "at " << rdr.currentObject()
-		   << " (" << hex << rdr.currentObject() << dec << ")"
+		   << " (" << Qt::hex << rdr.currentObject() << Qt::dec << ")"
 		   << " type=" << type << " layer=" << layer << " flag=" << objflag << " size=" << size;
 #endif
 

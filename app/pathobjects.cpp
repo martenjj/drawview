@@ -128,7 +128,7 @@ void DrawPathDashPattern::dump(QTextStream &str,const QString &indent)
 	str << indent << "Dash pattern start " << start << " count " << elements.size() << " elements ";
 	const drawuint *ptr = elements.data();
 	for (int i = 0; i<elements.size(); ++i) str << ptr[i] << " ";
-	str << endl;
+	str << Qt::endl;
 }
 
 
@@ -674,18 +674,18 @@ void DrawPathObject::dump(QTextStream &str,const QString &indent1,const QString 
 	const QString indent = indent1+indent2;
 
 	str << indent << qSetPadChar('0')
-	    << "fillcol " << hex << qSetFieldWidth(8) << fillcolour << qSetFieldWidth(0) << dec
-	    << " pathcol " << hex << qSetFieldWidth(8) << pathcolour << qSetFieldWidth(0) << dec
-	    << " width " << pathwidth << endl;
+	    << "fillcol " << Qt::hex << qSetFieldWidth(8) << fillcolour << qSetFieldWidth(0) << Qt::dec
+	    << " pathcol " << Qt::hex << qSetFieldWidth(8) << pathcolour << qSetFieldWidth(0) << Qt::dec
+	    << " width " << pathwidth << Qt::endl;
 	str << indent << "style " << pathstyle
-	    << " " << (singledot ? "singledot" : "") << endl;
+	    << " " << (singledot ? "singledot" : "") << Qt::endl;
 
 	if (hasDashPattern()) dash->dump(str,indent);
 
 	for (QList<DrawPathElement *>::const_iterator it = path.begin();
 	     it!=path.end(); ++it)
 	{
-		str << indent << *(*it) << endl;
+		str << indent << *(*it) << Qt::endl;
 	}
 }
 

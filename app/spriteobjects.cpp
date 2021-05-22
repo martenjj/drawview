@@ -146,7 +146,7 @@ void DrawImageObjectBase::dump1(QTextStream &str,const QString &indent1,const QS
 	{
 		str << indent1 << indent2
 		    << "transmat " << transmat << " simple " << simple
-		    << endl;
+		    << Qt::endl;
 	}
 }
 
@@ -165,7 +165,7 @@ void DrawImageObjectBase::dump2(QTextStream &str,const QString &indent1,const QS
 		    << " format " << image.format()
 		    << " depth " << image.depth() << " alpha " << image.hasAlphaChannel();
 	}
-	str << endl;
+	str << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -210,8 +210,8 @@ void DrawSpriteObjectBase::dump1(QTextStream &str,const QString &indent1,const Q
 	DrawImageObjectBase::dump1(str,indent1,indent2);
 
 	str << indent1 << indent2 << qSetPadChar('0')
-	    << "mode " << mode << " (" << hex << qSetFieldWidth(8) << mode << qSetFieldWidth(0) << dec << ")"
-	    << endl;
+	    << "mode " << mode << " (" << Qt::hex << qSetFieldWidth(8) << mode << qSetFieldWidth(0) << Qt::dec << ")"
+	    << Qt::endl;
 
 	if (bpp!=0)					// valid sprite image
 	{
@@ -221,7 +221,7 @@ void DrawSpriteObjectBase::dump1(QTextStream &str,const QString &indent1,const Q
 		    << " hadpalette " << hadpalette
 		    << " haspalette " << haspalette
 		    << " mask " << hasmask
-		    << endl;
+		    << Qt::endl;
 	}
 
 	DrawImageObjectBase::dump2(str,indent1,indent2);
@@ -414,7 +414,7 @@ void DrawJpegObject::dump(QTextStream &str,const QString &indent1,const QString 
 	str << indent1 << indent2
 	    << "jpeg size (" << width << "," << height << ")"
 	    << " pdx/pdy (" << pdx << "," << pdy << ")"
-	    << endl;
+	    << Qt::endl;
 
 	DrawImageObjectBase::dump2(str,indent1,indent2);
 }

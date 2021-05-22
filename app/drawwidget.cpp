@@ -141,7 +141,7 @@ void DrawWidget::paintEvent(QPaintEvent *pe)
 	p.end();					// finished with painting
 
 #ifdef DEBUG_PAINTING
-	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << endl;
+	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << Qt::endl;
 #endif
 }
 
@@ -163,5 +163,5 @@ void DrawWidget::printDiagram(QPaintDevice *dev)
 
 	p.end();					// finished with painting
 
-	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << endl;
+	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << Qt::endl;
 }

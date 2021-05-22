@@ -85,14 +85,14 @@ void DrawUnknownObject::dump(QTextStream &str,const QString &indent1,const QStri
 	const drawword *ptr = data.data();
 	bool printed = false;
 
-	str << indent << hex << qSetPadChar('0');
+	str << indent << Qt::hex << qSetPadChar('0');
 	for (int i = 0; i<data.size(); ++i)
 	{
-		if ((i % 8)==0 && printed) str << endl << indent;
+		if ((i % 8)==0 && printed) str << Qt::endl << indent;
 		str << qSetFieldWidth(8) << ptr[i] << qSetFieldWidth(0) << " ";
 		printed = true;
 	}
 
-	if (printed) str << endl;
-	str << dec;
+	if (printed) str << Qt::endl;
+	str << Qt::dec;
 }

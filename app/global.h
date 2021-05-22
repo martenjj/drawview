@@ -58,7 +58,7 @@
 #ifdef QT4
 #include <qdebug.h>
 #define debugmsg(n)	qDebug().nospace()
-#define warnmsg()	qWarning().nospace() << endl
+#define warnmsg()	qWarning().nospace() << Qt::endl
 #else							// QT4
 #include <iostream>
 #define debugmsg(n)	cerr

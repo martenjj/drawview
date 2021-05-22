@@ -214,7 +214,7 @@ void DrawRadiateObject::dump(QTextStream &str,const QString &indent1,const QStri
 
 	str << indent << "centre " << centre
 	    << " angle " << angle << " degrees " << (angle*180/acos(-1))
-	    << " number " << number << endl;
+	    << " number " << number << Qt::endl;
 
 	object->dump(str,indent,"   ");
 }

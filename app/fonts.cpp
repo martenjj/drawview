@@ -332,7 +332,7 @@ void FontReferenceMap::dump(QTextStream &str,const QString &indent) const
 			str << " = family \"" << ent->m->family() << "\""
 			    << " style " << ent->m->style() << " weight " << ent->m->weight();
 		}
-		str << endl;
+		str << Qt::endl;
 
 	}
 }
