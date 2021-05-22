@@ -135,8 +135,8 @@ static QString describeInfo(const QFontInfo &fi)
 #endif
 
 
-bool DrawTextObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-			      Draw::textopt flags,const DrawMatrix *mat) const
+bool DrawTextObjectBase::drawInternal(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
+                                      Draw::textopt flags,const DrawMatrix *mat) const
 {
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 
@@ -244,7 +244,7 @@ bool DrawTextObject::build(DrawReader &rdr,DrawDiagram *diag)
 
 bool DrawTextObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
-	return (DrawTextObjectBase::draw(p,diag,opts,textstyle.flags()));
+	return (DrawTextObjectBase::drawInternal(p,diag,opts,textstyle.flags()));
 }
 
 
@@ -311,7 +311,7 @@ bool DrawTransformedTextObject::build(DrawReader &rdr,DrawDiagram *diag)
 
 bool DrawTransformedTextObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
-	return (DrawTextObjectBase::draw(p,diag,opts,textflags.flags(),&mat));
+	return (DrawTextObjectBase::drawInternal(p,diag,opts,textflags.flags(),&mat));
 }
 
 

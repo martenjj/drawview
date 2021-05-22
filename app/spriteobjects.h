@@ -69,13 +69,13 @@ public:
 	DrawImageObjectBase(Draw::objflags flag,int layer = 0);
 	virtual ~DrawImageObjectBase()		{}
 
+protected:
 	bool build3();
-
-	virtual bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-                          const DrawMatrix *mat = NULL) const;
-
 	void dump1(QTextStream &str,const QString &indent1,const QString &indent2) const;
 	void dump2(QTextStream &str,const QString &indent1,const QString &indent2) const;
+
+	bool drawInternal(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
+                          const DrawMatrix *mat = NULL) const;
 
 protected:
 	QImage image;
@@ -96,10 +96,8 @@ public:
 	DrawSpriteObjectBase(Draw::objflags flag,int layer = 0);
 	virtual ~DrawSpriteObjectBase()		{}
 
+protected:
 	bool build2(DrawReader &rdr,DrawDiagram *diag);
-
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-		  const DrawMatrix *mat = NULL) const override;
 
 	void dump1(QTextStream &str,const QString &indent1,const QString &indent2) const;
 	void dump2(QTextStream &str,const QString &indent1,const QString &indent2) const;

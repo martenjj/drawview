@@ -70,13 +70,13 @@ public:
 	DrawTextObjectBase(Draw::objflags flag,int layer = 0);
 	virtual ~DrawTextObjectBase()				{}
 
+protected:
 	bool build2(DrawReader &rdr,DrawDiagram *diag);
-
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-		  Draw::textopt flags,const DrawMatrix *mat = NULL) const;
-
 	void dump1(QTextStream &str,const QString &indent1,const QString &indent2) const;
 	void dump2(QTextStream &str,const QString &indent1,const QString &indent2) const;
+
+	bool drawInternal(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
+                          Draw::textopt flags,const DrawMatrix *mat = NULL) const;
 
 protected:
 	DrawTextStyle textstyle;

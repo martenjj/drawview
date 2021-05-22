@@ -110,8 +110,8 @@ bool DrawImageObjectBase::build3()
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawImageObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-			       const DrawMatrix *mat) const
+bool DrawImageObjectBase::drawInternal(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
+                                       const DrawMatrix *mat) const
 {
 	if (image.isNull()) return (false);
 	if (!DrawObject::draw(p,diag,opts)) return (false);
@@ -195,13 +195,6 @@ bool DrawSpriteObjectBase::build2(DrawReader &rdr,DrawDiagram *diag)
 	if (es.isNull()) image = sr.getImage();		// copy out the image
 	else rdr.addError(es,Draw::errorWARNING);	// note sprite read error
 	return (true);
-}
-
-
-bool DrawSpriteObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-				const DrawMatrix *mat) const
-{
-	return (DrawImageObjectBase::draw(p,diag,opts,mat));
 }
 
 
@@ -316,7 +309,7 @@ bool DrawTransformedSpriteObject::build(DrawReader &rdr,DrawDiagram *diag)
 
 bool DrawTransformedSpriteObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
-	return (DrawSpriteObjectBase::draw(p,diag,opts,(simple ? NULL : &transmat)));
+	return (DrawSpriteObjectBase::drawInternal(p,diag,opts,(simple ? NULL : &transmat)));
 }
 
 
@@ -403,7 +396,7 @@ bool DrawJpegObject::build(DrawReader &rdr,DrawDiagram *diag)
 
 bool DrawJpegObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
-	return (DrawImageObjectBase::draw(p,diag,opts,(simple ? NULL : &transmat)));
+	return (DrawImageObjectBase::drawInternal(p,diag,opts,(simple ? NULL : &transmat)));
 }
 
 
