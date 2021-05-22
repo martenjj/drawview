@@ -106,7 +106,7 @@ public:
 #endif
 
 	static DrawObject *create(DrawReader &rdr,DrawDiagram *diag,
-				  DrawObjectManager::CreateFlags flags = 0);
+				  DrawObjectManager::CreateFlags flags = DrawObjectManager::CreateFlags());
 	static void registerCreator(Draw::object,DrawObjectCreator *);
 };
 
