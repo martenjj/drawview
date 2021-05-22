@@ -180,7 +180,7 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 
 	p.save();					// save global state
-	QMatrix m = p.matrix();				// cheaper than restore()/save()
+	const QTransform m = p.transform();		// cheaper than restore()/save()
 	PaintOptions newopts = *opts;			// doesn't work when matrix changed
 	newopts.setFlags(PaintOptions::EnableClipping,false);
 
@@ -191,7 +191,7 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 
 	for (unsigned int i = 0; i<number; ++i)
 	{
-		p.setMatrix(m);				// reset to original each time
+		p.setTransform(m);			// reset to original each time
 
 		double ang = -angle*i;			// rotation in Qt is clockwise
 		double c = cos(ang);
@@ -200,7 +200,7 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 		int dx = scx-qRound(c*scx-s*scy);	// offset from original centre
 		int dy = scy-qRound(s*scx+c*scy);	// to transformed centre
 
-		p.setMatrix(QMatrix(c,s,-s,c,dx,dy),true);
+		p.setTransform(QTransform(c, s, -s, c, dx, dy), true);
 		object->draw(p,diag,&newopts);
 	}
 

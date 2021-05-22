@@ -173,7 +173,7 @@ bool DrawTextObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOpt
 	if (mat!=NULL)					// transformed text
 	{
 		p.translate(xco,yco);
-		p.setMatrix(mat->toQMatrix(true),true);
+		p.setTransform(mat->toTransform(true),true);
 		p.translate(-xco,-yco);
 	}
 

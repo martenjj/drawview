@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	10-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -76,7 +76,7 @@ typedef drawuint drawword;
 
 class QColor;
 class QRect;
-class QMatrix;
+class QTransform;
 
 class DrawReader;
 
@@ -327,7 +327,7 @@ public:
 	bool isIdentity() const			{ return (identity); }
 	bool isSimple() const			{ return (mm[1]==0.0 && mm[2]==0.0); }
 	DrawMatrix simplifyScale(bool *ix,bool *iy) const;
-	QMatrix toQMatrix(bool nodisplacement = false) const;
+	QTransform toTransform(bool nodisplacement = false) const;
 
 private:
 	double mm[4];

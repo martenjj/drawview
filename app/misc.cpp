@@ -35,7 +35,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-#include <qmatrix.h>
+#include <qtransform.h>
 
 #include "reader.h"
 #include "coord.h"
@@ -140,11 +140,11 @@ DrawMatrix::operator QString() const
 }
 
 
-QMatrix DrawMatrix::toQMatrix(bool nodisplacement) const
+QTransform DrawMatrix::toTransform(bool nodisplacement) const
 {
-	return (QMatrix(mm[0],-mm[1],-mm[2],mm[3],
-			(nodisplacement ? 0 : DrawCoord::toPixelH(dd[0])),
-			(nodisplacement ? 0 : -DrawCoord::toPixelV(dd[1]))));
+	return (QTransform(mm[0],-mm[1],-mm[2],mm[3],
+                           (nodisplacement ? 0 : DrawCoord::toPixelH(dd[0])),
+                           (nodisplacement ? 0 : -DrawCoord::toPixelV(dd[1]))));
 }
 
 

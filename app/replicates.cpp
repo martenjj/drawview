@@ -107,7 +107,7 @@ bool DrawSimpleReplicateBase::draw(QPainter &p,const DrawDiagram *diag,const Pai
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 
 	p.save();					// save global state
-	QMatrix m = p.matrix();				// cheaper than restore()/save()
+	const QTransform m = p.transform();		// cheaper than restore()/save()
 
 	PaintOptions newopts = *opts;			// doesn't work when matrix changed
 	newopts.setFlags(PaintOptions::EnableClipping,false);
@@ -118,7 +118,7 @@ bool DrawSimpleReplicateBase::draw(QPainter &p,const DrawDiagram *diag,const Pai
 		for (int j = 0; j<vernum; ++j)
 		{
 			if (typ==Draw::repDIAGONAL && i!=j) continue;
-			p.setMatrix(m);			// reset and apply this
+			p.setTransform(m);		// reset and apply this
 			p.translate(DrawCoord::toPixelH(i*horsp),-DrawCoord::toPixelV(j*versp));
 			object->draw(p,diag,&newopts);	// handles skeleton or not
 		}
@@ -388,7 +388,7 @@ bool DrawGeneralReplicateBase::draw(QPainter &p,const DrawDiagram *diag,const Pa
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 
 	p.save();					// save global state
-	QMatrix m = p.matrix();				// cheaper than restore()/save()
+	const QTransform m = p.transform();		// cheaper than restore()/save()
 
 	PaintOptions newopts = *opts;			// doesn't work when matrix changed
 	newopts.setFlags(PaintOptions::EnableClipping,false);
@@ -419,8 +419,8 @@ bool DrawGeneralReplicateBase::draw(QPainter &p,const DrawDiagram *diag,const Pa
 		const int my = qRound(DrawCoord::toPixelY(0)*(1-sy)) +
 			       DrawCoord::toPixelV(qRound(sy*oy0)-iy0);
 
-		p.setMatrix(m);				// reset and transform for this
-		p.setMatrix(QMatrix(sx,0,0,sy,mx,my),true);
+		p.setTransform(m);				// reset and transform for this
+		p.setTransform(QTransform(sx, 0, 0, sy, mx, my), true);
 
 		object->draw(p,diag,&newopts);
 	}
