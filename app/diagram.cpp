@@ -217,7 +217,7 @@ DrawDiagram::DrawDiagram(const QString &file)
 				errors.add(QString("Decompression process failed to start, error %1").arg(proc.error()));
 				return;
 			}
-			debugmsg(0) << "started process pid " << proc.pid();
+			debugmsg(0) << "started process pid " << proc.processId();
 
 			if (!proc.waitForFinished())	// let it run to finish
 			{
