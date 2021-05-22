@@ -183,9 +183,9 @@ bool DrawTextObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOpt
 		int x = xco;
 		switch (just)				// adjust line justification
 		{
-case Draw::justCENTRE:	x -= p.fontMetrics().width(*it)/2;	break;
-case Draw::justRIGHT:	x -= p.fontMetrics().width(*it);	break;
-default:							break;
+case Draw::justCENTRE:	x -= p.fontMetrics().horizontalAdvance(*it)/2;	break;
+case Draw::justRIGHT:	x -= p.fontMetrics().horizontalAdvance(*it);	break;
+default:								break;
 		}
 
 		p.drawText(x,yco,QString::fromLatin1(*it));
