@@ -1,7 +1,7 @@
 /* Emacs:          -*- mode:c; mode:riscos-file; c-basic-offset: 4; -*- */
 /************************************************************************/
 /*									*/
-/*	File:		decompress.c		Edit:  05-Dec-15	*/
+/*	File:		decompress.c		Edit:  22-May-21	*/
 /*	Language:	ANSI C						*/
 /*	Project:	Draw file compression library			*/
 /*	Developed on:	Vector						*/
@@ -75,7 +75,6 @@
 /*									*/
 /************************************************************************/
 
-#define Error(s)		return (Error1(s))
 #define Error1(s)		err_generateLookup(s)
 #define Error2()		err_lastError()
 #define Error3(s,a)		err_generateLookup(s,a)
@@ -727,8 +726,8 @@ static os_error *drawcomp_decompress_diag(draw_diag *diag_in,draw_diag *diag_out
 
     cflags = ((int *) diag_in->data)[5];		/* Original compression flags */
 
-    strncpy(diag_in->data,DRAW_FILE_ID,4);		/* Identifier & creator ID in header */
-    strncpy(ptroff(diag_in->data,12),"DrawCompress",12);
+    memcpy(diag_in->data,DRAW_FILE_ID,4);		/* Identifier & creator ID in header */
+    memcpy(ptroff(diag_in->data,12),"DrawCompress",12);
     if (diag_out!=NULL)					/* Copy file header */
     {
 	memcpy(diag_out->data,diag_in->data,sizeof(draw_fileheader));
