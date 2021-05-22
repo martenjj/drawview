@@ -412,12 +412,12 @@ bool DrawGeneralReplicateBase::draw(QPainter &p,const DrawDiagram *diag,const Pa
 		const int ix1 = inst->bbox()->x1();
 		const int iy1 = inst->bbox()->y1();
 
-		const double sx = ((double) (ix1-ix0))/(ox1-ox0);
-		const double sy = ((double) (iy1-iy0))/(oy1-oy0);
+		const double sx = double(ix1-ix0)/(ox1-ox0);
+		const double sy = double(iy1-iy0)/(oy1-oy0);
 
-		const int mx = DrawCoord::toPixelH(ix0-((int) (sx*ox0)));
-		const int my = ((int) (DrawCoord::toPixelY(0)*(1-sy))) +
-			       DrawCoord::toPixelV(((int) (sy*oy0))-iy0);
+		const int mx = DrawCoord::toPixelH(ix0-qRound(sx*ox0));
+		const int my = qRound(DrawCoord::toPixelY(0)*(1-sy)) +
+			       DrawCoord::toPixelV(qRound(sy*oy0)-iy0);
 
 		p.setMatrix(m);				// reset and transform for this
 		p.setMatrix(QMatrix(sx,0,0,sy,mx,my),true);

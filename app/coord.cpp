@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	18-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -133,7 +133,7 @@ int DrawCoord::toUnscaledV(drawint v)			// no inversion
 int DrawCoord::fontToPoint(int p,bool scaled)		// font units = 1/640 point
 {
 	if (!scaled) return (qMax(((p+320)/640),1));
-	return (qMax(((int) (((p*sZoom)+320)/640)),1));
+	return (qMax((qRound(((p*sZoom)+320)/640)), 1));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ double DrawCoord::zoom()
 
 int DrawCoord::scaleBy(int d,double zoom)
 {
-	return ((int) (d*zoom+.5));
+	return (qRound(d*zoom+.5));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ void DrawCoord::begin(const QPaintDevice *pd,double scale)
 	sActive = pd;					// note painter is active
 
 	sZoom = scale;
-	sFactor = (int) (DRAWPERINCH/scale);
+	sFactor = qRound(DRAWPERINCH/scale);
 
 	sDpiX = pd->logicalDpiX();			// DPI in each direction
 	sDpiY = pd->logicalDpiY();

@@ -126,11 +126,11 @@ bool DrawImageObjectBase::draw(QPainter &p,const DrawDiagram *diag,const PaintOp
 	}
 	else						// complex transform
 	{
-		p.translate(DrawCoord::toPixelX((int) mat->dx()),DrawCoord::toPixelY((int) mat->dy()));
+		p.translate(DrawCoord::toPixelX(mat->dx()), DrawCoord::toPixelY(mat->dy()));
 		p.scale(DrawCoord::zoom(),-DrawCoord::zoom());
 		p.setMatrix(QMatrix(mat->m11(),mat->m12(),mat->m21(),mat->m22(),0,0),true);
-		p.scale(((double) p.device()->logicalDpiX())/image.logicalDpiX(),
-			((double) p.device()->logicalDpiY())/image.logicalDpiY());
+		p.scale(double(p.device()->logicalDpiX())/image.logicalDpiX(),
+                        double(p.device()->logicalDpiY())/image.logicalDpiY());
 		p.drawImage(0,0,image);
 	}
 

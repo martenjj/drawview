@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	11-Sep-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -87,10 +87,10 @@ DrawBox::operator QString() const
 
 DrawMatrix::DrawMatrix(drawint m11,drawint m12,drawint m21,drawint m22,drawint dx,drawint dy)
 {
-	mm[0] = ((double) m11)/Draw::SCALE1;		// convert to Qt scale factor
-	mm[1] = ((double) m12)/Draw::SCALE1;
-	mm[1] = ((double) m21)/Draw::SCALE1;
-	mm[3] = ((double) m22)/Draw::SCALE1;
+	mm[0] = double(m11)/Draw::SCALE1;		// convert to Qt scale factor
+	mm[1] = double(m12)/Draw::SCALE1;
+	mm[1] = double(m21)/Draw::SCALE1;
+	mm[3] = double(m22)/Draw::SCALE1;
 	dd[0] = dx; dd[1] = dy;				// these stay in Draw units
 	identity = false;
 }
@@ -120,7 +120,7 @@ bool DrawMatrix::read(DrawReader &rdr)
 	{
 		drawint w;
 		if (!rdr.getWord((drawword *) &w)) return (false);
-		mm[i] = ((double) w)/Draw::SCALE1;
+		mm[i] = double(w)/Draw::SCALE1;
 	}
 	for (int i = 0; i<=1; ++i)			// translations
 	{

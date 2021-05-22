@@ -195,8 +195,8 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 		double c = cos(ang);
 		double s = sin(ang);
 
-		int dx = scx-((int) (c*scx-s*scy));	// offset from original centre
-		int dy = scy-((int) (s*scx+c*scy));	// to transformed centre
+		int dx = scx-qRound(c*scx-s*scy);	// offset from original centre
+		int dy = scy-qRound(s*scx+c*scy);	// to transformed centre
 
 		p.setMatrix(QMatrix(c,s,-s,c,dx,dy),true);
 		object->draw(p,diag,&newopts);
