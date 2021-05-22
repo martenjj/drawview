@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	11-Oct-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -77,7 +77,7 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-DrawView::DrawView(QString file)
+DrawView::DrawView(const QString &file)
 	: QMainWindow(NULL)
 {
 	debugmsg(0) << funcinfo << "file=" << file;
@@ -261,18 +261,17 @@ void DrawView::slotFileMenuAboutToShow()
 }
 
 
-bool DrawView::loadFile(QString &file)
+bool DrawView::loadFile(const QString &file)
 {
-	if (file.isNull()) return (false);
-	if (file=="-") file = "/dev/stdin";		// not actually supported
+	if (file.isEmpty()) return (false);
+	QString infile = (file=="-") ? "/dev/stdin" : file;
+	QFile qf(infile);				// stdin is not actually supported
 
-	QFile qf(file);
-
-	DrawDiagram *dg = new DrawDiagram(file);
+	DrawDiagram *dg = new DrawDiagram(infile);
 	if (!dg->isValid())
 	{
 		QMessageBox::critical(NULL,("Error - "+qApp->applicationName()),
-				      QString("Error loading drawing file '%2'\n%1").arg(dg->drawError()).arg(file),
+				      QString("Error loading drawing file '%2'\n%1").arg(dg->drawError()).arg(infile),
 				      QMessageBox::Cancel,QMessageBox::NoButton,QMessageBox::NoButton);
 		delete dg;
 		return (false);
@@ -286,13 +285,13 @@ bool DrawView::loadFile(QString &file)
 	QPrinter::Orientation orient;			// guess a page size
 	if (PaperUtil::guessSize(mDiagram->boundingBox(),&size,&orient)) setDrawingSize(size,orient);
 
-	mDocname = file.remove(QRegExp("^.*/"));	// save for possible printing
+	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
 	setWindowTitle(QString("%2 - %1").arg(qApp->applicationName()).arg(mDocname));
 
 	if (!mDiagram->drawError().isNull())
 	{
 		QMessageBox::information(NULL,("Message - "+qApp->applicationName()),
-					 QString("Problem in drawing file '%2'\n%1").arg(mDiagram->drawError()).arg(file),
+					 QString("Problem in drawing file '%2'\n%1").arg(mDiagram->drawError()).arg(infile),
 					 QMessageBox::Ignore,QMessageBox::NoButton,QMessageBox::NoButton);
 	}
 
@@ -320,7 +319,7 @@ void DrawView::fileOpen()
 
 	static QDir opendir = QDir::current();		// start in current directory
 
-	QFileDialog d(this,"Open File",QString::null,openfilters.join(";;"));
+	QFileDialog d(this, "Open File", "", openfilters.join(";;"));
 	d.setFileMode(QFileDialog::ExistingFile);
 	d.setAcceptMode(QFileDialog::AcceptOpen);
 	d.setDirectory(opendir);			// use previous directory
@@ -355,7 +354,7 @@ void DrawView::fileExport()
 
 	static QDir expdir = QDir::current();		// start in current directory
 
-	QFileDialog d(this,"Export To File",QString::null,filters.join(";;"));
+	QFileDialog d(this, "Export To File", "", filters.join(";;"));
 	d.setFileMode(QFileDialog::AnyFile);
 	d.setAcceptMode(QFileDialog::AcceptSave);
 	d.setLabelText(QFileDialog::LookIn,"Save in:");
@@ -376,7 +375,7 @@ void DrawView::fileExport()
 	}
 
 	const QString sf = d.selectedNameFilter();	// see which filter was used
-	QString ext = QString::null;
+	QString ext = "";
 	QRegExp rx("\\(\\*\\.(\\w+)");
 	if (sf.indexOf(rx)>=0) ext = rx.cap(1);		// extract extension from that
 	if (!ext.isNull() && !expfile.endsWith("."+ext)) expfile += "."+ext;

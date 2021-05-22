@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	11-Sep-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -85,7 +85,7 @@ public:
 	Qt::PenStyle getPen();
 
 	bool read(DrawReader &rdr);
-	void dump(QTextStream &str,const QString &indent = QString::null);
+	void dump(QTextStream &str, const QString &indent = "");
 
 private:
 	drawuint start;

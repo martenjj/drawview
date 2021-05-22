@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	17-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -82,7 +82,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 static const char *filtername = "drawfilter";
-static QString decompfilter = QString::null;
+static QString decompfilter = "";
 
 
 static void locateDecompFilter()
@@ -364,7 +364,7 @@ bool DrawDiagram::isValid() const
 
 QString DrawDiagram::drawError() const
 {
-	QString msg = QString::null;
+	QString msg = "";
 
 	int count = 0;
 	for (QList<const DrawError *>::const_iterator it = errors.list()->begin();

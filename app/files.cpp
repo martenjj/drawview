@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	15-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -81,7 +81,7 @@
 FileReader::FileReader(const QString &basename)
 {
 	name = basename;				// save for report later
-	path = QString::null;				// file not found yet
+	path.clear();					// file not found yet
 
 	ok = tryFile() ||
 	     tryFile(qApp->applicationDirPath()+"/../share/"+PACKAGE) ||
@@ -136,7 +136,7 @@ const QString FileReader::getLine()
 {
 	for (;;)					// until got a line, anyway
 	{						// check for end of file
-		if (str.atEnd()) return (QString::null);
+		if (str.atEnd()) return (QString());
 		QString line = str.readLine();
 		++lineno;				// read line and count it
 
@@ -160,7 +160,7 @@ const QStringList FileReader::getParsedLine()
 	if (line.isNull()) return (fields);		// end of file, empty result
 
 	const QRegExp ws("^\\s+");			// match whitespace at start
-	QString field = QString::null;			// current field being built
+	QString field;					// current field being built
 	bool quote = false;				// within a quoted string
 
 	while (!line.isEmpty())				// until end of line
@@ -169,7 +169,7 @@ const QStringList FileReader::getParsedLine()
 		{					// save the current field
 			if (!field.isNull()) fields.append(field);
 			line = line.replace(ws,"");	// trim whitespace from start
-			field = QString::null;		// clear to start next
+			field.clear();			// clear to start next
 			continue;
 		}
 

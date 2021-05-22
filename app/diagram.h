@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	26-Nov-05						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -70,7 +70,7 @@ class FontReferenceMap;
 class DrawDiagram
 {
 public:
-	DrawDiagram(const QString &file = QString::null);
+	DrawDiagram(const QString &file = "");
 	~DrawDiagram();
 
 	bool isValid() const;

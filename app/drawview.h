@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	10-Oct-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -67,7 +67,7 @@ class DrawView : public QMainWindow
 	Q_OBJECT
 
 public:
-	DrawView(QString file = QString::null);
+	DrawView(const QString &file = QString());
 	~DrawView();
 
 	bool isValid() const			{ return (mDiagram!=NULL); }
@@ -95,7 +95,7 @@ protected slots:
 	void slotZoomOut();
 
 private:
-	bool loadFile(QString &file);
+	bool loadFile(const QString &file);
 	void setupActions();
 	void changeZoom(int incr);
 

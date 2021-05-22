@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	15-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -72,7 +72,7 @@ public:
 	void reportError(const QString &desc,QWidget *parent = NULL) const;
 
 protected:
-	bool tryFile(const QString &basename = QString::null);
+	bool tryFile(const QString &basename = "");
 
 private:
 	bool ok;

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Sprites					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -161,7 +161,7 @@ SpriteReader::SpriteReader(DrawReader &rdr)
 #ifdef DEBUG_SPRITEREADER
 	debugmsg(0) << funcinfo;
 #endif
-	errstr = QString::null;				// no error found yet
+	errstr.clear();					// no error found yet
 
 	mode = 0;					// default in case of failure
 	bpp = pix = cols = 0;

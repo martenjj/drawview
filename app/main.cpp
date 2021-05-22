@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	11-Sep-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -88,7 +88,7 @@ int main(int argc,char *argv[])
 		const int n = args.count()-1;		// not including program name
 		if (n==0)
 		{
-			(void) new DrawView(QString::null);
+			(void) new DrawView(QString());
 			ok = true;
 		}
 		else
