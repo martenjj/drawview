@@ -130,7 +130,7 @@ public:
 	Draw::object type() const override 	{ return (Draw::objENDMARK); }
 	QString typeName() const override	{ return ("ENDMARK"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag) override		{ return (true); }
+    bool build(DrawReader &rdr,DrawDiagram *diag) override	{ Q_UNUSED(rdr); Q_UNUSED(diag); return (true); }
 };
 
 //////////////////////////////////////////////////////////////////////////
