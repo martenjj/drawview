@@ -441,7 +441,7 @@ bool DrawPathObject::build(DrawReader &rdr,DrawDiagram *diag)
 	singledot = true;				// possibly so far, anyway
 	int elm = 0;					// current element index
 	int tag = Draw::pathMOVE;			// current element type
-	int startx,starty;				// start point of subpath
+	int startx = 0, starty = 0;			// start point of subpath
 	bool open = false;				// subpath not closed yet
 
 	while (tag!=Draw::pathTERM)
