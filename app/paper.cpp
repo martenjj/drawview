@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	11-Oct-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -63,17 +63,17 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-static const QPrinter::PageSize guessablePageSizes[] =
+static const QPageSize::PageSizeId guessablePageSizes[] =
 {
-	QPrinter::A5,
-	QPrinter::A4,
-	QPrinter::A3,
-	QPrinter::A2,
-	QPrinter::A1,
-	QPrinter::A0,
-	QPrinter::B0
+	QPageSize::A5,
+	QPageSize::A4,
+	QPageSize::A3,
+	QPageSize::A2,
+	QPageSize::A1,
+	QPageSize::A0,
+	QPageSize::B0
 };
-static const int nGuessablePageSizes = sizeof(guessablePageSizes)/sizeof(QPrinter::PageSize);
+static const int nGuessablePageSizes = sizeof(guessablePageSizes)/sizeof(QPageSize::PageSizeId);
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -83,7 +83,7 @@ static const int nGuessablePageSizes = sizeof(guessablePageSizes)/sizeof(QPrinte
 //////////////////////////////////////////////////////////////////////////
 
 bool PaperUtil::guessSize(const DrawBox *box,
-			  QPrinter::PageSize *size,QPrinter::Orientation *orient)
+			  QPageSize *size, QPageLayout::Orientation *orient)
 {
 	if (!box->isValid()) return (false);		// bounds not available
 
@@ -92,17 +92,17 @@ bool PaperUtil::guessSize(const DrawBox *box,
 
 	debugmsg(0) << funcinfo << "for drawing right=" << right << " top=" << top;
 
-	QPrinter::PageSize bestps = QPrinter::A4;
-	QPrinter::Orientation bestor = QPrinter::Landscape;
+	QPageSize bestps(QPageSize::A4);
+	QPageLayout::Orientation bestor = QPageLayout::Landscape;
 	int bestfit = INT_MAX;
 
 	QPrinter pr(QPrinter::HighResolution);
-	pr.setOrientation(QPrinter::Portrait);
+	pr.setPageOrientation(QPageLayout::Portrait);
 	pr.setFullPage(true);				// don't want any margins
 
 	for (int i = 0; i<nGuessablePageSizes; ++i)
 	{
-		QPrinter::PageSize ps = guessablePageSizes[i];
+		QPageSize ps = QPageSize(guessablePageSizes[i]);
 		pr.setPageSize(ps);
 		unsigned int w = mmToDraw(pr.widthMM());
 		unsigned int h = mmToDraw(pr.heightMM());
@@ -115,7 +115,7 @@ bool PaperUtil::guessSize(const DrawBox *box,
 				debugmsg(0) << "  best fit portrait ps=" << ps << " w=" << w << " h=" << h;
 				bestfit = fit;
 				bestps = ps;
-				bestor = QPrinter::Portrait;
+				bestor = QPageLayout::Portrait;
 			}
 		}
 
@@ -127,7 +127,7 @@ bool PaperUtil::guessSize(const DrawBox *box,
 				debugmsg(0) << "  best fit landscape ps=" << ps << " w=" << w << " h=" << h;
 				bestfit = fit;
 				bestps = ps;
-				bestor = QPrinter::Landscape;
+				bestor = QPageLayout::Landscape;
 			}
 		}
 	}
@@ -146,12 +146,12 @@ bool PaperUtil::guessSize(const DrawBox *box,
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-void PaperUtil::getSize(QPrinter::PageSize size, QPrinter::Orientation orient,
+void PaperUtil::getSize(const QPageSize &size, QPageLayout::Orientation orient,
                         unsigned int *width, unsigned int *height, QPrinter::Unit unit)
 {
 	QPrinter pr(QPrinter::ScreenResolution);
 	pr.setPageSize(size);
-	pr.setOrientation(orient);
+	pr.setPageOrientation(orient);
 	pr.setFullPage(true);				// don't want any margins
 
 	debugmsg(0) << funcinfo

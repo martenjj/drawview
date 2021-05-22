@@ -108,7 +108,7 @@ DrawView::DrawView(const QString &file)
 	setCentralWidget(wScroller);			// content of main window
 	setupActions();					// menu and shortcut actions
 							// default page settings
-	setDrawingSize(QPrinter::A4,QPrinter::Landscape);
+	setDrawingSize(QPageSize(QPageSize::A4), QPageLayout::Landscape);
 
 	if (!file.isNull())				// file to load specified
 	{
@@ -281,8 +281,8 @@ bool DrawView::loadFile(const QString &file)
 	mDiagram = dg;					// note the new one
 	wDrawing->setDiagram(mDiagram);			// tell display about it
 
-	QPrinter::PageSize size;
-	QPrinter::Orientation orient;			// guess a page size
+	QPageSize size;
+	QPageLayout::Orientation orient;		// guess a page size
 	if (PaperUtil::guessSize(mDiagram->boundingBox(),&size,&orient)) setDrawingSize(size,orient);
 
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
@@ -428,7 +428,7 @@ void DrawView::fileExport()
 		pr->setOutputFileName(expfile);
 
 		pr->setFullPage(true);			// must do these settings in
-		pr->setOrientation(mOrient);		// this order, otherwise Qt 4.1.0
+		pr->setPageOrientation(mOrient);	// this order, otherwise Qt 4.1.0
 		pr->setPageSize(mPagesize);		// gets the output orientation
 							// wrong - Qt bug 99066
 		device = pr;				// use this paint device
@@ -453,12 +453,12 @@ void DrawView::optionsPageSize()
 {
 	QPrinter pr;
 	pr.setPageSize(mPagesize);
-	pr.setOrientation(mOrient);
+	pr.setPageOrientation(mOrient);
 	pr.setOutputFormat(QPrinter::PdfFormat);	// allow all known paper sizes
 
 	QPageSetupDialog pd(&pr,this);
 	pd.setWindowTitle("Page Size - "+qApp->applicationName());
-	if (pd.exec()) setDrawingSize(pr.pageSize(),pr.orientation());
+	if (pd.exec()) setDrawingSize(pr.pageLayout().pageSize(), pr.pageLayout().orientation());
 }
 
 
@@ -481,7 +481,7 @@ void DrawView::drawingSizeChanged()
 }
 
 
-void DrawView::setDrawingSize(QPrinter::PageSize size,QPrinter::Orientation orient)
+void DrawView::setDrawingSize(const QPageSize &size, QPageLayout::Orientation orient)
 {
 	mPagesize = size;
 	mOrient = orient;

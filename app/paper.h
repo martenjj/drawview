@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	11-Oct-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -52,8 +52,8 @@
 namespace PaperUtil
 {
 	extern bool guessSize(const DrawBox *box,
-			      QPrinter::PageSize *size,QPrinter::Orientation *orient);
-	extern void getSize(QPrinter::PageSize size, QPrinter::Orientation orient,
+			      QPageSize *size, QPageLayout::Orientation *orient);
+	extern void getSize(const QPageSize &size, QPageLayout::Orientation orient,
                             unsigned int *width, unsigned int *height,
                             QPrinter::Unit unit = QPrinter::DevicePixel);
 };

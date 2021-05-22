@@ -74,7 +74,7 @@ public:
 
 protected:
 	void drawingSizeChanged();
-	void setDrawingSize(QPrinter::PageSize size,QPrinter::Orientation orient);
+	void setDrawingSize(const QPageSize &size, QPageLayout::Orientation orient);
 
 protected slots:
 	void fileOpen();
@@ -109,8 +109,8 @@ private:
 	DrawDiagram *mDiagram;
 
 	QString mDocname;
-	QPrinter::PageSize mPagesize;
-	QPrinter::Orientation mOrient;
+	QPageSize mPagesize;
+	QPageLayout::Orientation mOrient;
 };
 
 
