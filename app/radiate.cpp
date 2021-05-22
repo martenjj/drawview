@@ -94,8 +94,8 @@ bool DrawRadiateObject::build(DrawReader &rdr,DrawDiagram *diag)
 	if (!DrawObject::build(rdr,diag)) return (false);
 
 	drawuint ang[2];
-	if (!rdr.getWord((drawword *) &ang[0]) ||	// read 'double angle'
-	    !rdr.getWord((drawword *) &ang[1])) return (false);
+	if (!rdr.getWord(static_cast<drawword *>(&ang[0])) ||	// read 'double angle'
+	    !rdr.getWord(static_cast<drawword *>(&ang[1]))) return (false);
 
 	const bool sign = (ang[0] & 0x80000000)!=0;	// convert to native 'double'
 	const int exp = (ang[0] & 0x7FF00000)>>20;
@@ -103,9 +103,11 @@ bool DrawRadiateObject::build(DrawReader &rdr,DrawDiagram *diag)
 	angle = ldexp(frac,exp-1023);
 	if (sign) angle = -angle;
 
-	if (!rdr.getWord((drawword *) &number) ||	// read 'int number'
-	    !rdr.getWord((drawword *) &centre)) return (false);
-							// read 'draw_radtyp centre'
+        drawword cent;
+	if (!rdr.getWord(static_cast<drawword *>(&number)) ||	// read 'int number'
+	    !rdr.getWord(static_cast<drawword *>(&cent))) return (false);
+        centre = static_cast<Draw::radtyp>(cent);        	// read 'draw_radtyp centre'
+
 	rdr.save();
 	object = DrawObjectManager::create(rdr,diag);	// read 'draw_pathstrhdr path'
 	rdr.restore();
@@ -187,7 +189,7 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 	const int scx = DrawCoord::toPixelX(cx);	// pixel position of centre
 	const int scy = DrawCoord::toPixelY(cy);
 
-	for (int i = 0; i<number; ++i)
+	for (unsigned int i = 0; i<number; ++i)
 	{
 		p.setMatrix(m);				// reset to original each time
 

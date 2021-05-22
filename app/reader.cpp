@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -89,27 +89,6 @@
 #include "error.h"
 
 #include "reader.h"
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  Class DRAWREADER -- Abstract base class for reading.		//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-DrawReader::DrawReader(DrawErrorList *errl)
-{
-	errstat = DrawReader::Invalid;			// no status set yet
-	curpos = expsize = objstart = 0;		// clear position and counters
-
-	ourerrs = NULL;					// no error list allocated yet
-	errlist = errl;					// save caller's list if any
-}
-
-
-DrawReader::~DrawReader()
-{
-	if (ourerrs!=NULL) delete ourerrs;		// we allocated it, so destroy
-}
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -207,27 +186,34 @@ void DrawReader::restore()
 
 //////////////////////////////////////////////////////////////////////////
 //									//
-//  Class DRAWFILEREADER -- Reader that reads from a file - actually	//
-//  a 'QIODevice', which has the potential to be attached to other	//
-//  data sources such as a memory buffer.				//
+//  Class DRAWREADER -- Reader that reads from any QIODevice, which	//
+//  therefore can read from a file or any other data source such as a	//
+//  memory buffer.							//
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-DrawFileReader::DrawFileReader(QIODevice *dev,DrawErrorList *errl)
-	: DrawReader(errl)
+DrawReader::DrawReader(QIODevice *dev,DrawErrorList *errl)
 {
 	debugmsg(0) << funcinfo;
+
+	errstat = DrawReader::Invalid;			// no status set yet
+	curpos = expsize = objstart = 0;		// clear position and counters
+
+	ourerrs = NULL;					// no error list allocated yet
+	errlist = errl;					// save caller's list if any
+
 	str = new QDataStream(dev);
 	str->setByteOrder(QDataStream::LittleEndian);	// always this in Draw files
 	if (str->status()==QDataStream::Ok) setError(DrawReader::Ok);
 }
 
 
-DrawFileReader::~DrawFileReader()
+DrawReader::~DrawReader()
 {
 	debugmsg(0) << funcinfo;
 	str->device()->close();
 	delete str;
+	if (ourerrs!=NULL) delete ourerrs;		// we allocated it, so destroy
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -256,7 +242,7 @@ DrawFileReader::~DrawFileReader()
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawFileReader::getWord(drawword *wp,bool expecteof)
+bool DrawReader::getWord(drawword *wp, bool expecteof)
 {
 #ifdef DEBUG_READER
 	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=0x" << Qt::hex << curpos << Qt::dec;
@@ -293,7 +279,7 @@ bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 	if (str->status()==QDataStream::ReadPastEnd) return (setError(DrawReader::Eof));
 	checkStreamStatus();
 
-	if (wp!=NULL) *wp = w;
+	if (wp!=NULL) *wp = w;				// store result read
 	expsize -= sizeof(drawword);			// count down expected size
 	curpos += sizeof(drawword);			// count up current position
 	return (true);
@@ -305,7 +291,7 @@ bool DrawFileReader::getWord(drawword *wp,bool expecteof)
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawFileReader::getByte(drawbyte *cp,drawuint len)
+bool DrawReader::getByte(drawbyte *cp,drawuint len)
 {
 #ifdef DEBUG_READER
 	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec << " len=" << len;
@@ -333,7 +319,7 @@ bool DrawFileReader::getByte(drawbyte *cp,drawuint len)
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawFileReader::getString(QByteArray *b,unsigned char terminator)
+bool DrawReader::getString(QByteArray *b,unsigned char terminator)
 {
 #ifdef DEBUG_READER
 	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
@@ -364,7 +350,7 @@ bool DrawFileReader::getString(QByteArray *b,unsigned char terminator)
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawFileReader::discardWordAlign()
+bool DrawReader::discardWordAlign()
 {
 #ifdef DEBUG_READER
 	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
@@ -391,7 +377,7 @@ bool DrawFileReader::discardWordAlign()
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-bool DrawFileReader::discardRest()
+bool DrawReader::discardRest()
 {
 #ifdef DEBUG_READER
 	debugmsg(0) << funcinfo << "expsize=" << expsize << " curpos=" << Qt::hex << curpos << Qt::dec;
@@ -410,3 +396,26 @@ bool DrawFileReader::discardRest()
 
 	return (true);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  Compatibility overloads - keep all the pointer ugliness in one	//
+//  place here.								//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+bool DrawReader::getByte(char *cp, drawuint len)
+{
+	return (getByte(static_cast<drawbyte *>(static_cast<void *>(cp)), len));
+}
+
+bool DrawReader::getWord(void *vp, bool expecteof)
+{
+	return (getWord(static_cast<drawword *>(vp), expecteof));
+}
+
+bool DrawReader::getWord(std::nullptr_t np, bool expecteof)
+{
+	return (getWord(static_cast<drawword *>(np), expecteof));
+}
+

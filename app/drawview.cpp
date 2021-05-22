@@ -288,7 +288,7 @@ bool DrawView::loadFile(const QString &file)
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
 	setWindowTitle(QString("%2 - %1").arg(qApp->applicationName()).arg(mDocname));
 
-	if (!mDiagram->drawError().isNull())
+	if (!mDiagram->drawError().isEmpty())
 	{
 		QMessageBox::information(NULL,("Message - "+qApp->applicationName()),
 					 QString("Problem in drawing file '%2'\n%1").arg(mDiagram->drawError()).arg(infile),

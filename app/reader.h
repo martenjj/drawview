@@ -56,7 +56,7 @@ class DrawErrorList;
 
 //////////////////////////////////////////////////////////////////////////
 //									//
-//  Class DRAWREADER -- Abstract base class for reading.		//
+//  Class DRAWREADER -- Reader that operates on any QIODevice.		//
 //									//
 //////////////////////////////////////////////////////////////////////////
 
@@ -65,7 +65,8 @@ class DrawReader
 public:
 	enum status { Ok, Finished, Eof, Ioerr, Short, Invalid };
 
-	virtual ~DrawReader();
+	explicit DrawReader(QIODevice *dev, DrawErrorList *errl = nullptr);
+	~DrawReader();
 
 	void save();
 	void restore();
@@ -79,11 +80,22 @@ public:
 	DrawReader::status getStatus() const		{ return (errstat); }
 	DrawErrorList *getErrorList() const		{ return (errlist); }
 
-	virtual bool getWord(drawword *wp,bool expecteof = false) = 0;
-	virtual bool getByte(drawbyte *cp,drawuint len = 1) = 0;
-	virtual bool getString(QByteArray *bp,unsigned char terminator = '\0') = 0;
-	virtual bool discardWordAlign() = 0;
-	virtual bool discardRest() = 0;
+	bool getWord(drawword *wp, bool expecteof = false);
+	bool getByte(drawbyte *bp, drawuint len = 1);
+	bool getString(QByteArray *bp, unsigned char terminator = '\0');
+	bool discardWordAlign();
+	bool discardRest();
+
+	// Compatibility overload to be able to pass the result of
+	// QByteArray::data(), which returns a 'char *'
+	bool getByte(char *cp, drawuint len = 1);
+
+	// Compatibility overload to be able to pass a pointer to
+	// an arbitrary type, which must be word-aligned.
+	bool getWord(void *vp, bool expecteof = false);
+
+	// Compatibility overload to be able to pass a null pointer.
+	bool getWord(std::nullptr_t np, bool expecteof = false);
 
 	void addError(const QString &msg,Draw::error lvl = Draw::errorFATAL);
 
@@ -97,6 +109,7 @@ protected:
 	QStack<drawuint> savestack;
 
 private:
+	QDataStream *str;
 	DrawReader::status errstat;
 	QString errmessage;
 	drawuint errloc;
@@ -104,28 +117,6 @@ private:
 	DrawErrorList *errlist;
 
 	drawuint objstart;
-};
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  Class DRAWFILEREADER -- Reader that reads from a file.		//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-class DrawFileReader : public DrawReader
-{
-public:
-	DrawFileReader(QIODevice *dev,DrawErrorList *errl = NULL);
-	~DrawFileReader();
-
-	bool getWord(drawword *wp,bool expecteof = false)  override;
-	bool getByte(drawbyte *cp,drawuint len = 1)  override;
-	bool getString(QByteArray *bp,unsigned char terminator = '\0')  override;
-	bool discardWordAlign()  override;
-	bool discardRest()  override;
-
-private:
-	QDataStream *str;
 };
 
 #endif							// READER_H

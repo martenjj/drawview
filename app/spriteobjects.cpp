@@ -390,7 +390,7 @@ bool DrawJpegObject::build(DrawReader &rdr,DrawDiagram *diag)
 	}
 
 	QByteArray buf(datasize,0);			// read 'int data[]'
-	if (!rdr.getByte(((drawbyte *) buf.data()),datasize)) return (false);
+	if (!rdr.getByte(buf.data(), datasize)) return (false);
 	if (!image.loadFromData(buf,"JPEG"))
 	{
 		rdr.addError("JPEG image load failed",Draw::errorWARNING);

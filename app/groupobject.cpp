@@ -69,9 +69,9 @@ bool DrawGroupObject::build(DrawReader &rdr,DrawDiagram *diag)
 {							// from 'draw_groustr'
 	if (!DrawObject::build(rdr,diag)) return (false);
 
-	if (!rdr.getWord(NULL) || 			// read 'draw_groupnametyp name'
-	    !rdr.getWord(NULL) ||
-	    !rdr.getWord(NULL)) return (false);		// nothing ever uses this!
+	if (!rdr.getWord(nullptr) || 			// read 'draw_groupnametyp name'
+	    !rdr.getWord(nullptr) ||
+	    !rdr.getWord(nullptr)) return (false);	// nothing ever uses this!
 
 	while (rdr.sizeRemaining()>0)			// read 'draw_objhdr object[]'
 	{

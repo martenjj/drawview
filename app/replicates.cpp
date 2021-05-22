@@ -85,11 +85,11 @@ bool DrawSimpleReplicateBase::build(DrawReader &rdr,DrawDiagram *diag)
 {							// from 'struct draw_simrepstr'
 	if (!DrawObject::build(rdr,diag)) return (false);
 
-	if (!rdr.getWord((drawword *) &typ) ||		// read 'draw_reptyp type'
-	    !rdr.getWord((drawword *) &hornum) ||	// read 'int hor_num'
-	    !rdr.getWord((drawword *) &horsp) ||	// read 'int hor_sp'
-	    !rdr.getWord((drawword *) &vernum) ||	// read 'int vert_num'
-	    !rdr.getWord((drawword *) &versp)) return (false);
+	if (!rdr.getWord(&typ) ||		// read 'draw_reptyp type'
+	    !rdr.getWord(&hornum) ||	// read 'int hor_num'
+	    !rdr.getWord(&horsp) ||	// read 'int hor_sp'
+	    !rdr.getWord(&vernum) ||	// read 'int vert_num'
+	    !rdr.getWord(&versp)) return (false);
 							// read 'int vert_sp'
 	rdr.save();
 	if (!skeleton) object = DrawObjectManager::create(rdr,diag);

@@ -77,7 +77,7 @@ protected:
 
 private:
 	double angle;
-	int number;
+	unsigned int number;
 	Draw::radtyp centre;
 	DrawObject *object;
 };

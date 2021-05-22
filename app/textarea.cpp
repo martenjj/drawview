@@ -569,8 +569,8 @@ bool DrawTextAreaObject::build(DrawReader &rdr,DrawDiagram *diag)
 		columns.append(static_cast<DrawTextColumnObject *>(obj));
 	}
 							// from 'struct draw_textareaend'
-	if (!rdr.getWord(NULL) ||			// read 'int blank1'
-	    !rdr.getWord(NULL)) return (false);		// read 'int blank2'
+	if (!rdr.getWord(nullptr) ||			// read 'int blank1'
+	    !rdr.getWord(nullptr)) return (false);	// read 'int blank2'
 
 	if (!rdr.getWord(&textcolour) ||		// read 'draw_coltyp textcolour'
 	    !rdr.getWord(&backcolour)) return (false);	// read 'draw_coltyp background'

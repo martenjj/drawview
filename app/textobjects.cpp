@@ -87,8 +87,8 @@ bool DrawTextObjectBase::build2(DrawReader &rdr,DrawDiagram *diag)
 	    !textstyle.read(rdr) ||			// read 'draw_textstyle textstyle'
 	    !rdr.getWord(&xsize) ||			// read 'draw_fontsize fsizex'
 	    !rdr.getWord(&ysize) ||			// read 'draw_fontsize fsizey'
-	    !rdr.getWord((drawword *) &xcoord) ||	// read 'draw_objcoord coord'
-	    !rdr.getWord((drawword *) &ycoord)) return (false);
+	    !rdr.getWord(&xcoord) ||			// read 'draw_objcoord coord'
+	    !rdr.getWord(&ycoord)) return (false);
 
 	Draw::fontid ref = textstyle.ref();		// check font reference
 	if (ref!=0)					// if fancy font used
@@ -304,8 +304,7 @@ bool DrawTransformedTextObject::build(DrawReader &rdr,DrawDiagram *diag)
 {							// from 'struct draw_transtextstr'
 	if (!DrawObject::build(rdr,diag)) return (false);
 	if (!mat.read(rdr)) return (false);		// read 'draw_transmat mat'
-							// read 'int flags'
-	if (!rdr.getWord((drawword *) &textflags)) return (false);
+	if (!rdr.getWord(&textflags)) return (false);	// read 'int flags'
 	return (DrawTextObjectBase::build2(rdr,diag));	// read style and text
 }
 

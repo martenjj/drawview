@@ -179,13 +179,13 @@ SpriteReader::SpriteReader(DrawReader &rdr)
 	debugmsg(0) << "  size=" << size;
 #endif
 	QByteArray name(12,'\0');			// read 'char name[12]'
-	if (!rdr.getByte(((drawbyte *) name.data()),name.size())) return;
+	if (!rdr.getByte(name.data(), name.size())) return;
 	name.resize(qstrlen(name));
 #ifdef DEBUG_SPRITEREADER
 	debugmsg(0) << "  name=" << name;
 #endif
-	if (!rdr.getWord((drawword *) &width) ||	// read 'int width,height'
-	    !rdr.getWord((drawword *) &height)) return;
+	if (!rdr.getWord(&width) ||			// read 'int width,height'
+	    !rdr.getWord(&height)) return;
 
 	if (!rdr.getWord(&leftbit) ||			// read 'int lbit,rbit'
 	    !rdr.getWord(&rightbit)) return;
@@ -240,7 +240,7 @@ SpriteReader::SpriteReader(DrawReader &rdr)
 
 		for (int i = 0; i<palent; ++i)
 		{
-			if (!rdr.getWord(&palette[i]) || !rdr.getWord(NULL)) return;
+			if (!rdr.getWord(&palette[i]) || !rdr.getWord(nullptr)) return;
 		}
 
 		if (cols==256)				// check for old format palette

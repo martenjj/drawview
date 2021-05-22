@@ -98,7 +98,7 @@ bool DrawPathDashPattern::read(DrawReader &rdr)
 	int count;
 
 	if (!rdr.getWord(&start) ||			// read 'int dashstart,dashcount'
-	    !rdr.getWord((drawword *) &count)) return (false);
+	    !rdr.getWord(&count)) return (false);
 
 	elements.resize(count);
 	drawuint *ptr = elements.data();
@@ -452,8 +452,8 @@ bool DrawPathObject::build(DrawReader &rdr,DrawDiagram *diag)
 			path.append(new DrawPathTermElement());
 			break;
 		}
-							// read 'enum draw_path_tagtype'
-		if (!rdr.getWord((drawword *) &tag)) return (false);
+
+		if (!rdr.getWord(&tag)) return (false);	// read 'enum draw_path_tagtype'
 		if (elm==0 && tag!=Draw::pathMOVE)	// check starts with a move
 		{
 			rdr.addError("Path doesn't start with move",Draw::errorWARNING);
@@ -474,19 +474,19 @@ case Draw::pathMOVE:	if (open)			// previous subpath is still open
 				if (abs(x-startx)<8 && abs(y-starty)<8) path.append(new DrawPathCloseElement());
 			}
 
-			rdr.getWord((drawword *) &x); rdr.getWord((drawword *) &y);
+			rdr.getWord(&x); rdr.getWord(&y);
 			path.append(new DrawPathMoveElement(x,y));
 			open = true;			// note new subpath now open
 			startx = x; starty = y;		// note start of this subpath
 			break;
 
-case Draw::pathLINE:	rdr.getWord((drawword *) &x); rdr.getWord((drawword *) &y);
+case Draw::pathLINE:	rdr.getWord(&x); rdr.getWord(&y);
 			path.append(new DrawPathLineElement(x,y));
 			break;
 
-case Draw::pathCURVE:	rdr.getWord((drawword *) &x1); rdr.getWord((drawword *) &y1);
-			rdr.getWord((drawword *) &x2); rdr.getWord((drawword *) &y2);
-			rdr.getWord((drawword *) &x); rdr.getWord((drawword *) &y);
+case Draw::pathCURVE:	rdr.getWord(&x1); rdr.getWord(&y1);
+			rdr.getWord(&x2); rdr.getWord(&y2);
+			rdr.getWord(&x); rdr.getWord(&y);
 			path.append(new DrawPathCurveElement(x,y,x1,y1,x2,y2));
 			break;
 

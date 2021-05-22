@@ -64,10 +64,10 @@ DrawBox::DrawBox()
 bool DrawBox::read(DrawReader &rdr)
 {
 	return (rdr.sizeRemaining()>=(4*sizeof(drawword)) &&
-		rdr.getWord((drawword *) &mx0) &&	// only sort of cast that works
-		rdr.getWord((drawword *) &my0) &&
-		rdr.getWord((drawword *) &mx1) &&
-		rdr.getWord((drawword *) &my1));
+		rdr.getWord(&mx0) &&
+		rdr.getWord(&my0) &&
+		rdr.getWord(&mx1) &&
+		rdr.getWord(&my1));
 }
 
 
@@ -119,12 +119,12 @@ bool DrawMatrix::read(DrawReader &rdr)
 	for (int i = 0; i<=3; ++i)			// transformation
 	{
 		drawint w;
-		if (!rdr.getWord((drawword *) &w)) return (false);
+		if (!rdr.getWord(&w)) return (false);
 		mm[i] = double(w)/Draw::SCALE1;
 	}
 	for (int i = 0; i<=1; ++i)			// translations
 	{
-		if (!rdr.getWord((drawword *) &dd[i])) return (false);
+		if (!rdr.getWord(&dd[i])) return (false);
 	}
 
 	identity = false;
@@ -173,8 +173,8 @@ DrawPathStyle::DrawPathStyle()
 
 bool DrawPathStyle::read(DrawReader &rdr)
 {
-	drawuint packed;				// read 'struct draw_pathstyle'
-	if (!rdr.getWord((drawword *) &packed)) return (false);
+	drawuint packed;
+	if (!rdr.getWord(&packed)) return (false);	// read 'struct draw_pathstyle'
 							// from 'struct draw_pathstyle'
 	joincapwind = (packed & 0x000000FF);		// extract 'unsigned char joincapwind'
 	overlay = (packed & 0x0000FF00) >> 8;		// extract 'unsigned char overlay'
@@ -246,10 +246,10 @@ DrawTextStyle::DrawTextStyle()
 
 
 bool DrawTextStyle::read(DrawReader &rdr)
-{							// read from 'struct draw_textstyle'
-
+{
 	drawuint packed;
-	if (!rdr.getWord((drawword *) &packed)) return (false);
+	if (!rdr.getWord(&packed)) return (false);	// read  'struct draw_textstyle'
+							// from 'struct draw_textstyle'
 	fontref = (packed & 0x000000FF);		// extract 'draw_fontid fontref'
 	flag = (packed & 0x0000FF00) >> 8;		// extract 'unsigned char flags'
 	spacing = (packed & 0xFFFF0000) >> 16;		// extract 'short spacing'
@@ -276,10 +276,10 @@ DrawTextFlags::DrawTextFlags()
 
 
 bool DrawTextFlags::read(DrawReader &rdr)
-{							// read from 'int'
+{
 	drawuint packed;
-	if (!rdr.getWord((drawword *) &packed)) return (false);
-
+	if (!rdr.getWord(&packed)) return (false);	// read 'int'
+							// from 'int'
 	flag = (packed & 0x000000FF);			// extract 'unsigned char flags'
 	return (true);
 }

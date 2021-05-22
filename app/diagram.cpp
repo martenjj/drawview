@@ -173,7 +173,7 @@ DrawDiagram::DrawDiagram(const QString &file)
 		QByteArray data;
 		QBuffer *buf = NULL;
 
-		DrawFileReader *rd = new DrawFileReader(&ff,&errors);
+		DrawReader *rd = new DrawReader(&ff, &errors);
 		if (rd->getStatus()!=DrawReader::Ok)	// create reader to read from file
 		{
 			errors.add("Reader initialisation failed");
@@ -183,7 +183,7 @@ DrawDiagram::DrawDiagram(const QString &file)
 
 		QByteArray title(sizeof(drawword),'\0');
 		rd->setExpectedSize(title.size());	// read first word of file
-		if (!rd->getByte(((drawbyte *) title.data()),title.size()))
+		if (!rd->getByte(title.data(), title.size()))
 		{					// what, a problem already?
 			errors.add("Empty file");
 			ff.close();
@@ -247,7 +247,7 @@ DrawDiagram::DrawDiagram(const QString &file)
 
 			buf = new QBuffer(&data);	// create device reading buffer
 			buf->open(QIODevice::ReadOnly);	// create reader using buffer
-			rd = new DrawFileReader(buf,&errors);
+			rd = new DrawReader(buf, &errors);
 		}
 							// read rest of file
 		if (rd->getStatus()==DrawReader::Ok) readDrawFile(*rd,title);
@@ -286,7 +286,7 @@ bool DrawDiagram::readDrawFile(DrawReader &rdr,QByteArray title)
 	if (title.isEmpty())				// haven't got this already
 	{
 		title.resize(4);			// read 'char title[4]'
-		if (!rdr.getByte(((drawbyte *) title.data()),4)) return (false);
+		if (!rdr.getByte(title.data(), 4)) return (false);
 	}
 
 	debugmsg(0) << "  title=" << title;
@@ -329,7 +329,7 @@ bool DrawDiagram::readDrawFile(DrawReader &rdr,QByteArray title)
 
 	if (!rdr.getByte(progident,12)) return (false);	// read 'char progident[12]'
 	progident[12] = '\0';
-	debugmsg(0) << "  creator '" << ((char*)progident) << "'";
+	debugmsg(0) << "  creator '" << progident << "'";
 
 	if (!bbox.read(rdr)) return (false);		// read 'draw_box bbox'
 	debugmsg(0) << "  bbox=" << bbox;
