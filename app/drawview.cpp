@@ -359,7 +359,7 @@ void DrawView::fileExport()
 	d.setAcceptMode(QFileDialog::AcceptSave);
 	d.setLabelText(QFileDialog::LookIn,"Save in:");
 	d.setLabelText(QFileDialog::Accept,"Export");
-	d.setConfirmOverwrite(true);
+	d.setOption(QFileDialog::DontConfirmOverwrite, false);
 	d.setDirectory(expdir);				// use previous directory
 
 	if (!d.exec()) return;				// run the dialogue
