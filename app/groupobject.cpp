@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -125,7 +125,7 @@ class DrawGroupObjectCreator : public DrawObjectCreator
 {
 	friend class DrawGroupObjectSetup;
 public:
-	DrawGroupObject *create(Draw::objflags flag,int layer = 0)
+	DrawGroupObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawGroupObject(flag,layer));
 	}

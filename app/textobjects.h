@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -100,12 +100,12 @@ class DrawTextObject : public DrawTextObjectBase
 public:
 	DrawTextObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objTEXT); }
-	QString typeName() const	{ return ("TEXT"); }
+	Draw::object type() const override	{ return (Draw::objTEXT); }
+	QString typeName() const override	{ return ("TEXT"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 };
@@ -121,12 +121,12 @@ class DrawTransformedTextObject : public DrawTextObjectBase
 public:
 	DrawTransformedTextObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objTRANSTEXT); }
-	QString typeName() const	{ return ("TRANSTEXT"); }
+	Draw::object type() const override	{ return (Draw::objTRANSTEXT); }
+	QString typeName() const override	{ return ("TRANSTEXT"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	DrawMatrix mat;
@@ -146,11 +146,11 @@ public:
 	DrawFontTableObject(Draw::objflags flag,int layer = 0);
 	~DrawFontTableObject();
 
-	Draw::object type() const	{ return (Draw::objFONTLIST); }
-	QString typeName() const	{ return ("FONTTABLE"); }
+	Draw::object type() const override	{ return (Draw::objFONTLIST); }
+	QString typeName() const override	{ return ("FONTTABLE"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	FontReferenceMap *fontmap;

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -71,8 +71,8 @@ public:
 
 	bool build3();
 
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-		  const DrawMatrix *mat = NULL) const;
+	virtual bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
+                          const DrawMatrix *mat = NULL) const;
 
 	void dump1(QTextStream &str,const QString &indent1,const QString &indent2) const;
 	void dump2(QTextStream &str,const QString &indent1,const QString &indent2) const;
@@ -99,7 +99,7 @@ public:
 	bool build2(DrawReader &rdr,DrawDiagram *diag);
 
 	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts,
-		  const DrawMatrix *mat = NULL) const;
+		  const DrawMatrix *mat = NULL) const override;
 
 	void dump1(QTextStream &str,const QString &indent1,const QString &indent2) const;
 	void dump2(QTextStream &str,const QString &indent1,const QString &indent2) const;
@@ -125,12 +125,12 @@ class DrawSpriteObject : public DrawSpriteObjectBase
 public:
 	DrawSpriteObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objSPRITE); }
-	QString typeName() const	{ return ("SPRITE"); }
+	Draw::object type() const override	{ return (Draw::objSPRITE); }
+	QString typeName() const override	{ return ("SPRITE"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -144,12 +144,12 @@ class DrawTransformedSpriteObject : public DrawSpriteObjectBase
 public:
 	DrawTransformedSpriteObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objTRANSPRITE); }
-	QString typeName() const	{ return ("TRANSPRITE"); }
+	Draw::object type() const override	{ return (Draw::objTRANSPRITE); }
+	QString typeName() const override	{ return ("TRANSPRITE"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -164,12 +164,12 @@ class DrawJpegObject : public DrawImageObjectBase
 public:
 	DrawJpegObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objJPEG); }
-	QString typeName() const	{ return ("JPEG"); }
+	Draw::object type() const override	{ return (Draw::objJPEG); }
+	QString typeName() const override	{ return ("JPEG"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	drawuint width,height;

@@ -118,11 +118,11 @@ public:
 	DrawFileReader(QIODevice *dev,DrawErrorList *errl = NULL);
 	~DrawFileReader();
 
-	bool getWord(drawword *wp,bool expecteof = false);
-	bool getByte(drawbyte *cp,drawuint len = 1);
-	bool getString(QByteArray *bp,unsigned char terminator = '\0');
-	bool discardWordAlign();
-	bool discardRest();
+	bool getWord(drawword *wp,bool expecteof = false)  override;
+	bool getByte(drawbyte *cp,drawuint len = 1)  override;
+	bool getString(QByteArray *bp,unsigned char terminator = '\0')  override;
+	bool discardWordAlign()  override;
+	bool discardRest()  override;
 
 private:
 	QDataStream *str;

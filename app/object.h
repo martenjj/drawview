@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	10-Nov-07						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -127,10 +127,10 @@ class DrawEndMarkObject : public DrawObject
 public:
 	DrawEndMarkObject() : DrawObject(Draw::flagNULL)	{}
 
-	Draw::object type() const 	{ return (Draw::objENDMARK); }
-	QString typeName() const	{ return ("ENDMARK"); }
+	Draw::object type() const override 	{ return (Draw::objENDMARK); }
+	QString typeName() const override	{ return ("ENDMARK"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag)		{ return (true); }
+	bool build(DrawReader &rdr,DrawDiagram *diag) override		{ return (true); }
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -145,8 +145,8 @@ class DrawBlankObject : public DrawObject
 public:
 	DrawBlankObject() : DrawObject(Draw::flagNULL)		{}
 
-	Draw::object type() const 	{ return (Draw::objBLANK); }
-	QString typeName() const	{ return ("BLANK"); }
+	Draw::object type() const override 	{ return (Draw::objBLANK); }
+	QString typeName() const override	{ return ("BLANK"); }
 };
 
 #endif							// DRAWOBJECT_H

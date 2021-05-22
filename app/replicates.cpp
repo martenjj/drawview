@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -165,7 +165,7 @@ class DrawSimpleReplicateObjectCreator : public DrawObjectCreator
 {
 	friend class DrawSimpleReplicateObjectSetup;
 public:
-	DrawSimpleReplicateObject *create(Draw::objflags flag,int layer = 0)
+	DrawSimpleReplicateObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawSimpleReplicateObject(flag,layer));
 	}
@@ -211,7 +211,7 @@ class DrawSimpleSkeletonObjectCreator : public DrawObjectCreator
 {
 	friend class DrawSimpleSkeletonObjectSetup;
 public:
-	DrawSimpleSkeletonObject *create(Draw::objflags flag,int layer = 0)
+	DrawSimpleSkeletonObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawSimpleSkeletonObject(flag,layer));
 	}
@@ -276,7 +276,7 @@ class DrawGeneralInstanceObjectCreator : public DrawObjectCreator
 {
 	friend class DrawGeneralInstanceObjectSetup;
 public:
-	DrawGeneralInstanceObject *create(Draw::objflags flag,int layer = 0)
+	DrawGeneralInstanceObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawGeneralInstanceObject(flag,layer));
 	}
@@ -467,7 +467,7 @@ class DrawGeneralReplicateObjectCreator : public DrawObjectCreator
 {
 	friend class DrawGeneralReplicateObjectSetup;
 public:
-	DrawGeneralReplicateObject *create(Draw::objflags flag,int layer = 0)
+	DrawGeneralReplicateObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawGeneralReplicateObject(flag,layer));
 	}
@@ -513,7 +513,7 @@ class DrawGeneralSkeletonObjectCreator : public DrawObjectCreator
 {
 	friend class DrawGeneralSkeletonObjectSetup;
 public:
-	DrawGeneralSkeletonObject *create(Draw::objflags flag,int layer = 0)
+	DrawGeneralSkeletonObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawGeneralSkeletonObject(flag,layer));
 	}

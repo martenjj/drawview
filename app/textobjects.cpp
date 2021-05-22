@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	08-Mar-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -265,7 +265,7 @@ class DrawTextObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTextObjectSetup;
 public:
-	DrawTextObject *create(Draw::objflags flag,int layer = 0)
+	DrawTextObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTextObject(flag,layer));
 	}
@@ -336,7 +336,7 @@ class DrawTransformedTextObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTransformedTextObjectSetup;
 public:
-	DrawTransformedTextObject *create(Draw::objflags flag,int layer = 0)
+	DrawTransformedTextObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTransformedTextObject(flag,layer));
 	}
@@ -428,7 +428,7 @@ class DrawFontTableObjectCreator : public DrawObjectCreator
 {
 	friend class DrawFontTableObjectSetup;
 public:
-	DrawFontTableObject *create(Draw::objflags flag,int layer = 0)
+	DrawFontTableObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawFontTableObject(flag,layer));
 	}

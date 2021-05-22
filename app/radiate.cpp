@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -230,7 +230,7 @@ class DrawRadiateObjectCreator : public DrawObjectCreator
 {
 	friend class DrawRadiateObjectSetup;
 public:
-	DrawRadiateObject *create(Draw::objflags flag,int layer = 0)
+	DrawRadiateObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawRadiateObject(flag,layer));
 	}

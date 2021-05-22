@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	10-Oct-17						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -73,7 +73,7 @@ public:
 	void printDiagram(QPaintDevice *dev);
 
 protected:
-	void paintEvent(QPaintEvent *pe);
+	void paintEvent(QPaintEvent *pe) override;
 
 private:
 	const DrawDiagram *diag;

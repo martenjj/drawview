@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -66,11 +66,11 @@ class DrawUnknownObject : public DrawObject
 public:
 	DrawUnknownObject(Draw::object type,Draw::objflag flag,int layer = 0);
 
-	Draw::object type() const 	{ return (tag); }
-	QString typeName() const	{ return (QString("UNKNOWN(%1)").arg(tag)); }
+	Draw::object type() const override 	{ return (tag); }
+	QString typeName() const override	{ return (QString("UNKNOWN(%1)").arg(tag)); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	Draw::object tag;

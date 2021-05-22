@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -269,7 +269,7 @@ class DrawSpriteObjectCreator : public DrawObjectCreator
 {
 	friend class DrawSpriteObjectSetup;
 public:
-	DrawSpriteObject *create(Draw::objflags flag,int layer = 0)
+	DrawSpriteObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawSpriteObject(flag,layer));
 	}
@@ -336,7 +336,7 @@ class DrawTransformedSpriteObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTransformedSpriteObjectSetup;
 public:
-	DrawTransformedSpriteObject *create(Draw::objflags flag,int layer = 0)
+	DrawTransformedSpriteObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTransformedSpriteObject(flag,layer));
 	}
@@ -430,7 +430,7 @@ class DrawJpegObjectCreator : public DrawObjectCreator
 {
 	friend class DrawJpegObjectSetup;
 public:
-	DrawJpegObject *create(Draw::objflags flag,int layer = 0)
+	DrawJpegObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawJpegObject(flag,layer));
 	}

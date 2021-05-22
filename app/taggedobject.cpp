@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	17-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -138,7 +138,7 @@ class DrawTaggedObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTaggedObjectSetup;
 public:
-	DrawTaggedObject *create(Draw::objflags flag,int layer = 0)
+	DrawTaggedObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTaggedObject(flag,layer));
 	}

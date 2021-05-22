@@ -194,9 +194,9 @@ class DrawPathTermElement : public DrawPathElement
 {
 public:
 	DrawPathTermElement() : DrawPathElement()		{}
-	operator QString() 		{ return ("TERM"); }
-	void draw(QPainterPath &pp) 				{}
-	bool hasCoords()		{ return (false); }
+	operator QString() override 		{ return ("TERM"); }
+	void draw(QPainterPath &pp) override 	{}
+	bool hasCoords() override		{ return (false); }
 };
 
 
@@ -204,8 +204,8 @@ class DrawPathMoveElement : public DrawPathElement
 {
 public:
 	DrawPathMoveElement(drawint xx,drawint yy) : DrawPathElement(xx,yy)	{}
-	operator QString() 		{ return (QString("MOVE->(%1,%2)").arg(x).arg(y)); }
-	void draw(QPainterPath &pp)	{ pp.moveTo(DrawCoord::toPixelX(x),DrawCoord::toPixelY(y)); }
+	operator QString() override		{ return (QString("MOVE->(%1,%2)").arg(x).arg(y)); }
+	void draw(QPainterPath &pp) override	{ pp.moveTo(DrawCoord::toPixelX(x),DrawCoord::toPixelY(y)); }
 };
 
 
@@ -213,11 +213,11 @@ class DrawPathLineElement : public DrawPathElement
 {
 public:
 	DrawPathLineElement(drawint xx,drawint yy) : DrawPathElement(xx,yy)	{}
-	operator QString() 		{ return (QString("LINE->(%1,%2)").arg(x).arg(y)); }
-	void draw(QPainterPath &pp)	{ pp.lineTo(DrawCoord::toPixelX(x),DrawCoord::toPixelY(y)); }
-	bool isStroke()						{ return (true); }
-	void drawStartCap(QPainter &p,drawint px,drawint py,Draw::startcaptyp type,int w,int l = 0);
-	void drawEndCap(QPainter &p,drawint px,drawint py,Draw::endcaptyp type,int w,int l = 0);
+	operator QString() override 		{ return (QString("LINE->(%1,%2)").arg(x).arg(y)); }
+	void draw(QPainterPath &pp) override	{ pp.lineTo(DrawCoord::toPixelX(x),DrawCoord::toPixelY(y)); }
+	bool isStroke() override		{ return (true); }
+	void drawStartCap(QPainter &p,drawint px,drawint py,Draw::startcaptyp type,int w,int l = 0) override;
+	void drawEndCap(QPainter &p,drawint px,drawint py,Draw::endcaptyp type,int w,int l = 0) override;
 };
 
 
@@ -228,15 +228,15 @@ public:
 			     drawint x1,drawint y1,
 			     drawint x2,drawint y2) : DrawPathElement(xx,yy)	{
 					cx1 = x1; cy1 = y1; cx2 = x2; cy2 = y2; }
-	operator QString() 		{ return (QString("CURVE->(%1,%2)@(%3,%4)@(%5,%6)")
+	operator QString() override		{ return (QString("CURVE->(%1,%2)@(%3,%4)@(%5,%6)")
 						  .arg(x).arg(y)
 						  .arg(cx1).arg(cy1).arg(cx2).arg(cy2)); }
-	void draw(QPainterPath &pp)	{ pp.cubicTo(DrawCoord::toPixelX(cx1),DrawCoord::toPixelY(cy1),
+	void draw(QPainterPath &pp) override	{ pp.cubicTo(DrawCoord::toPixelX(cx1),DrawCoord::toPixelY(cy1),
 						             DrawCoord::toPixelX(cx2),DrawCoord::toPixelY(cy2),
 						             DrawCoord::toPixelX(x),DrawCoord::toPixelY(y)); }
-	bool isStroke()						{ return (true); }
-	void drawStartCap(QPainter &p,drawint px,drawint py,Draw::startcaptyp type,int w,int l = 0);
-	void drawEndCap(QPainter &p,drawint px,drawint py,Draw::endcaptyp type,int w,int l = 0);
+	bool isStroke() override		{ return (true); }
+	void drawStartCap(QPainter &p,drawint px,drawint py,Draw::startcaptyp type,int w,int l = 0) override;
+	void drawEndCap(QPainter &p,drawint px,drawint py,Draw::endcaptyp type,int w,int l = 0) override;
 
 protected:
 	drawint cx1,cy1;
@@ -248,10 +248,10 @@ class DrawPathCloseElement : public DrawPathElement
 {
 public:
 	DrawPathCloseElement() : DrawPathElement()				{}
-	operator QString()		{ return ("CLOSE"); }
-	void draw(QPainterPath &pp)	{ pp.closeSubpath(); }
-	bool isStroke()			{ return (true); }
-	bool hasCoords()		{ return (false); }
+	operator QString() override		{ return ("CLOSE"); }
+	void draw(QPainterPath &pp) override	{ pp.closeSubpath(); }
+	bool isStroke() override		{ return (true); }
+	bool hasCoords() override		{ return (false); }
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -700,7 +700,7 @@ class DrawPathObjectCreator : public DrawObjectCreator
 {
 	friend class DrawPathObjectSetup;
 public:
-	DrawPathObject *create(Draw::objflags flag,int layer = 0)
+	DrawPathObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawPathObject(flag,layer));
 	}
@@ -803,7 +803,7 @@ class DrawMaskObjectCreator : public DrawObjectCreator
 {
 	friend class DrawMaskObjectSetup;
 public:
-	DrawMaskObject *create(Draw::objflags flag,int layer = 0)
+	DrawMaskObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawMaskObject(flag,layer));
 	}

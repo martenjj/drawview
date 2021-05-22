@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -70,12 +70,12 @@ public:
 	DrawPathObject(Draw::objflags flag,int layer = 0);
 	~DrawPathObject();
 
-	Draw::object type() const	{ return (Draw::objPATH); }
-	QString typeName() const	{ return ("PATH"); }
+	Draw::object type() const override	{ return (Draw::objPATH); }
+	QString typeName() const override	{ return ("PATH"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 	bool hasDashPattern() const	{ return (dash!=NULL); }
 	bool hasLineColour() const	{ return (pathcolour!=Draw::TRANSPARENT); }
@@ -108,12 +108,12 @@ public:
 	DrawMaskObject(Draw::objflags flag,int layer = 0);
 	~DrawMaskObject();
 
-	Draw::object type() const	{ return (Draw::objMASK); }
-	QString typeName() const	{ return ("MASK"); }
+	Draw::object type() const override	{ return (Draw::objMASK); }
+	QString typeName() const override	{ return ("MASK"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	DrawObject *object;

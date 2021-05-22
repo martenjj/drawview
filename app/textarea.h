@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -70,12 +70,12 @@ public:
 	DrawTextAreaObject(Draw::objflags flag,int layer = 0);
 	~DrawTextAreaObject();
 
-	Draw::object type() const	{ return (Draw::objTEXTAREA); }
-	QString typeName() const	{ return ("TEXTAREA"); }
+	Draw::object type() const override	{ return (Draw::objTEXTAREA); }
+	QString typeName() const override	{ return ("TEXTAREA"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 	void getCharProperties(const QTextCursor *cur,int *lp,int *pp,int *lm,int *rm) const;
@@ -100,11 +100,11 @@ class DrawTextColumnObject : public DrawObject
 public:
 	DrawTextColumnObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objTEXTCOL); }
-	QString typeName() const	{ return ("TEXTCOLUMN"); }
+	Draw::object type() const override	{ return (Draw::objTEXTCOL); }
+	QString typeName() const override	{ return ("TEXTCOLUMN"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 };

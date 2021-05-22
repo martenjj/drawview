@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -68,9 +68,9 @@ public:
 	DrawSimpleReplicateBase(Draw::objflags flag,int layer = 0);
 	~DrawSimpleReplicateBase();
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 protected:
 	bool skeleton;
@@ -93,8 +93,8 @@ class DrawSimpleReplicateObject : public DrawSimpleReplicateBase
 public:
 	DrawSimpleReplicateObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objSIMREP); }
-	QString typeName() const	{ return ("SIMREP"); }
+	Draw::object type() const override	{ return (Draw::objSIMREP); }
+	QString typeName() const override	{ return ("SIMREP"); }
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -108,8 +108,8 @@ class DrawSimpleSkeletonObject : public DrawSimpleReplicateBase
 public:
 	DrawSimpleSkeletonObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objSIMSKEL); }
-	QString typeName() const	{ return ("SIMSKEL"); }
+	Draw::object type() const override	{ return (Draw::objSIMSKEL); }
+	QString typeName() const override	{ return ("SIMSKEL"); }
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -124,11 +124,11 @@ class DrawGeneralInstanceObject : public DrawObject
 public:
 	DrawGeneralInstanceObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objGENINST); }
-	QString typeName() const	{ return ("GENINST"); }
+	Draw::object type() const override	{ return (Draw::objGENINST); }
+	QString typeName() const override	{ return ("GENINST"); }
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
 #ifdef NEWGENREP
@@ -149,9 +149,9 @@ public:
 	DrawGeneralReplicateBase(Draw::objflags flag,int layer = 0);
 	~DrawGeneralReplicateBase();
 
-	bool build(DrawReader &rdr,DrawDiagram *diag);
-	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const;
-	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const;
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 protected:
 	bool skeleton;
@@ -172,8 +172,8 @@ class DrawGeneralReplicateObject : public DrawGeneralReplicateBase
 public:
 	DrawGeneralReplicateObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objGENREP); }
-	QString typeName() const	{ return ("GENREP"); }
+	Draw::object type() const override	{ return (Draw::objGENREP); }
+	QString typeName() const override	{ return ("GENREP"); }
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -187,8 +187,8 @@ class DrawGeneralSkeletonObject : public DrawGeneralReplicateBase
 public:
 	DrawGeneralSkeletonObject(Draw::objflags flag,int layer = 0);
 
-	Draw::object type() const	{ return (Draw::objGENSKEL); }
-	QString typeName() const	{ return ("GENSKEL"); }
+	Draw::object type() const override	{ return (Draw::objGENSKEL); }
+	QString typeName() const override	{ return ("GENSKEL"); }
 };
 
 #endif							// REPLICATES_H

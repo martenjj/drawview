@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	16-Jan-06						//
+//  Edit:	22-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -791,7 +791,7 @@ class DrawTextAreaObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTextAreaObjectSetup;
 public:
-	DrawTextAreaObject *create(Draw::objflags flag,int layer = 0)
+	DrawTextAreaObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTextAreaObject(flag,layer));
 	}
@@ -847,7 +847,7 @@ class DrawTextColumnObjectCreator : public DrawObjectCreator
 {
 	friend class DrawTextColumnObjectSetup;
 public:
-	DrawTextColumnObject *create(Draw::objflags flag,int layer = 0)
+	DrawTextColumnObject *create(Draw::objflags flag,int layer = 0) override
 	{
 		return (new DrawTextColumnObject(flag,layer));
 	}
