@@ -71,7 +71,6 @@ static bool tryIcon(const QString &where)
 
 int main(int argc,char *argv[])
 {
-	QT_REQUIRE_VERSION(argc,argv,"5.6.0");
 	QApplication app(argc,argv);
 
 	app.setApplicationName(PACKAGE_NAME);
