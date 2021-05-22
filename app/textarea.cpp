@@ -609,7 +609,7 @@ void DrawTextAreaObject::dump(QTextStream &str,const QString &indent1,const QStr
 	str << indent
 	    << "+- Text length " << tx.size()
 	    << Qt::endl;
-	str << indent << "   " << tx.replace('\n',("\n"+indent+"   ")) << Qt::endl;
+	str << indent << "   " << tx.replace('\n', QString("\n"+indent+"   ").toLatin1()) << Qt::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////
