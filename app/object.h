@@ -86,6 +86,7 @@ class DrawObjectCreator
 {
 public:
 	virtual DrawObject *create(Draw::objflags flag,int layer = 0) = 0;
+	virtual ~DrawObjectCreator() = default;
 };
 
 typedef DrawObjectCreator *(*ObjectCreatorFunction)();
