@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	25-Nov-05						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -68,7 +68,7 @@ namespace DrawCoord
 
 	extern void begin(const QPaintDevice *pd,double scale = 1.0);
 	extern void end();
-};
+}
 
 
 #endif							// COORD_H

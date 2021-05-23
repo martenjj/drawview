@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -178,7 +178,7 @@ bool DrawTextObjectBase::drawInternal(QPainter &p,const DrawDiagram *diag,const 
 	}
 
 	QList<QByteArray> lines = text.split('\n');	// handle multi-line text
-	for (QList<QByteArray>::const_iterator it = lines.begin(); it!=lines.end(); ++it)
+	for (QList<QByteArray>::const_iterator it = lines.constBegin(); it!=lines.constEnd(); ++it)
 	{
 		int x = xco;
 		switch (just)				// adjust line justification
@@ -402,7 +402,7 @@ bool DrawFontTableObject::build(DrawReader &rdr,DrawDiagram *diag)
 #ifdef DEBUG_TEXT
 		debugmsg(0) << funcinfo << "ref " << ref << " -> name '" << name << "'";
 #endif
-		fontmap->add(ref,name);
+		fontmap->add(ref,name.constData());
 	}
 
 	diag->setFontMap(fontmap);			// use map in diagram

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -73,11 +73,14 @@ int main(int argc,char *argv[])
 {
 	QApplication app(argc,argv);
 
-	app.setApplicationName(PACKAGE_NAME);
+	app.setApplicationName(PACKAGE);
+	app.setApplicationDisplayName(PACKAGE_NAME);
+#ifndef KF5
 #ifdef DESKTOPICONS
 	tryIcon(DESKTOPICONS) ||
 #endif
             tryIcon(KDEICONS);
+#endif
 
 	app.setQuitOnLastWindowClosed(false);		// not during startup
  	if (!app.isSessionRestored())

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -102,7 +102,7 @@ class DrawObjectManager
 public:
 	enum CreateFlag { ExpectEndMark = 0x1, BlankObjectOnly = 0x2 };
 #ifdef QT4
-	Q_DECLARE_FLAGS(CreateFlags,CreateFlag);
+	Q_DECLARE_FLAGS(CreateFlags,CreateFlag)
 #endif
 
 	static DrawObject *create(DrawReader &rdr,DrawDiagram *diag,
@@ -111,7 +111,7 @@ public:
 };
 
 #ifdef QT4
-Q_DECLARE_OPERATORS_FOR_FLAGS(DrawObjectManager::CreateFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(DrawObjectManager::CreateFlags)
 #endif
 
 //////////////////////////////////////////////////////////////////////////

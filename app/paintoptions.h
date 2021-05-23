@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	01-Feb-06						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -40,6 +40,8 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
+#include "drawtypes.h"
+
 class QRect;
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,7 +63,7 @@ public:
 		AntiAlias		= 0x20,
 	};
 #ifdef QT4
-	Q_DECLARE_FLAGS(PaintFlags,PaintFlag);
+	Q_DECLARE_FLAGS(PaintFlags,PaintFlag)
 #endif
 	PaintOptions();
 
@@ -77,7 +79,7 @@ private:
 };
 
 #ifdef QT4
-Q_DECLARE_OPERATORS_FOR_FLAGS(PaintOptions::PaintFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(PaintOptions::PaintFlags)
 #endif
 
 #endif							// PAINTOPTIONS_H

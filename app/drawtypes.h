@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -56,13 +56,18 @@ typedef unsigned long drawuint;
 #endif							// SIZEOF_LONG
 #endif							// SIZEOF_INT
 #else							// HAVE_CONFIG_H
+#ifdef QT5
+#include <qglobal.h>
+typedef qint32 drawint;
+typedef quint32 drawuint;
+#else							// QT5
 #ifdef __GNUC__
 #warning "No 'config.h' available, assuming 'long' for 32 bit data type"
 #endif							// GNUC
 typedef long drawint;					// hopefully 4 bytes each
 typedef unsigned long drawuint;
+#endif							// QT5
 #endif							// HAVE_CONFIG_H
-
 typedef unsigned char drawbyte;
 typedef drawuint drawword;
 
@@ -235,7 +240,7 @@ namespace Draw
 		flagREGENBBOX		= 0x10		// Need to regenerate box
 	};
 #ifdef QT4
-	Q_DECLARE_FLAGS(objflags,objflag);
+	Q_DECLARE_FLAGS(objflags,objflag)
 #endif
 
 	enum comptype					// Compression types
@@ -266,10 +271,10 @@ namespace Draw
 		errorWARNING	= 1,
 		errorFATAL	= 2
 	};
-};
+}
 
 #ifdef QT4
-Q_DECLARE_OPERATORS_FOR_FLAGS(Draw::objflags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Draw::objflags)
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -421,6 +426,6 @@ namespace DrawUtil
 	extern QColor toQColor(Draw::coltyp c);
 	extern bool isTransparent(Draw::coltyp c);
 	extern QByteArray &substituteRiscosSpecialChars(QByteArray &s);
-};
+}
 
 #endif							// DRAWTYPES_H

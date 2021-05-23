@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -52,7 +52,7 @@ DrawBox::DrawBox(drawint xx0,drawint yy0,drawint xx1,drawint yy1)
 	my0 = yy0;					//   int y0;
 	mx1 = xx1;					//   int x1;
 	my1 = yy1;					//   int y1;
-};
+}
 
 
 DrawBox::DrawBox()

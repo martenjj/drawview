@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -112,7 +112,7 @@ bool PaperUtil::guessSize(const DrawBox *box,
 			int fit = (w-right)+(h-top);
 			if (fit<bestfit)
 			{
-				debugmsg(0) << "  best fit portrait ps=" << ps << " w=" << w << " h=" << h;
+				debugmsg(0) << "  best fit portrait ps=" << ps.name() << " w=" << w << " h=" << h;
 				bestfit = fit;
 				bestps = ps;
 				bestor = QPageLayout::Portrait;
@@ -124,7 +124,7 @@ bool PaperUtil::guessSize(const DrawBox *box,
 			int fit = (h-right)+(w-top);
 			if (fit<bestfit)
 			{
-				debugmsg(0) << "  best fit landscape ps=" << ps << " w=" << w << " h=" << h;
+				debugmsg(0) << "  best fit landscape ps=" << ps.name() << " w=" << w << " h=" << h;
 				bestfit = fit;
 				bestps = ps;
 				bestor = QPageLayout::Landscape;

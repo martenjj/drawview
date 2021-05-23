@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -69,7 +69,6 @@
 #include "paper.h"
 
 #include "drawview.h"
-#include "drawview.moc"
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -237,7 +236,7 @@ void DrawView::setupActions()
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleSkeletons(bool)));
 	mview->addAction(act);
 
-	act = new QAction(QString("&About %1...").arg(qApp->applicationName()),this);
+	act = new QAction(QString("&About %1...").arg(qApp->applicationDisplayName()),this);
 	connect(act,SIGNAL(triggered()),this,SLOT(aboutMe()));
 	mhelp->addAction(act);
 
@@ -579,7 +578,7 @@ void DrawView::slotZoomOut()
 
 void DrawView::aboutMe()
 {
-	QMessageBox::about(this,QString("About %1").arg(qApp->applicationName()),
+	QMessageBox::about(this,QString("About %1").arg(qApp->applicationDisplayName()),
 			   QString("<qt>RiscOS Draw file viewer using Qt 5, version <b>%1</b><p>Home and download page:<br><b>%3</b><p>Report bugs or suggestions to:<br><b>%2</b><p>Released under the <b>GNU GPL</b>;<br>see http://www.gnu.org/licenses/gpl.html")
 			   .arg(PACKAGE_VERSION).arg(PACKAGE_BUGREPORT).arg(PACKAGE_URL));
 }

@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Type=MimeType
-MimeType=application/x-riscosvector
-Patterns=*.vec;*.c56;*.C56
-Comment=RiscOS Vector drawing
-Icon=fileC56

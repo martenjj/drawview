@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Sprites					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -180,7 +180,7 @@ SpriteReader::SpriteReader(DrawReader &rdr)
 #endif
 	QByteArray name(12,'\0');			// read 'char name[12]'
 	if (!rdr.getByte(name.data(), name.size())) return;
-	name.resize(qstrlen(name));
+	name.resize(qstrlen(name.constData()));
 #ifdef DEBUG_SPRITEREADER
 	debugmsg(0) << "  name=" << name;
 #endif

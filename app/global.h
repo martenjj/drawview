@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView						//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	07-Mar-17						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -61,8 +61,8 @@
 #define warnmsg()	qWarning().nospace() << Qt::endl
 #else							// QT4
 #include <iostream>
-#define debugmsg(n)	cerr
-#define warnmsg()	cerr << "\n" << "WARNING: "
+#define debugmsg(n)	std::cerr
+#define warnmsg()	std::cerr << "\n" << "WARNING: "
 #endif							// QT4
 #endif							// KDE
 
@@ -75,6 +75,5 @@
 #define funcinfo	"[" << __FILE__ << ":" << __LINE__ << "] "
 #endif							// GNUC
 #endif							// KDE
-
 
 #endif							// APPLIC_H

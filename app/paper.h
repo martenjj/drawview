@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Application					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -56,6 +56,6 @@ namespace PaperUtil
 	extern void getSize(const QPageSize &size, QPageLayout::Orientation orient,
                             unsigned int *width, unsigned int *height,
                             QPrinter::Unit unit = QPrinter::DevicePixel);
-};
+}
 
 #endif							// PAPER_H

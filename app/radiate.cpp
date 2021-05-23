@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -94,8 +94,8 @@ bool DrawRadiateObject::build(DrawReader &rdr,DrawDiagram *diag)
 	if (!DrawObject::build(rdr,diag)) return (false);
 
 	drawuint ang[2];
-	if (!rdr.getWord(static_cast<drawword *>(&ang[0])) ||	// read 'double angle'
-	    !rdr.getWord(static_cast<drawword *>(&ang[1]))) return (false);
+	if (!rdr.getWord(&ang[0]) ||			// read 'double angle'
+	    !rdr.getWord(&ang[1])) return (false);
 
 	const bool sign = (ang[0] & 0x80000000)!=0;	// convert to native 'double'
 	const int exp = (ang[0] & 0x7FF00000)>>20;
@@ -103,10 +103,8 @@ bool DrawRadiateObject::build(DrawReader &rdr,DrawDiagram *diag)
 	angle = ldexp(frac,exp-1023);
 	if (sign) angle = -angle;
 
-        drawword cent;
-	if (!rdr.getWord(static_cast<drawword *>(&number)) ||	// read 'int number'
-	    !rdr.getWord(static_cast<drawword *>(&cent))) return (false);
-        centre = static_cast<Draw::radtyp>(cent);        	// read 'draw_radtyp centre'
+	if (!rdr.getWord(&number) ||			// read 'int number'
+	    !rdr.getWord(&centre)) return (false);	// read 'Draw::radtyp centre'
 
 	rdr.save();
 	object = DrawObjectManager::create(rdr,diag);	// read 'draw_pathstrhdr path'
@@ -184,7 +182,7 @@ bool DrawRadiateObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOpti
 	PaintOptions newopts = *opts;			// doesn't work when matrix changed
 	newopts.setFlags(PaintOptions::EnableClipping,false);
 
-	int cx,cy;					// drawing coordinates of centre
+	drawint cx,cy;					// drawing coordinates of centre
 	findCentre(&cx,&cy);
 	const int scx = DrawCoord::toPixelX(cx);	// pixel position of centre
 	const int scy = DrawCoord::toPixelY(cy);

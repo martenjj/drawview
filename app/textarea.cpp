@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -403,7 +403,7 @@ bool TextAreaDocument::sequenceF()
 		return (false);
 	}
 
-	fontmap.add(reg.cap(1).toInt(),reg.cap(2).toLatin1(),reg.cap(3).toInt(),reg.cap(4).toInt());
+	fontmap.add(reg.cap(1).toInt(),reg.cap(2).toLatin1().constData(),reg.cap(3).toInt(),reg.cap(4).toInt());
 
 	ptr += reg.cap(0).length();
 	return (true);
@@ -513,7 +513,7 @@ bool TextAreaDocument::sequenceNumber(char first)
 		return (false);
 	}
 
-	Draw::fontid ref = (QString(first)+reg.cap(1)).toInt();
+	Draw::fontid ref = QString(QString(first)+reg.cap(1)).toInt();
 
 	QFont f = fontmap.findFont(ref);
 	charfmt.setFont(f);

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -96,7 +96,7 @@ static void locateDecompFilter()
 	paths.append(here+"/../filter");
 	paths.append(QDir::currentPath());
 
-	for (QStringList::const_iterator it = paths.begin(); it!=paths.end(); ++it)
+	for (QStringList::const_iterator it = paths.constBegin(); it!=paths.constEnd(); ++it)
 	{
 		QFile exe((*it)+"/"+filtername);
 		if (exe.exists())
@@ -277,7 +277,7 @@ DrawDiagram::~DrawDiagram()
 bool DrawDiagram::readDrawFile(DrawReader &rdr,QByteArray title)
 {							// from 'struct draw_fileheader'
 	drawuint majorstamp,minorstamp;
-	drawbyte progident[12+1];
+	QByteArray progident(12, '\0');
 
 	rdr.setExpectedSize(40);			// size of file header
 
@@ -326,10 +326,9 @@ bool DrawDiagram::readDrawFile(DrawReader &rdr,QByteArray title)
 		rdr.addError(QString("File version %1 not supported").arg(majorstamp));
 		return (false);
 	}
-
-	if (!rdr.getByte(progident,12)) return (false);	// read 'char progident[12]'
-	progident[12] = '\0';
-	debugmsg(0) << "  creator '" << progident << "'";
+							// read 'char progident[12]'
+	if (!rdr.getByte(progident.data(), 12)) return (false);
+	debugmsg(0) << "  creator '" << qPrintable(progident.trimmed()) << "'";
 
 	if (!bbox.read(rdr)) return (false);		// read 'draw_box bbox'
 	debugmsg(0) << "  bbox=" << bbox;

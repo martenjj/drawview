@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	23-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -61,6 +61,9 @@
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qmessagebox.h>
+#ifdef KF5
+#include <qstandardpaths.h>
+#endif
 
 #include "files.h"
 
@@ -84,8 +87,12 @@ FileReader::FileReader(const QString &basename)
 	path.clear();					// file not found yet
 
 	ok = tryFile() ||
+#ifdef KF5
+	     tryFile(QStandardPaths::locate(QStandardPaths::AppDataLocation, "share", QStandardPaths::LocateDirectory)) ||
+#else
 	     tryFile(qApp->applicationDirPath()+"/../share/"+PACKAGE) ||
 	     tryFile(qApp->applicationDirPath()+"/../share") ||
+#endif
 	     tryFile("../share") ||
 	     tryFile(".");
 	if (!ok)
