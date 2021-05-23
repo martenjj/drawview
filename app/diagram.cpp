@@ -87,15 +87,19 @@ static QString decompfilter = "";
 
 static void locateDecompFilter()
 {
-	if (!decompfilter.isNull()) return;		// have got it already
+	if (!decompfilter.isEmpty()) return;		// have got it already
 
 	QStringList paths;
 	QString here = qApp->applicationDirPath();
+#ifdef DRAWFILTER_DIR
+	paths.append(here);
+	paths.append(DRAWFILTER_DIR);
+#else
 	paths.append(here+"/../libexec");
 	paths.append(here+"/../lib");
 	paths.append(here+"/../filter");
 	paths.append(QDir::currentPath());
-
+#endif
 	for (QStringList::const_iterator it = paths.constBegin(); it!=paths.constEnd(); ++it)
 	{
 		QFile exe((*it)+"/"+filtername);
