@@ -75,7 +75,7 @@ set(drawview_SRCS
   textarea.cpp
   replicates.cpp
   radiate.cpp
-  ${DRAWVIEW_LOG_SRCS}
+  ${drawview_LOG_SRCS}
 )
 
 add_definitions("-DQT4")

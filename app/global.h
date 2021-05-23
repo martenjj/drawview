@@ -30,8 +30,8 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef APPLIC_H
-#define APPLIC_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -44,17 +44,27 @@
 #endif							// CONFIG_H
 #include "drawtypes.h"
 
+#ifdef KDE4
+#include <kdebug.h>
+#endif							// KDE4
+#ifdef KF5
+#include "drawview_debug.h"
+#endif							// KF5
+
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Debugging messages							//
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-#ifdef KDE
-#include <kdebug.h>
+#ifdef KDE4
 #define debugmsg(n)	kdDebug(0)
 #define warnmsg()	kdWarning()
-#else							// KDE
+#else							// KDE4
+#ifdef KF5
+#define debugmsg(n)	qCDebug(DRAWVIEW_LOG).nospace()
+#define warnmsg()	qCWarning(DRAWVIEW_LOG).nospace()
+#else							// KF5
 #ifdef QT4
 #include <qdebug.h>
 #define debugmsg(n)	qDebug().nospace()
@@ -64,16 +74,21 @@
 #define debugmsg(n)	std::cerr
 #define warnmsg()	std::cerr << "\n" << "WARNING: "
 #endif							// QT4
-#endif							// KDE
+#endif							// KF5
+#endif							// KDE4
 
-#ifdef KDE
+#ifdef KDE4
 #define funcinfo	k_funcinfo
-#else							// KDE
+#else							// KDE4
+#ifdef KF5
+#define funcinfo	""
+#else							// KF5
 #ifdef __GNUC__
 #define funcinfo	"[" << __PRETTY_FUNCTION__ << "] "
 #else							// GNUC
 #define funcinfo	"[" << __FILE__ << ":" << __LINE__ << "] "
 #endif							// GNUC
-#endif							// KDE
+#endif							// KF5
+#endif							// KDE4
 
-#endif							// APPLIC_H
+#endif							// GLOBAL_H
