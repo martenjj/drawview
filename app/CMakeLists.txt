@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Application				#
-#  Edit:		23-May-21					#
+#  Edit:		24-May-21					#
 #########################################################################
 
 project(drawview)
@@ -11,8 +11,8 @@ project(drawview)
 #									#
 #########################################################################
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg)
-#find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Config IconThemes KIO Crash)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n XmlGui Auth)
 
 #########################################################################
 #									#
@@ -93,18 +93,16 @@ add_definitions("-DPACKAGE_BUGREPORT=\\\"jjm@keelhaul.me.uk\\\"")
 add_definitions("-DDRAWFILTER_DIR=\\\"${KDE_INSTALL_LIBEXECDIR}\\\"")
 
 add_executable(drawview ${drawview_SRCS})
+add_dependencies(drawview vcsversion)
 target_link_libraries(drawview
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
   Qt5::PrintSupport
   Qt5::Svg
-#   KF5::I18n
-#   KF5::ConfigCore
-#   KF5::Crash
+  KF5::I18n
+  KF5::XmlGui
 )
-
-add_dependencies(drawview vcsversion)
 
 #########################################################################
 #									#

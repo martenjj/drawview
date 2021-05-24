@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	22-May-21						//
+//  Edit:	24-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -38,7 +38,7 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-#include <qmainwindow.h>
+#include <kxmlguiwindow.h>
 #include <qprinter.h>
 
 //////////////////////////////////////////////////////////////////////////
@@ -47,14 +47,12 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-class QWidget;
 class QScrollArea;
-class QAction;
-class QActionGroup;
+
+class KSelectAction;
 
 class DrawWidget;
 class DrawDiagram;
-//class PaperMenus;
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -62,13 +60,13 @@ class DrawDiagram;
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-class DrawView : public QMainWindow
+class DrawView : public KXmlGuiWindow
 {
 	Q_OBJECT
 
 public:
 	DrawView(const QString &file = QString());
-	~DrawView();
+	virtual ~DrawView();
 
 	bool isValid() const			{ return (mDiagram!=NULL); }
 
@@ -82,17 +80,12 @@ protected slots:
 	void fileExport();
 	void optionsPreferences();
 	void optionsPageSize();
-	void aboutMe();
-
-	void slotFileMenuAboutToShow();
 
 	void slotToggleClipping(bool on);
 	void slotToggleAntiAlias(bool on);
 	void slotToggleBoxes(bool on);
 	void slotToggleSkeletons(bool on);
 	void slotZoomSelected(QAction *act);
-	void slotZoomIn();
-	void slotZoomOut();
 
 private:
 	bool loadFile(const QString &file);
@@ -101,9 +94,7 @@ private:
 
 	QScrollArea *wScroller;
 	QWidget *wFrame;
-	QActionGroup *mZoomacts;
-	QAction *aExport;
-	QAction *aDump;
+	KSelectAction *mZoomActs;
 
 	DrawWidget *wDrawing;
 	DrawDiagram *mDiagram;

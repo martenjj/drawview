@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	23-May-21						//
+//  Edit:	24-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -82,7 +82,6 @@ int main(int argc,char *argv[])
             tryIcon(KDEICONS);
 #endif
 
-	app.setQuitOnLastWindowClosed(false);		// not during startup
  	if (!app.isSessionRestored())
 	{
 		bool ok = false;
@@ -102,7 +101,7 @@ int main(int argc,char *argv[])
 				if (file[0]=='-' && file[1]=='\0') file = "/dev/stdin";
 				DrawView *v = new DrawView(file);
 				if (v->isValid()) ok = true;
-				else delete v;
+				else v->deleteLater();
 			}
 		}
 

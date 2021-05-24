@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	23-May-21						//
+//  Edit:	24-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -40,29 +40,26 @@
 #include "global.h"
 
 #include <qapplication.h>
-#include <qmainwindow.h>
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qwidget.h>
 #include <qaction.h>
-#include <qactiongroup.h>
-#include <qmenu.h>
-#include <qmenubar.h>
-#include <qframe.h>
 #include <qgridlayout.h>
 #include <qscrollarea.h>
 #include <qscrollbar.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qalgorithms.h>
-#include <qlist.h>
-#include <qpoint.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
 #include <qpagesetupdialog.h>
 #include <qsvggenerator.h>
-#include <qdesktopwidget.h>
+#include <qstatusbar.h>
+
+#include <klocalizedstring.h>
+#include <kstandardaction.h>
+#include <kactioncollection.h>
+#include <kselectaction.h>
 
 #include "drawwidget.h"
 #include "diagram.h"
@@ -77,7 +74,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 DrawView::DrawView(const QString &file)
-	: QMainWindow(NULL)
+	: KXmlGuiWindow(NULL)
 {
 	debugmsg(0) << funcinfo << "file=" << file;
 
@@ -85,7 +82,6 @@ DrawView::DrawView(const QString &file)
 
 	setAcceptDrops(false);				// not accepted just anywhere
 	setAttribute(Qt::WA_DeleteOnClose);		// close me and I'll go away
-	setWindowTitle(qApp->applicationName());
 
 	wScroller = new QScrollArea(this);		// main scrolling area
 	wScroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -106,15 +102,21 @@ DrawView::DrawView(const QString &file)
 
 	setCentralWidget(wScroller);			// content of main window
 	setupActions();					// menu and shortcut actions
+	setupGUI(KXmlGuiWindow::Default);		// create and merge GUI
+	setAutoSaveSettings();
+							// we don't have a status bar
+	QAction *act = actionCollection()->action("options_show_statusbar");
+	if (act!=nullptr) act->setVisible(false);
+	statusBar()->setVisible(false);
 							// default page settings
 	setDrawingSize(QPageSize(QPageSize::A4), QPageLayout::Landscape);
 
 	if (!file.isNull())				// file to load specified
 	{
-		if (!loadFile(file)) return;		// load it, give up if error
+		if (!loadFile(file)) deleteLater();	// load it, give up if error
 	}
 
-	this->show();					// show us as window
+	show();						// show us as window
 	debugmsg(0) << funcinfo << "done" << Qt::endl;
 }
 
@@ -138,113 +140,68 @@ void DrawView::setupActions()
 	static const int zooms[] = { 10, 20, 33, 50, 75, 100, 125, 150, 200, 330, 500, 1000 };
 	static const int nzooms = sizeof(zooms)/sizeof(int);
 
-        QMenu *mfile = menuBar()->addMenu("&File");
-        QMenu *mview = menuBar()->addMenu("&View");
-        QMenu *msett = menuBar()->addMenu("&Settings");
-        menuBar()->addSeparator();
-        QMenu *mhelp = menuBar()->addMenu("&Help");
+	KActionCollection *ac = actionCollection();
+	KStandardAction::quit(this, SLOT(close()), ac);
 
-	QAction *act = new QAction("&Open...",this);
-	act->setShortcut(Qt::CTRL+Qt::Key_O);
-	connect(act,SIGNAL(triggered()),this,SLOT(fileOpen()));
-	mfile->addAction(act);
+	KStandardAction::open(this, SLOT(fileOpen()), ac);
 
-	aExport = new QAction("Ex&port...",this);
-	//act->setShortcut(Qt::CTRL+Qt::Key_P);
-	connect(aExport,SIGNAL(triggered()),this,SLOT(fileExport()));
-	mfile->addAction(aExport);
-
-	aDump = new QAction("&Dump",this);
-	connect(aDump,SIGNAL(triggered()),this,SLOT(fileDump()));
-	mfile->addAction(aDump);
-	mfile->addSeparator();
-
-	act = new QAction("&Close",this);
-	act->setShortcut(Qt::CTRL+Qt::Key_W);
-	connect(act,SIGNAL(triggered()),this,SLOT(close()));
-	mfile->addAction(act);
-
-	act = new QAction("&Quit",this);
-	act->setShortcut(Qt::CTRL+Qt::Key_Q);
-	connect(act,SIGNAL(triggered()),qApp,SLOT(quit()));
-	mfile->addAction(act);
-
-	act = new QAction("P&age Size...",this);
-	connect(act,SIGNAL(triggered()),this,SLOT(optionsPageSize()));
-	msett->addAction(act);
-
-	act = new QAction("&Preferences...",this);
+	QAction *act = KStandardAction::save(this, SLOT(fileExport()), ac);
+	act->setText(i18n("Export..."));
 	act->setEnabled(false);
-	connect(act,SIGNAL(triggered()),this,SLOT(optionsPreferences()));
-	msett->addAction(act);
 
-	QMenu *mzoom = new QMenu("&Zoom");
+	act = ac->addAction("file_dump");
+	act->setText(i18n("Dump"));
+	act->setIcon(QIcon::fromTheme("view-list-text"));
+	act->setEnabled(false);
+	connect(act, SIGNAL(triggered()), SLOT(fileDump()));
 
-	act = new QAction("&In",this);
-	act->setShortcut(Qt::CTRL+Qt::Key_Up);
-	connect(act,SIGNAL(triggered()),this,SLOT(slotZoomIn()));
-	mzoom->addAction(act);
+	act = ac->addAction("settings_page_size");
+	act->setText(i18n("Page Size..."));
+	act->setIcon(QIcon::fromTheme("document-properties"));
+	connect(act, SIGNAL(triggered()), SLOT(optionsPageSize()));
 
-	act = new QAction("&Out",this);
-	act->setShortcut(Qt::CTRL+Qt::Key_Down);
-	connect(act,SIGNAL(triggered()),this,SLOT(slotZoomOut()));
-	mzoom->addAction(act);
+	act = KStandardAction::preferences(this, SLOT(optionsPreferences()), ac);
+	act->setEnabled(false);
 
-	mzoom->addSeparator();
+	act = KStandardAction::zoomIn(this, [this]() { changeZoom(+1); }, ac);
+	act = KStandardAction::zoomOut(this, [this]() { changeZoom(-1); }, ac);
+	act = KStandardAction::actualSize(this, [this]() { changeZoom(0); }, ac);
 
-	mZoomacts = new QActionGroup(this);
-	connect(mZoomacts,SIGNAL(triggered(QAction *)),this,SLOT(slotZoomSelected(QAction *)));
+	mZoomActs = new KSelectAction(QIcon::fromTheme("zoom"), i18n("Zoom"), this);
 	for (int i = 0; i<nzooms; ++i)
 	{
 		const int z = zooms[i];
 		act = new QAction(QString("%1%").arg(z), this);
 		act->setCheckable(true);
 		act->setData(z);
-		mZoomacts->addAction(act);
-		mzoom->addAction(act);
-		if (z==100)
-		{
-			act->setShortcut(Qt::CTRL+Qt::Key_1);
-			act->setChecked(true);
-		}
+		connect(act, &QAction::triggered, this, [this, act]() { slotZoomSelected(act); });
+		mZoomActs->addAction(act);
 	}
+	ac->addAction("view_zoom", mZoomActs);
 
-	mview->addMenu(mzoom);
-	mview->addSeparator();
-
-	act = new QAction("&Clipping",this);
+	act = ac->addAction("view_clipping");
+	act->setText(i18n("Clipping"));
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::EnableClipping);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleClipping(bool)));
-	mview->addAction(act);
 
-	act = new QAction("&Antialiasing",this);
+	act = ac->addAction("view_antialiasing");
+	act->setText(i18n("Antialiasing"));
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::AntiAlias);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleAntiAlias(bool)));
-	mview->addAction(act);
 
-	act = new QAction("&Bounding boxes",this);
+	act = ac->addAction("view_bounding_boxes");
+	act->setText(i18n("Bounding boxes"));
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::DisplayBoundingBoxes);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleBoxes(bool)));
-	mview->addAction(act);
 
-	act = new QAction("S&keleton objects",this);
+	act = ac->addAction("view_skeleton_objects");
+	act->setText(i18n("Skeleton objects"));
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::DisplaySkeletonObjects);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleSkeletons(bool)));
-	mview->addAction(act);
-
-	act = new QAction(QString("&About %1...").arg(qApp->applicationDisplayName()),this);
-	connect(act,SIGNAL(triggered()),this,SLOT(aboutMe()));
-	mhelp->addAction(act);
-
-	act = new QAction("About &Qt...",this);
-	connect(act,SIGNAL(triggered()),qApp,SLOT(aboutQt()));
-	mhelp->addAction(act);
-
-	connect(mfile,SIGNAL(aboutToShow()),this,SLOT(slotFileMenuAboutToShow()));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -252,13 +209,6 @@ void DrawView::setupActions()
 //  "File" menu operations						//
 //									//
 //////////////////////////////////////////////////////////////////////////
-
-void DrawView::slotFileMenuAboutToShow()
-{
-	aExport->setEnabled(mDiagram!=NULL);
-	aDump->setEnabled(mDiagram!=NULL);
-}
-
 
 bool DrawView::loadFile(const QString &file)
 {
@@ -285,7 +235,7 @@ bool DrawView::loadFile(const QString &file)
 	if (PaperUtil::guessSize(mDiagram->boundingBox(),&size,&orient)) setDrawingSize(size,orient);
 
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
-	setWindowTitle(QString("%2 - %1").arg(qApp->applicationName()).arg(mDocname));
+	setWindowTitle(mDocname);
 
 	if (!mDiagram->drawError().isEmpty())
 	{
@@ -293,6 +243,11 @@ bool DrawView::loadFile(const QString &file)
 					 QString("Problem in drawing file '%2'\n%1").arg(mDiagram->drawError()).arg(infile),
 					 QMessageBox::Ignore,QMessageBox::NoButton,QMessageBox::NoButton);
 	}
+
+	QAction *act = actionCollection()->action("file_save");
+	if (act!=nullptr) act->setEnabled(true);
+	act = actionCollection()->action("file_dump");
+	if (act!=nullptr) act->setEnabled(true);
 
 	return (true);
 }
@@ -456,8 +411,10 @@ void DrawView::optionsPageSize()
 	pr.setOutputFormat(QPrinter::PdfFormat);	// allow all known paper sizes
 
 	QPageSetupDialog pd(&pr,this);
-	pd.setWindowTitle("Page Size - "+qApp->applicationName());
-	if (pd.exec()) setDrawingSize(pr.pageLayout().pageSize(), pr.pageLayout().orientation());
+	pd.setWindowTitle("Page Size");
+	if (!pd.exec()) return;
+
+	setDrawingSize(pr.pageLayout().pageSize(), pr.pageLayout().orientation());
 }
 
 
@@ -496,6 +453,7 @@ void DrawView::setDrawingSize(const QPageSize &size, QPageLayout::Orientation or
 void DrawView::slotToggleClipping(bool on)
 {
 	wDrawing->paintOptions()->setFlags(PaintOptions::EnableClipping,on);
+	wDrawing->update();
 }
 
 
@@ -550,35 +508,20 @@ void DrawView::slotZoomSelected(QAction *act)
 
 void DrawView::changeZoom(int incr)
 {
-	const QList<QAction *> acts = mZoomacts->actions();
-	int i = acts.indexOf(mZoomacts->checkedAction());
-	if (i==-1) return;
+	const QList<QAction *> acts = mZoomActs->actions();
+	int i = mZoomActs->currentItem();
 
+	if (incr==0 || i==-1)
+	{
+		QAction *act = mZoomActs->action("100%");
+		if (act!=nullptr)
+		{
+			mZoomActs->setCurrentAction(act);
+			i = mZoomActs->currentItem();
+		}
+	}
+
+	if (i==-1) return;
 	i += incr;
 	if (i>=0 && i<acts.size()) acts.at(i)->activate(QAction::Trigger);
-}
-
-
-void DrawView::slotZoomIn()
-{
-	changeZoom(+1);
-}
-
-
-void DrawView::slotZoomOut()
-{
-	changeZoom(-1);
-}
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  "Help" menu operations						//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-void DrawView::aboutMe()
-{
-	QMessageBox::about(this,QString("About %1").arg(qApp->applicationDisplayName()),
-			   QString("<qt>RiscOS Draw file viewer using Qt 5, version <b>%1</b><p>Home and download page:<br><b>%3</b><p>Report bugs or suggestions to:<br><b>%2</b><p>Released under the <b>GNU GPL</b>;<br>see http://www.gnu.org/licenses/gpl.html")
-			   .arg(PACKAGE_VERSION).arg(PACKAGE_BUGREPORT).arg(PACKAGE_URL));
 }

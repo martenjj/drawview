@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Desktop Integration			#
-#  Edit:		22-May-21					#
+#  Edit:		24-May-21					#
 #########################################################################
 
 project(drawview)
@@ -43,6 +43,6 @@ set(drawview_APPLICS
 
 ecm_install_icons(ICONS ${drawview_ICONS} DESTINATION ${KDE_INSTALL_ICONDIR})
 
-# install(FILES drawview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/drawview)
+install(FILES drawviewui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/drawview)
 install(FILES ${drawview_APPLICS} DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES ${drawview_MIMEXML} DESTINATION ${KDE_INSTALL_MIMEDIR})
