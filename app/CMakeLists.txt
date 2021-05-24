@@ -12,7 +12,7 @@ project(drawview)
 #########################################################################
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n XmlGui Auth)
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n XmlGui Auth Crash)
 
 #########################################################################
 #									#
@@ -78,6 +78,8 @@ set(drawview_SRCS
   ${drawview_LOG_SRCS}
 )
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+
 add_definitions("-DQT4")
 add_definitions("-DQT5")
 add_definitions("-DKF5")
@@ -102,6 +104,7 @@ target_link_libraries(drawview
   Qt5::Svg
   KF5::I18n
   KF5::XmlGui
+  KF5::Crash
 )
 
 #########################################################################

@@ -39,28 +39,15 @@
 #include "global.h"
 
 #include <qapplication.h>
-#include <qfile.h>
-#include <qicon.h>
-#include <qmessagebox.h>
+#include <qcommandlineparser.h>
+#include <qurl.h>
+#include <qdir.h>
+
+#include <kaboutdata.h>
+#include <klocalizedstring.h>
 
 #include "drawview.h"
-
-//////////////////////////////////////////////////////////////////////////
-//									//
-//  Locating the application icon					//
-//									//
-//////////////////////////////////////////////////////////////////////////
-
-static bool tryIcon(const QString &where)
-{
-	if (where.isNull()) return (false);
-
-	QString f(where+QString("/hicolor/32x32/apps/%1.png").arg(PACKAGE));
-	if (!QFile(f).exists()) return (false);
-
-	qApp->setWindowIcon(QIcon(f));
-	return (true);
-}
+#include "version.h"
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -71,43 +58,60 @@ static bool tryIcon(const QString &where)
 
 int main(int argc,char *argv[])
 {
-	QApplication app(argc,argv);
-
-	app.setApplicationName(PACKAGE);
-	app.setApplicationDisplayName(PACKAGE_NAME);
-#ifndef KF5
-#ifdef DESKTOPICONS
-	tryIcon(DESKTOPICONS) ||
+    KAboutData aboutData("drawview",			// componentName
+                         i18n("DrawView"),		// displayName
+#ifdef VCS_HAVE_VERSION
+                         ( VERSION " (" VCS_TYPE_STRING " " VCS_REVISION_STRING ")" ),
+#else
+                         VERSION,			// version
 #endif
-            tryIcon(KDEICONS);
-#endif
+                         i18n("RiscOS Draw file viewer"),
+                         KAboutLicense::GPL_V2,
+                         i18n("Copyright (c) 2006-2021 Jonathan Marten"),
+                         "",				// otherText
+                         PACKAGE_URL,			// homePageAddress
+                         PACKAGE_BUGREPORT);		// bugsEmailAddress
+    aboutData.addAuthor(i18n("Jonathan Marten"),
+                        "",
+                        PACKAGE_BUGREPORT,
+                        "http://www.keelhaul.me.uk");
 
- 	if (!app.isSessionRestored())
-	{
-		bool ok = false;
-		const QStringList args = app.arguments();
-		const int n = args.count()-1;		// not including program name
-		if (n==0)
-		{
-			(void) new DrawView(QString());
-			ok = true;
-		}
-		else
-		{
-			for (int i = 1; i<=n; ++i)
-			{
-				QString file = args[i];
-                                debugmsg(0) << file;
-				if (file[0]=='-' && file[1]=='\0') file = "/dev/stdin";
-				DrawView *v = new DrawView(file);
-				if (v->isValid()) ok = true;
-				else v->deleteLater();
-			}
-		}
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-		if (!ok) app.exit(EXIT_FAILURE);
-	}
+    QCommandLineParser parser;
+    parser.setApplicationDescription(aboutData.shortDescription());
 
-	app.setQuitOnLastWindowClosed(true);		// can do this now
-	return (app.exec());
+    parser.addPositionalArgument("file", i18n("File to load"), i18n("[file...]"));
+
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    DrawView *v = nullptr;
+    const QStringList args = parser.positionalArguments();
+    for (int i = 0; i<args.count(); ++i)		// load project or data files
+    {
+        // Parsing file arguments as URLs, as recommended at
+        // http://marc.info/?l=kde-core-devel&m=141359279227385&w=2
+        const QUrl u = QUrl::fromUserInput(args[i], QDir::currentPath(), QUrl::AssumeLocalFile);
+        if (!u.isValid())
+        {
+            warnmsg() << "Invalid file URL" << u;
+            continue;
+        }
+
+        v = new DrawView(u.toLocalFile());
+        if (!v->isValid()) v->deleteLater();
+        else v->show();
+    }
+
+    if (v==nullptr)					// no files were loaded
+    {
+        v = new DrawView(QString());
+        v->show();
+    }
+
+    app.setQuitOnLastWindowClosed(true);		// can do this now
+    return (app.exec());
 }  
