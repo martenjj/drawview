@@ -1,7 +1,7 @@
 ############################################## -*- mode:autoconf; -*- ####
 ##									##
 ##  Project:	DrawView						##
-##  Edit:	11-Oct-17						##
+##  Edit:	24-May-21						##
 ##									##
 ##########################################################################
 ##									##
@@ -39,7 +39,7 @@ AC_DEFINE([PACKAGE_URL],["http://www.keelhaul.me.uk/acorn/drawview"],[The packag
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 # Dependency tracking does not work with 'utils'
-AM_INIT_AUTOMAKE([-Wall foreign subdir-objects no-dependencies])
+AM_INIT_AUTOMAKE([foreign subdir-objects no-dependencies])
 
 # Additional arguments accepted
 AC_ARG_WITH([qt5],[  --with-qt5=DIR          specify Qt 4 base location])
