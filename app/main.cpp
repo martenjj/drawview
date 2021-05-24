@@ -58,8 +58,8 @@
 
 int main(int argc,char *argv[])
 {
-    KAboutData aboutData("drawview",			// componentName
-                         i18n("DrawView"),		// displayName
+    KAboutData aboutData(PACKAGE,			// componentName
+                         i18n(PACKAGE_NAME),		// displayName
 #ifdef VCS_HAVE_VERSION
                          ( VERSION " (" VCS_TYPE_STRING " " VCS_REVISION_STRING ")" ),
 #else
