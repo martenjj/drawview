@@ -47,7 +47,6 @@
 #include <qgridlayout.h>
 #include <qscrollarea.h>
 #include <qscrollbar.h>
-#include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qalgorithms.h>
 #include <qprinter.h>
@@ -60,6 +59,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kselectaction.h>
+#include <kmessagebox.h>
 
 #include "drawwidget.h"
 #include "diagram.h"
@@ -219,9 +219,8 @@ bool DrawView::loadFile(const QString &file)
 	DrawDiagram *dg = new DrawDiagram(infile);
 	if (!dg->isValid())
 	{
-		QMessageBox::critical(NULL,("Error - "+qApp->applicationName()),
-				      QString("Error loading drawing file '%2'\n%1").arg(dg->drawError()).arg(infile),
-				      QMessageBox::Cancel,QMessageBox::NoButton,QMessageBox::NoButton);
+		KMessageBox::sorry(this, xi18nc("@info", "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>%1</emphasis>",
+						dg->drawError(), infile));
 		delete dg;
 		return (false);
 	}
@@ -239,9 +238,8 @@ bool DrawView::loadFile(const QString &file)
 
 	if (!mDiagram->drawError().isEmpty())
 	{
-		QMessageBox::information(NULL,("Message - "+qApp->applicationName()),
-					 QString("Problem in drawing file '%2'\n%1").arg(mDiagram->drawError()).arg(infile),
-					 QMessageBox::Ignore,QMessageBox::NoButton,QMessageBox::NoButton);
+		KMessageBox::information(this, xi18nc("@info", "Problem in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>%1</emphasis>",
+						      mDiagram->drawError(), infile));
 	}
 
 	QAction *act = actionCollection()->action("file_save");
@@ -322,9 +320,7 @@ void DrawView::fileExport()
 	QString expfile = d.selectedFiles().value(0);
 	if (expfile.isNull())
 	{
-		QMessageBox::warning(this,("Error - "+qApp->applicationName()),
-				     "No file name entered",
-				     QMessageBox::Cancel,QMessageBox::NoButton,QMessageBox::NoButton);
+		KMessageBox::error(this, i18n("No file name entered"));
 		return;
 	}
 
@@ -391,10 +387,8 @@ void DrawView::fileExport()
 	wDrawing->printDiagram(device);			// do the print/export
 	delete device;					// finished with device
 							// let user know it worked
-	QMessageBox::information(this,("Success - "+qApp->applicationName()),
-				 QString("<qt>Exported <b>%1</b> to file<br><b>%2</b>")
-				         .arg(formatName).arg(expfile),
-				 QMessageBox::Ok,QMessageBox::NoButton,QMessageBox::NoButton);
+	KMessageBox::information(this, xi18nc("@info", "Exported %1 to file<nl/><filename>%2</filename>",
+					      formatName, expfile));
 }
 
 //////////////////////////////////////////////////////////////////////////

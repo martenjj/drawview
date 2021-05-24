@@ -56,14 +56,14 @@
 #include <qapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qmessagebox.h>
 #ifdef KF5
 #include <qstandardpaths.h>
 #endif
+
+#include <klocalizedstring.h>
+#include <kmessagebox.h>
 
 #include "files.h"
 
@@ -211,7 +211,6 @@ const QStringList FileReader::getParsedLine()
 
 void FileReader::reportError(const QString &desc,QWidget *parent) const
 {
-	QMessageBox::critical(parent,("Error - "+qApp->applicationName()),
-			     QString("Cannot locate %2 data file '%1'").arg(name).arg(desc),
-			     QMessageBox::Ignore,QMessageBox::NoButton);
+	KMessageBox::error(parent, xi18nc("@info", "Cannot locate %2 data file <filename>%1</filename>",
+                                          name, desc));
 }
