@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	24-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -88,6 +88,14 @@ FileReader::FileReader(const QString &basename)
 	     tryFile(qApp->applicationDirPath()+"/../share") ||
 	     tryFile("../share") ||
 	     tryFile(".");
+
+	if (!ok)
+	{
+		QString kdedir = qEnvironmentVariable("KDEDIR");
+		if (!kdedir.isEmpty()) ok = tryFile(kdedir+"/share/"+PACKAGE) ||
+		                            tryFile(kdedir+"/share/"+PACKAGE+"/share");
+        }
+
 	if (!ok)
 	{
 		warnmsg() << funcinfo << "cannot find data file '" << name << "'";
