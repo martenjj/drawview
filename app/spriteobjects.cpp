@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	22-May-21						//
+//  Edit:	24-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -116,7 +116,6 @@ bool DrawImageObjectBase::drawInternal(QPainter &p,const DrawDiagram *diag,const
 	if (image.isNull()) return (false);
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 	p.save();
-
 
 	if (mat==NULL)					// simple scaling only
 	{
@@ -242,7 +241,7 @@ bool DrawSpriteObject::build(DrawReader &rdr,DrawDiagram *diag)
 
 bool DrawSpriteObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
-	return (DrawSpriteObjectBase::draw(p,diag,opts));
+	return (DrawSpriteObjectBase::drawInternal(p,diag,opts));
 }
 
 
