@@ -99,6 +99,7 @@ DrawView::DrawView(const QString &file)
 	wDrawing = new DrawWidget(wFrame);		// the actual drawing
 	wDrawing->setCursor(Qt::CrossCursor);
 	connect(wDrawing, &DrawWidget::wheelZoom, this, &DrawView::slotChangeZoom);
+	connect(wDrawing, &DrawWidget::dragScroll, this, &DrawView::slotDragScroll);
 	lay->addWidget(wDrawing,0,0,Qt::AlignCenter);	// centered within border area
 
 	setCentralWidget(wScroller);			// content of main window
@@ -519,4 +520,11 @@ void DrawView::slotChangeZoom(int incr)
 	if (i==-1) return;
 	i += incr;
 	if (i>=0 && i<acts.size()) acts.at(i)->activate(QAction::Trigger);
+}
+
+
+void DrawView::slotDragScroll(int dx, int dy)
+{
+	wScroller->horizontalScrollBar()->setValue(wScroller->horizontalScrollBar()->value()-dx);
+	wScroller->verticalScrollBar()->setValue(wScroller->verticalScrollBar()->value()-dy);
 }

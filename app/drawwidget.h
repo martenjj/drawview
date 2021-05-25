@@ -76,14 +76,20 @@ protected:
 	void paintEvent(QPaintEvent *pe) override;
 	void wheelEvent(QWheelEvent *we) override;
 
+	void mousePressEvent(QMouseEvent *ev) override;
+	void mouseMoveEvent(QMouseEvent *ev) override;
+	void mouseReleaseEvent(QMouseEvent *ev) override;
+
 signals:
 	void wheelZoom(int step);
+	void dragScroll(int dx, int dy);
 
 private:
 	const DrawDiagram *diag;
 	PaintOptions paintopts;
 	double zoom;
 	int cumulativeDelta;
+	QPoint dragStart;
 };
 
 

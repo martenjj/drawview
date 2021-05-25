@@ -48,6 +48,7 @@
 #include <qdatetime.h>
 #include <qrect.h>
 #include <qprinter.h>
+#include <qguiapplication.h>
 
 #include "diagram.h"
 #include "coord.h"
@@ -70,6 +71,7 @@ DrawWidget::DrawWidget(QWidget *parent)
 	setFixedSize(500,400);				// pick a default size
 	zoom = 1.0;					// the only reasonable default
 	cumulativeDelta = 0;				// accumulated mouse wheel angle
+	dragStart = QPoint();				// point where drag started
 
 	QPalette pal = palette();			// set widget background colour
 	pal.setColor(QPalette::Background,Qt::white);
@@ -199,4 +201,42 @@ void DrawWidget::wheelEvent(QWheelEvent *we)
     }
 
     we->accept();
+}
+
+
+void DrawWidget::mousePressEvent(QMouseEvent *ev)
+{
+	if (ev->button()!=Qt::LeftButton)
+	{
+		ev->ignore();
+		return;
+	}
+
+	dragStart = ev->pos();
+	QGuiApplication::setOverrideCursor(Qt::OpenHandCursor);
+	ev->accept();
+}
+
+
+void DrawWidget::mouseMoveEvent(QMouseEvent *ev)
+{
+	if (dragStart.isNull())
+	{
+		ev->ignore();
+		return;
+	}
+
+	const int dx = ev->pos().x()-dragStart.x();
+	const int dy = ev->pos().y()-dragStart.y();
+
+	emit dragScroll(dx, dy);
+	ev->accept();
+}
+
+
+void DrawWidget::mouseReleaseEvent(QMouseEvent *ev)
+{
+	dragStart = QPoint();
+	QGuiApplication::restoreOverrideCursor();
+	ev->accept();
 }

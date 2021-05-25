@@ -89,6 +89,7 @@ protected slots:
 
 private slots:
 	void slotChangeZoom(int incr);
+	void slotDragScroll(int dx, int dy);
 
 private:
 	bool loadFile(const QString &file);
