@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	22-May-21						//
+//  Edit:	25-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -74,11 +74,16 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent *pe) override;
+	void wheelEvent(QWheelEvent *we) override;
+
+signals:
+	void wheelZoom(int step);
 
 private:
 	const DrawDiagram *diag;
 	PaintOptions paintopts;
 	double zoom;
+	int cumulativeDelta;
 };
 
 

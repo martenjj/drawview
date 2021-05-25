@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	24-May-21						//
+//  Edit:	25-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -98,6 +98,7 @@ DrawView::DrawView(const QString &file)
 
 	wDrawing = new DrawWidget(wFrame);		// the actual drawing
 	wDrawing->setCursor(Qt::CrossCursor);
+	connect(wDrawing, &DrawWidget::wheelZoom, this, &DrawView::slotChangeZoom);
 	lay->addWidget(wDrawing,0,0,Qt::AlignCenter);	// centered within border area
 
 	setCentralWidget(wScroller);			// content of main window
@@ -163,9 +164,9 @@ void DrawView::setupActions()
 	act = KStandardAction::preferences(this, SLOT(optionsPreferences()), ac);
 	act->setEnabled(false);
 
-	act = KStandardAction::zoomIn(this, [this]() { changeZoom(+1); }, ac);
-	act = KStandardAction::zoomOut(this, [this]() { changeZoom(-1); }, ac);
-	act = KStandardAction::actualSize(this, [this]() { changeZoom(0); }, ac);
+	act = KStandardAction::zoomIn(this, [this]() { slotChangeZoom(+1); }, ac);
+	act = KStandardAction::zoomOut(this, [this]() { slotChangeZoom(-1); }, ac);
+	act = KStandardAction::actualSize(this, [this]() { slotChangeZoom(0); }, ac);
 
 	mZoomActs = new KSelectAction(QIcon::fromTheme("zoom"), i18n("Zoom"), this);
 	for (int i = 0; i<nzooms; ++i)
@@ -500,7 +501,7 @@ void DrawView::slotZoomSelected(QAction *act)
 }
 
 
-void DrawView::changeZoom(int incr)
+void DrawView::slotChangeZoom(int incr)
 {
 	const QList<QAction *> acts = mZoomActs->actions();
 	int i = mZoomActs->currentItem();

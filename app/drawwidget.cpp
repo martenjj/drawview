@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	23-May-21						//
+//  Edit:	25-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -69,6 +69,7 @@ DrawWidget::DrawWidget(QWidget *parent)
 	diag = NULL;					// no diagram set yet
 	setFixedSize(500,400);				// pick a default size
 	zoom = 1.0;					// the only reasonable default
+	cumulativeDelta = 0;				// accumulated mouse wheel angle
 
 	QPalette pal = palette();			// set widget background colour
 	pal.setColor(QPalette::Background,Qt::white);
@@ -163,4 +164,39 @@ void DrawWidget::printDiagram(QPaintDevice *dev)
 	p.end();					// finished with painting
 
 	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << Qt::endl;
+}
+
+
+void DrawWidget::wheelEvent(QWheelEvent *we)
+{
+    if (!(we->modifiers() & Qt::ControlModifier))	// Ctrl-wheel does zooming
+    {
+        we->ignore();					// otherwise default wheel action
+        return;
+    }
+
+    // Based on KMixDockWidget::trayWheelEvent() in kmix/gui/kmixdockwidget.cpp
+
+    int inc = 0;
+    const int delta = we->angleDelta().y();
+    cumulativeDelta += delta;
+
+    while (cumulativeDelta>=120)
+    {
+        cumulativeDelta -= 120;
+        ++inc;
+    }
+    while (cumulativeDelta <= -120)
+    {
+        cumulativeDelta += 120;
+        ++inc;
+    }
+
+    while (inc>0)
+    {
+        emit wheelZoom(delta<0 ? -1 : +1);
+        --inc;
+    }
+
+    we->accept();
 }

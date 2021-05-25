@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	24-May-21						//
+//  Edit:	25-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -87,10 +87,12 @@ protected slots:
 	void slotToggleSkeletons(bool on);
 	void slotZoomSelected(QAction *act);
 
+private slots:
+	void slotChangeZoom(int incr);
+
 private:
 	bool loadFile(const QString &file);
 	void setupActions();
-	void changeZoom(int incr);
 
 	QScrollArea *wScroller;
 	QWidget *wFrame;
