@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Application				#
-#  Edit:		24-May-21					#
+#  Edit:		25-May-21					#
 #########################################################################
 
 project(drawview)
@@ -70,6 +70,7 @@ set(drawview_SRCS
   pathobjects.cpp
   groupobject.cpp
   taggedobject.cpp
+  libraryobject.cpp
   textobjects.cpp
   spriteobjects.cpp
   textarea.cpp

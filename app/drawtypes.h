@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	23-May-21						//
+//  Edit:	25-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -101,6 +101,7 @@ namespace Draw
 	const unsigned int SCALE1	= 0x00010000;	// 1:1 in transform units
 	const unsigned int TRANSPARENT	= 0xFFFFFFFF;	// Transparent colour
 	const int MAXLAYER		= 31;		// How many layers
+	const int NAMELEN		= 20;		// Library object name length
 
 	typedef drawuint coltyp;			// os_colour draw_coltyp
 	typedef drawuint pathwidth;			// int draw_pathwidth
