@@ -178,6 +178,7 @@ void DrawView::setupActions()
 		act->setData(z);
 		connect(act, &QAction::triggered, this, [this, act]() { slotZoomSelected(act); });
 		mZoomActs->addAction(act);
+		if (z==100) mZoomActs->setCurrentAction(act);
 	}
 	ac->addAction("view_zoom", mZoomActs);
 
