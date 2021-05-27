@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	25-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -98,6 +98,7 @@ private:
 	QScrollArea *wScroller;
 	QWidget *wFrame;
 	KSelectAction *mZoomActs;
+	KSelectAction *mLibraryNameActs;
 
 	DrawWidget *wDrawing;
 	DrawDiagram *mDiagram;

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Objects					//
-//  Edit:	25-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -67,6 +67,8 @@ public:
 
 	Draw::object type() const override	{ return (Draw::objLIB); }
 	QString typeName() const override	{ return ("LIBRARY"); }
+
+	QByteArray libraryName() const		{ return (objname); }
 
 	bool build(DrawReader &rdr,DrawDiagram *diag) override;
 	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;

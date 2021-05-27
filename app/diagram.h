@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -83,6 +83,7 @@ public:
 	FontReferenceMap *fontMap() const		{ return (fontmap); }
 	void setFontMap(FontReferenceMap *fm) 		{ fontmap = fm; }
 	const DrawBox *boundingBox() const		{ return (&bbox); }
+	QList<QByteArray> libraryObjectNames() const;
 
 protected:
 	bool readDrawFile(DrawReader &rdr,QByteArray title = "");

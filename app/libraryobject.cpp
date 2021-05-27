@@ -41,6 +41,7 @@
 #include <qtextstream.h>
 
 #include "reader.h"
+#include "paintoptions.h"
 
 #include "libraryobject.h"
 
@@ -88,6 +89,10 @@ bool DrawLibraryObject::build(DrawReader &rdr,DrawDiagram *diag)
 bool DrawLibraryObject::draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const
 {
 	if (object==NULL) return (false);
+
+	const QByteArray &wantedName = opts->libraryName();
+	if (!wantedName.isEmpty() && wantedName!=objname) return (false);
+
 	if (!DrawObject::draw(p,diag,opts)) return (false);
 	return (object->draw(p,diag,opts));
 }

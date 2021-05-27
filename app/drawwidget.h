@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	25-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -68,7 +68,9 @@ public:
 	void setDiagram(const DrawDiagram *dia);
 	void setDrawingSize(unsigned int width,unsigned int height);
 	void setZoom(double scale = 1.0);
-	PaintOptions *paintOptions()			{ return (&paintopts); }
+
+	PaintOptions *paintOptions()				{ return (&paintopts); }
+	QList<QByteArray> libraryObjectNames() const;
 
 	void printDiagram(QPaintDevice *dev);
 
