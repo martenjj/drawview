@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	23-May-21						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -419,3 +419,10 @@ bool DrawReader::getWord(std::nullptr_t np, bool expecteof)
 	return (getWord(static_cast<drawword *>(np), expecteof));
 }
 
+void DrawReader::endOfFile()
+{
+#ifdef DEBUG_READER
+	debugmsg(0) << funcinfo;
+#endif
+	setError(DrawReader::Finished);
+}

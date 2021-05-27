@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
-//  Project:	DrawView - Library					//
+//  Project:	DrawView - Objects					//
 //  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
-//  A widget that displays a Draw diagram.				//
+//  Library objects, simply enclosing another object.			//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -29,8 +29,8 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef DRAWWIDGET_H
-#define DRAWWIDGET_H
+#ifndef DRAWLIBRARYOBJECT_H
+#define DRAWLIBRARYOBJECT_H
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -38,9 +38,9 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-#include <qwidget.h>
+#include <qdatetime.h>
 
-#include "paintoptions.h"
+#include "object.h"
 
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -48,51 +48,36 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-class QPaintDevice;
+class QTextStream;
 
 class DrawDiagram;
+class DrawReader;
 
 //////////////////////////////////////////////////////////////////////////
 //									//
-//  Class DRAWWIDGET -- Widget to display a Draw diagram		//
+//  Class DRAWLIBRARYOBJECT -- A library object				//
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-class DrawWidget : public QWidget
+class DrawLibraryObject : public DrawObject
 {
-	Q_OBJECT
-
 public:
-	DrawWidget(QWidget *parent = NULL);
+	DrawLibraryObject(Draw::objflags flag,int layer = 0);
+	~DrawLibraryObject();
 
-	void setDiagram(const DrawDiagram *dia);
-	void setDrawingSize(unsigned int width,unsigned int height);
-	void setZoom(double scale = 1.0);
+	Draw::object type() const override	{ return (Draw::objLIB); }
+	QString typeName() const override	{ return ("LIBRARY"); }
 
-	PaintOptions *paintOptions()				{ return (&paintopts); }
-	QList<QByteArray> libraryObjectNames() const;
+	QByteArray libraryName() const		{ return (objname); }
 
-	void printDiagram(QPaintDevice *dev);
-
-protected:
-	void paintEvent(QPaintEvent *pe) override;
-	void wheelEvent(QWheelEvent *we) override;
-
-	void mousePressEvent(QMouseEvent *ev) override;
-	void mouseMoveEvent(QMouseEvent *ev) override;
-	void mouseReleaseEvent(QMouseEvent *ev) override;
-
-signals:
-	void wheelZoom(int step);
-	void dragScroll(int dx, int dy);
+	bool build(DrawReader &rdr,DrawDiagram *diag) override;
+	bool draw(QPainter &p,const DrawDiagram *diag,const PaintOptions *opts) const override;
+	void dump(QTextStream &str,const QString &indent1,const QString &indent2) const override;
 
 private:
-	const DrawDiagram *diag;
-	PaintOptions paintopts;
-	double zoom;
-	int cumulativeDelta;
-	QPoint dragStart;
+	DrawObject *object;
+	QByteArray objname;
+	QDateTime objtime;
 };
 
-
-#endif							// DRAWWIDGET_H
+#endif							// DRAWLIBRARYOBJECT_H

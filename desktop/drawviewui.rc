@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="drawview"
-     version="1"
+     version="2"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -17,6 +17,8 @@
       <Action name="view_antialiasing"/>
       <Action name="view_bounding_boxes"/>
       <Action name="view_skeleton_objects"/>
+      <Separator/>
+      <Action name="view_library_name"/>
     </Menu>
 
     <Menu name="settings">

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	23-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -61,6 +61,7 @@
 #include "fonts.h"
 #include "coord.h"
 #include "paintoptions.h"
+#include "libraryobject.h"
 
 #include "diagram.h"
 
@@ -370,8 +371,8 @@ QString DrawDiagram::drawError() const
 	QString msg = "";
 
 	int count = 0;
-	for (QList<const DrawError *>::const_iterator it = errors.list()->begin();
-	     it!=errors.list()->end(); ++it)
+	for (QList<const DrawError *>::const_iterator it = errors.list()->constBegin();
+	     it!=errors.list()->constEnd(); ++it)
 	{
 		msg += "\n";
 		msg += (*it)->message();
@@ -394,8 +395,8 @@ QString DrawDiagram::drawError() const
 
 void DrawDiagram::draw(QPainter &p,const PaintOptions *opts) const
 {
-	for (QList<DrawObject *>::const_iterator it = objects.begin();
-	     it!=objects.end(); ++it)			// draw each object in order
+	for (QList<DrawObject *>::const_iterator it = objects.constBegin();
+	     it!=objects.constEnd(); ++it)		// draw each object in order
 	{
 		(*it)->draw(p,this,opts);
 	}
@@ -416,12 +417,35 @@ void DrawDiagram::dump(QTextStream &str) const
 	str << Qt::endl;
 
 	QString in2 = "|  ";
-	for (QList<DrawObject *>::const_iterator it = objects.begin();
-	     it!=objects.end(); ++it)
+	for (QList<DrawObject *>::const_iterator it = objects.constBegin();
+	     it!=objects.constEnd(); ++it)
 	{
 		if ((*it)==objects.last()) in2 = "   ";
 		(*it)->dump(str,"",in2);
 	}
 
 	str << Qt::endl << line << Qt::endl << Qt::endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  Access to the objects						//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+QList<QByteArray> DrawDiagram::libraryObjectNames() const
+{
+	QList<QByteArray> result;
+
+	for (QList<DrawObject *>::const_iterator it = objects.constBegin();
+	     it!=objects.constEnd(); ++it)
+	{
+		const DrawObject *obj = (*it);
+		if (obj->type()!=Draw::objLIB) continue;
+
+		const DrawLibraryObject *lib = static_cast<const DrawLibraryObject *>(obj);
+		result.append(lib->libraryName());
+	}
+
+	return (result);
 }

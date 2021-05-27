@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	25-May-21						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -156,7 +156,7 @@ void DrawWidget::printDiagram(QPaintDevice *dev)
 	QPainter p;
 	p.begin(dev);					// begin painting
 
-	PaintOptions opts;				// don't need clipping here
+	PaintOptions opts = paintopts;			// don't need clipping here
 	opts.setFlags(PaintOptions::EnableClipping,false);
 
 	DrawCoord::begin(p.device());			// set for coordinate conversions
@@ -168,6 +168,11 @@ void DrawWidget::printDiagram(QPaintDevice *dev)
 	debugmsg(0) << funcinfo << "done, took " << start.msecsTo(QTime::currentTime()) << "ms" << Qt::endl;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  Mouse operations							//
+//									//
+//////////////////////////////////////////////////////////////////////////
 
 void DrawWidget::wheelEvent(QWheelEvent *we)
 {
@@ -239,4 +244,15 @@ void DrawWidget::mouseReleaseEvent(QMouseEvent *ev)
 	dragStart = QPoint();
 	QGuiApplication::restoreOverrideCursor();
 	ev->accept();
+}
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  Access to the diagram						//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+QList<QByteArray> DrawWidget::libraryObjectNames() const
+{
+	return (diag->libraryObjectNames());
 }

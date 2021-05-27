@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	16-Jan-06						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -54,7 +54,7 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-DrawUnknownObject::DrawUnknownObject(Draw::object typ,Draw::objflag flag,int layer)
+DrawUnknownObject::DrawUnknownObject(Draw::object typ,Draw::objflags flag,int layer)
 	: DrawObject((flag|Draw::flagNOBBOX),layer)
 {
 	tag = typ;

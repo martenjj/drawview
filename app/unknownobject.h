@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	22-May-21						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -64,7 +64,7 @@ class DrawDiagram;
 class DrawUnknownObject : public DrawObject
 {
 public:
-	DrawUnknownObject(Draw::object type,Draw::objflag flag,int layer = 0);
+	DrawUnknownObject(Draw::object type,Draw::objflags flag,int layer = 0);
 
 	Draw::object type() const override 	{ return (tag); }
 	QString typeName() const override	{ return (QString("UNKNOWN(%1)").arg(tag)); }

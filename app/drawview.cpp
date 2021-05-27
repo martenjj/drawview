@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	25-May-21						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -205,6 +205,10 @@ void DrawView::setupActions()
 	act->setCheckable(true);
 	act->setChecked(wDrawing->paintOptions()->flags() & PaintOptions::DisplaySkeletonObjects);
 	connect(act,SIGNAL(triggered(bool)),this,SLOT(slotToggleSkeletons(bool)));
+
+	mLibraryNameActs = new KSelectAction(QIcon::fromTheme("folder-images"), i18n("Library Object"), this);
+	ac->addAction("view_library_name", mLibraryNameActs);
+	mLibraryNameActs->setEnabled(false);		// until a library is loaded
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -231,6 +235,46 @@ bool DrawView::loadFile(const QString &file)
 	if (mDiagram!=NULL) delete mDiagram;		// have a diagram already?
 	mDiagram = dg;					// note the new one
 	wDrawing->setDiagram(mDiagram);			// tell display about it
+
+	// Clear the current library object name.  If there are library
+	// objects then the object name combo box will be filled below
+	// and its currentTextChanged() signal will set the name for
+	// rendering.
+	wDrawing->paintOptions()->setLibraryName(QByteArray());
+
+	mLibraryNameActs->clear();
+	const QList<QByteArray> libraryNames = wDrawing->libraryObjectNames();
+	if (!libraryNames.isEmpty())
+	{
+		QAction *act = new QAction(i18nc("@action:inmenu", "(All)"), this);
+		act->setCheckable(true);
+		mLibraryNameActs->addAction(act);
+
+		for (const QByteArray &libraryName : libraryNames)
+		{
+			act = new QAction(QString::fromLatin1(libraryName), this);
+			act->setCheckable(true);
+			act->setData(libraryName);
+			mLibraryNameActs->addAction(act);
+		}
+
+		QList<QAction *> addedActs = mLibraryNameActs->actions();
+		for (QAction *act1 : addedActs)
+		{
+			connect(act1, &QAction::triggered, this, [this, act1]()
+			{
+				wDrawing->paintOptions()->setLibraryName(act1->data().toByteArray());
+				wDrawing->update();
+			});
+		}
+
+		mLibraryNameActs->setCurrentItem(0);
+		mLibraryNameActs->setEnabled(true);
+	}
+	else
+	{
+		mLibraryNameActs->setEnabled(false);
+	}
 
 	QPageSize size;
 	QPageLayout::Orientation orient;		// guess a page size

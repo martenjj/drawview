@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	23-May-21						//
+//  Edit:	26-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -69,13 +69,16 @@ public:
 
 	PaintOptions::PaintFlags flags() const		{ return (mFlags); }
 	const DrawBox *clippingBox() const		{ return (&mClipbox); }
+	const QByteArray &libraryName() const		{ return (mLibraryName); }
 
+	void setLibraryName(const QByteArray &name)	{ mLibraryName = name; }
 	void setClippingBox(const QRect &rect);
 	void setFlags(PaintOptions::PaintFlags f,bool on = true)
 							{ if (on) mFlags |= f; else mFlags &= ~f; }
 private:
 	PaintOptions::PaintFlags mFlags;
 	DrawBox mClipbox;
+	QByteArray mLibraryName;
 };
 
 #ifdef QT4
