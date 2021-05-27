@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Objects					//
-//  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	01-Feb-06						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -202,12 +201,18 @@ DrawObject *DrawObjectManager::create(DrawReader &rdr,DrawDiagram *diag,DrawObje
 	Draw::object type = static_cast<Draw::object>(tag & 0x0000FF);
 							// extract 'draw_tagtyp tag'
 	int layer = (tag & 0x00FF00)>>8;		// extract 'draw_layer layer'
-	Draw::objflag objflag = static_cast<Draw::objflag>((tag & 0xFF0000)>>16);
+	Draw::objflags objflag = static_cast<Draw::objflags>((tag & 0xFF0000)>>16);
 							// extract 'draw_objflags flag'
 	if (layer<0 || layer>Draw::MAXLAYER)
 		rdr.addError(QString("Invalid layer number %1").arg(layer),Draw::errorWARNING);
 	if ((objflag & ~Draw::flagFILEOK)!=0)
 		rdr.addError(QString("Reserved flags %1 not zero").arg(objflag,2,16,QChar('0')),Draw::errorWARNING);
+
+	// Clear reserved bits of the object flags, as otherwise if the
+	// flagNOBBOX or flagREGENBBOX bits are set they cause the reading
+	// of the bounding box to be skipped in DrawObject::build().  Only
+	// retain the flag bits which are valid in a Draw file.
+	objflag &= Draw::flagFILEOK;
 
 	if (!rdr.getWord(&size)) return (NULL);		// read 'draw_sizetyp size'
 							// word, even if compressed file
