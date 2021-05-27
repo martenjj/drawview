@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	22-May-21						//
+//  Edit:	27-May-21						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -98,6 +98,7 @@ public:
 	bool getWord(std::nullptr_t np, bool expecteof = false);
 
 	void addError(const QString &msg,Draw::error lvl = Draw::errorFATAL);
+	void endOfFile();
 
 protected:
 	DrawReader(DrawErrorList *errl = NULL);

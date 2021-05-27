@@ -216,6 +216,15 @@ DrawObject *DrawObjectManager::create(DrawReader &rdr,DrawDiagram *diag,DrawObje
 
 	if (!rdr.getWord(&size)) return (NULL);		// read 'draw_sizetyp size'
 							// word, even if compressed file
+	if (size==0)
+	{
+		// Some of our historical files seem to finish with many blocks of
+		// zeros after the last valid object.
+		rdr.addError(QString("Zero object size (assumed end of file)"), Draw::errorWARNING);
+		rdr.endOfFile();
+		return (NULL);
+	}
+
 	if ((size % 4)!=0)				// maybe unaligned, we don't care
 	{						// but object must be whole words
 		rdr.addError(QString("Object size %1 not multiple of 4").arg(size));
