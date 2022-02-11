@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	26-May-21						//
+//  Edit:	11-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -74,7 +74,7 @@ public:
 	~DrawDiagram();
 
 	bool isValid() const;
-	QString drawError() const;
+	const DrawErrorList *drawErrorList() const	{ return (&errors); }
 
 	void dump(QTextStream &str) const;
 	void draw(QPainter &p,const PaintOptions *opts) const;

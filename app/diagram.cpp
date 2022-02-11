@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	26-May-21						//
+//  Edit:	11-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -363,28 +363,6 @@ bool DrawDiagram::readDrawFile(DrawReader &rdr,QByteArray title)
 bool DrawDiagram::isValid() const
 {
 	return (errors.level()<Draw::errorFATAL);
-}
-
-
-QString DrawDiagram::drawError() const
-{
-	QString msg = "";
-
-	int count = 0;
-	for (QList<const DrawError *>::const_iterator it = errors.list()->constBegin();
-	     it!=errors.list()->constEnd(); ++it)
-	{
-		msg += "\n";
-		msg += (*it)->message();
-
-		++count;
-		if (count>20)				// don't show too many
-		{
-			msg += "\n(more suppressed)";
-			break;
-		}
-	}
-	return (msg);
 }
 
 //////////////////////////////////////////////////////////////////////////
