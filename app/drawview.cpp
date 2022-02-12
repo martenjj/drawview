@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	11-Feb-22						//
+//  Edit:	12-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -217,12 +217,12 @@ void DrawView::setupActions()
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-static QString drawErrorDisplay(const QString &prefix, const DrawErrorList *errors)
+static QString drawErrorDisplay(const QString &prefix, const QList<const DrawError *> *errors)
 {
 	QString details;
 
 	int count = 0;
-	for (const DrawError *error : *errors->list())
+	for (const DrawError *error : *errors)
 	{
 		if (!details.isEmpty()) details += "<br/>";
 		details += error->message();
@@ -249,13 +249,15 @@ bool DrawView::loadFile(const QString &file)
 	QFile qf(infile);				// stdin is not actually supported
 
 	DrawDiagram *dg = new DrawDiagram(infile);
+	const QList<const DrawError *> *errors = dg->drawErrorList()->list();
+
 	if (!dg->isValid())
 	{
 		KMessageBox::sorry(this,
-				   drawErrorDisplay(xi18nc("@info with placeholder at end",
-							   "Error loading drawing file<nl/><filename>%1</filename><nl/><nl/><emphasis>###</emphasis>",
-							   infile),
-						    dg->drawErrorList()));
+				   drawErrorDisplay(xi18ncp("@info with placeholder near end",
+							    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+							    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+							    errors->count(), infile), errors));
 		delete dg;
 		return (false);
 	}
@@ -311,14 +313,15 @@ bool DrawView::loadFile(const QString &file)
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
 	setWindowTitle(mDocname);
 
-	if (!mDiagram->drawErrorList()->list()->isEmpty())
-	{
 
+
+	if (!errors->isEmpty())
+	{
 		KMessageBox::information(this,
-				   drawErrorDisplay(xi18nc("@info with placeholder at end",
-							   "Problem in drawing file<nl/><filename>%1</filename><nl/><nl/><emphasis>###</emphasis>",
-							   infile),
-						    dg->drawErrorList()));
+					 drawErrorDisplay(xi18ncp("@info with placeholder near end",
+								  "Warning in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								  "Warnings in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								  errors->count(), infile), errors));
 	}
 
 	QAction *act = actionCollection()->action("file_save");
