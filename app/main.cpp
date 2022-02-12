@@ -84,9 +84,16 @@ int main(int argc,char *argv[])
 
     parser.addPositionalArgument("file", i18n("File to load"), i18n("[file...]"));
 
+	QCommandLineOption targetDirectoryOption(QStringList() << "e" << "export-directory",
+            QCoreApplication::translate("main", "Export all input files as SVG into <directory>."),
+            QCoreApplication::translate("main", "directory"));
+    parser.addOption(targetDirectoryOption);
+
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
+
+	QString exportDir = parser.value(targetDirectoryOption);
 
     DrawView *v = nullptr;
     const QStringList args = parser.positionalArguments();
@@ -102,8 +109,20 @@ int main(int argc,char *argv[])
         }
 
         v = new DrawView(u.toLocalFile());
-        if (!v->isValid()) v->deleteLater();
-        else v->show();
+        if (!v->isValid())
+		{
+			v->deleteLater();
+		}
+		else if(exportDir.length()>0)
+		{
+			QString expfile = QString("%1%2%3.svg").arg(exportDir, exportDir.endsWith("/") ? "" : "/", u.fileName());
+			printf("%s\n", expfile.toStdString().c_str());
+			v->exportTo(expfile);
+		}
+        else
+		{
+			v->show();
+		}
     }
 
     if (v==nullptr)					// no files were loaded
@@ -111,6 +130,9 @@ int main(int argc,char *argv[])
         v = new DrawView(QString());
         v->show();
     }
+
+	if(exportDir.length()>0)
+		return 0;
 
     app.setQuitOnLastWindowClosed(true);		// can do this now
     return (app.exec());

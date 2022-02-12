@@ -69,6 +69,7 @@ public:
 	virtual ~DrawView();
 
 	bool isValid() const			{ return (mDiagram!=NULL); }
+	void exportTo(const QString &expfile = QString());
 
 protected:
 	void drawingSizeChanged();
