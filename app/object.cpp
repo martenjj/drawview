@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Objects					//
-//  Edit:	27-May-21						//
+//  Edit:	11-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -240,8 +240,19 @@ DrawObject *DrawObjectManager::create(DrawReader &rdr,DrawDiagram *diag,DrawObje
 	const drawuint taken = 2*sizeof(drawword);	// how much read so far
 	if (taken>=size)				// check size not too small
 	{
-		rdr.addError(QString("Impossible object size %1").arg(size));
-		return (NULL);
+		// Test case https://github.com/martenjj/drawview/issues/5
+		// file "19_bin,AFF".  Font table at 0028 has size 8 and no
+		// fonts included, and a valid path object starts immediately
+		// afterwards at 0030.
+		if (size==8 && type==Draw::objFONTLIST)
+		{
+			rdr.addError(QString("Font table contains no fonts"), Draw::errorWARNING);
+		}
+		else
+		{
+			rdr.addError(QString("Impossible object size %1").arg(size));
+			return (NULL);
+		}
 	}
 	size -= taken;					// account for tag/comp and size
 	rdr.setExpectedSize(size);			// that much more to go
