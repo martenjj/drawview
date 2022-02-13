@@ -41,6 +41,18 @@ font names and available fonts is configurable.
 
 ------------------------------------------------------------------------
 
+Batch conversion can be performed by running DrawView from a shell
+with the arguments:
+
+| Option |     |
+| ------ | --- |
+| -e &lt;file&gt;      | Convert an input file and save it as the output file specified.  The format for conversion is taken from the extension of the output file or can be specified using the '-f' option. |
+| -e &lt;directory&gt; | Convert any number of input files and save them in the directory specified. The format for conversion can be specified using the '-f' option, the default is SVG.                    |
+| -f &lt;format&gt;    | Specify the format for conversion.  The value can be "SVG", "PDF" or "PS" in upper or lower case; the default is SVG.                                                                |
+| -o                   | Overwrite already existing export files, by default do not overwrite them.                                                                                                           |
+
+------------------------------------------------------------------------
+
 DrawView requires the Qt 5 (version 5.10 or later, available from
 www.qt.io) and the KDE Frameworks (version 5.68 or later, available
 from www.kde.org) libraries.  These are already included in many Linux
