@@ -373,11 +373,12 @@ void DrawView::fileDump()
 void DrawView::fileOpen()
 {
 	QStringList openfilters;
-	openfilters.append("All drawing files (*.aff *.vec *.c56 *.c4b *.cc3)");
+	openfilters.append("All drawing files (*.aff *.vec *.c56 *.c4b *.cc3 *.810)");
 	openfilters.append("Draw files (*.aff)");
 	openfilters.append("Vector files (*.vec *.c56)");
 	openfilters.append("Compressed Draw files (*.c4b)");
 	openfilters.append("Poster files (*.cc3)");
+	openfilters.append("Library files (*.810)");
 	openfilters.append("All files (*)");
 
 	static QDir opendir = QDir::current();		// start in current directory
