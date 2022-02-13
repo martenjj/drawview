@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	26-May-21						//
+//  Edit:	12-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -70,6 +70,8 @@ public:
 
 	bool isValid() const			{ return (mDiagram!=NULL); }
 
+	QString fileExportTo(const QString &format, const QString &expfile);
+
 protected:
 	void drawingSizeChanged();
 	void setDrawingSize(const QPageSize &size, QPageLayout::Orientation orient);
@@ -94,6 +96,7 @@ private slots:
 private:
 	bool loadFile(const QString &file);
 	void setupActions();
+
 
 	QScrollArea *wScroller;
 	QWidget *wFrame;

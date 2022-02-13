@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	12-Feb-22						//
+//  Edit:	13-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -36,6 +36,8 @@
 //  Include files							//
 //									//
 //////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
 
 #include "global.h"
 
@@ -253,11 +255,26 @@ bool DrawView::loadFile(const QString &file)
 
 	if (!dg->isValid())
 	{
-		KMessageBox::sorry(this,
-				   drawErrorDisplay(xi18ncp("@info with placeholder near end",
-							    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-							    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-							    errors->count(), infile), errors));
+		if (guiMode)				// running as a GUI application
+		{
+			KMessageBox::sorry(this,
+					   drawErrorDisplay(xi18ncp("@info with placeholder near end",
+								    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								    errors->count(), infile), errors));
+		}
+		else					// command line export only
+		{
+			reportError(xi18ncp("@info:shell",
+					    "Error loading drawing file <filename>%2</filename>",
+					    "Errors loading drawing file <filename>%2</filename>",
+					    errors->count(), infile), false);
+			for (const DrawError *error : *errors)
+			{
+				std::cerr << "  " << qPrintable(error->message()) << std::endl;
+			}
+		}
+
 		delete dg;
 		return (false);
 	}
@@ -313,15 +330,27 @@ bool DrawView::loadFile(const QString &file)
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
 	setWindowTitle(mDocname);
 
-
-
-	if (!errors->isEmpty())
+	if (!errors->isEmpty())				// some errors, but not fatal
 	{
-		KMessageBox::information(this,
-					 drawErrorDisplay(xi18ncp("@info with placeholder near end",
-								  "Warning in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-								  "Warnings in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-								  errors->count(), infile), errors));
+		if (guiMode)				// running as a GUI application
+		{
+			KMessageBox::information(this,
+						 drawErrorDisplay(xi18ncp("@info with placeholder near end",
+									  "Warning in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+									  "Warnings in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+									  errors->count(), infile), errors));
+		}
+		else					// command line export only
+		{
+			reportError(xi18ncp("@info:shell",
+					    "Warning in drawing file <filename>%2</filename>",
+					    "Warnings in drawing file <filename>%2</filename>",
+					    errors->count(), infile), false);
+			for (const DrawError *error : *errors)
+			{
+				std::cerr << "  " << qPrintable(error->message()) << std::endl;
+			}
+		}
 	}
 
 	QAction *act = actionCollection()->action("file_save");
@@ -412,9 +441,21 @@ void DrawView::fileExport()
 	if (sf.indexOf(rx)>=0) ext = rx.cap(1);		// extract extension from that
 	if (!ext.isNull() && !expfile.endsWith("."+ext)) expfile += "."+ext;
 
+	const QString formatName = fileExportTo(ext, expfile);
+	KMessageBox::information(this, xi18nc("@info", "Exported %1 to file<nl/><filename>%2</filename>",
+					      formatName, expfile));
+}
+
+
+QString DrawView::fileExportTo(const QString &format, const QString &expfile)
+{
+	if (mDiagram==NULL) return (QString());		// no diagram to print
+
+	qDebug() << "to" << expfile << "as" << format;
+
 	QPaintDevice *device;
 	QString formatName;
-	if (ext=="svg")
+	if (format=="svg")
 	{
 		formatName = "SVG";
 
@@ -452,11 +493,11 @@ void DrawView::fileExport()
 	}
 	else
 	{
-		QPrinter::OutputFormat format = (ext=="pdf" ? QPrinter::PdfFormat : QPrinter::NativeFormat);
-		formatName = (format==QPrinter::PdfFormat ? "PDF" : "PostScript");
+		QPrinter::OutputFormat fmt = (format=="pdf" ? QPrinter::PdfFormat : QPrinter::NativeFormat);
+		formatName = (fmt==QPrinter::PdfFormat ? "PDF" : "PostScript");
 
 		QPrinter *pr = new QPrinter(QPrinter::HighResolution);
-		pr->setOutputFormat(format);		// configure printer for output
+		pr->setOutputFormat(fmt);		// configure printer for output
 		pr->setOutputFileName(expfile);
 
 		pr->setFullPage(true);			// must do these settings in
@@ -468,9 +509,7 @@ void DrawView::fileExport()
 
 	wDrawing->printDiagram(device);			// do the print/export
 	delete device;					// finished with device
-							// let user know it worked
-	KMessageBox::information(this, xi18nc("@info", "Exported %1 to file<nl/><filename>%2</filename>",
-					      formatName, expfile));
+	return (formatName);				// format that was used
 }
 
 //////////////////////////////////////////////////////////////////////////
