@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////// -*- mode:c++; -*- ////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	26-May-21						//
+//  Edit:	12-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -69,7 +69,8 @@ public:
 	virtual ~DrawView();
 
 	bool isValid() const			{ return (mDiagram!=NULL); }
-	void exportTo(const QString &expfile = QString());
+
+	QString fileExportTo(const QString &format, const QString &expfile);
 
 protected:
 	void drawingSizeChanged();
@@ -95,6 +96,7 @@ private slots:
 private:
 	bool loadFile(const QString &file);
 	void setupActions();
+
 
 	QScrollArea *wScroller;
 	QWidget *wFrame;
