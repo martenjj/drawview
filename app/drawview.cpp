@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	12-Feb-22						//
+//  Edit:	13-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -36,6 +36,8 @@
 //  Include files							//
 //									//
 //////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
 
 #include "global.h"
 
@@ -253,11 +255,26 @@ bool DrawView::loadFile(const QString &file)
 
 	if (!dg->isValid())
 	{
-		KMessageBox::sorry(this,
-				   drawErrorDisplay(xi18ncp("@info with placeholder near end",
-							    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-							    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-							    errors->count(), infile), errors));
+		if (guiMode)				// running as a GUI application
+		{
+			KMessageBox::sorry(this,
+					   drawErrorDisplay(xi18ncp("@info with placeholder near end",
+								    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+								    errors->count(), infile), errors));
+		}
+		else					// command line export only
+		{
+			reportError(xi18ncp("@info:shell",
+					    "Error loading drawing file <filename>%2</filename>",
+					    "Errors loading drawing file <filename>%2</filename>",
+					    errors->count(), infile), false);
+			for (const DrawError *error : *errors)
+			{
+				std::cerr << "  " << qPrintable(error->message()) << std::endl;
+			}
+		}
+
 		delete dg;
 		return (false);
 	}
@@ -313,15 +330,27 @@ bool DrawView::loadFile(const QString &file)
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
 	setWindowTitle(mDocname);
 
-
-
-	if (!errors->isEmpty())
+	if (!errors->isEmpty())				// some errors, but not fatal
 	{
-		KMessageBox::information(this,
-					 drawErrorDisplay(xi18ncp("@info with placeholder near end",
-								  "Warning in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-								  "Warnings in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
-								  errors->count(), infile), errors));
+		if (guiMode)				// running as a GUI application
+		{
+			KMessageBox::information(this,
+						 drawErrorDisplay(xi18ncp("@info with placeholder near end",
+									  "Warning in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+									  "Warnings in drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
+									  errors->count(), infile), errors));
+		}
+		else					// command line export only
+		{
+			reportError(xi18ncp("@info:shell",
+					    "Warning in drawing file <filename>%2</filename>",
+					    "Warnings in drawing file <filename>%2</filename>",
+					    errors->count(), infile), false);
+			for (const DrawError *error : *errors)
+			{
+				std::cerr << "  " << qPrintable(error->message()) << std::endl;
+			}
+		}
 	}
 
 	QAction *act = actionCollection()->action("file_save");

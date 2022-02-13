@@ -58,7 +58,9 @@
 //									//
 //////////////////////////////////////////////////////////////////////////
 
-static void reportError(const QString &msg, bool fatal = true)
+bool guiMode = true;					// running as a GUI application
+
+void reportError(const QString &msg, bool fatal)
 {
     std::cerr << qPrintable(QCoreApplication::applicationName())
               << " (" << qPrintable(fatal ? i18n("ERROR") : i18n("WARNING")) << "): "
@@ -148,8 +150,9 @@ int main(int argc,char *argv[])
         if (!dirExport && args.count()>1) reportError(i18n("Export ('-e') for multiple files must be to a directory"));
 
         if (dirExport && !exportArg.endsWith('/')) exportArg += '/';
-
         qDebug() << "export to" << exportArg << "dir?" << dirExport << "overwrite?" << exportOverwrite;
+
+        guiMode = false;				// note not running with GUI
     }
     else
     {

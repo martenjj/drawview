@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView						//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	23-May-21						//
+//  Edit:	13-Feb-22						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -90,5 +90,15 @@
 #endif							// GNUC
 #endif							// KF5
 #endif							// KDE4
+
+//////////////////////////////////////////////////////////////////////////
+//									//
+//  Global functions and variables					//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+extern void reportError(const QString &msg, bool fatal = true);
+extern bool guiMode;
+
 
 #endif							// GLOBAL_H
