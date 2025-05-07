@@ -156,7 +156,7 @@ TextAreaDocument::TextAreaDocument(DrawReader &rd,const QByteArray &txt,QColor c
 
 	// Any other control character is ignored
 #ifdef QT6
-	static const QRegularExpression rp1("[\\0000-\\0011\\0013-\\0037\\0177-\\0237]");
+	static const QRegularExpression rp1("[\\000-\\011\\013-\\037\\177-\\237]");
 #else
 	static const QRegExp rp1("[\\0000-\\0011\\0013-\\0037\\0177-\\0237]");
 #endif
