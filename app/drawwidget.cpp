@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Library					//
-//  Edit:	27-May-21						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -74,7 +74,11 @@ DrawWidget::DrawWidget(QWidget *parent)
 	dragStart = QPoint();				// point where drag started
 
 	QPalette pal = palette();			// set widget background colour
+#ifdef QT6
+	pal.setColor(QPalette::Window,Qt::white);
+#else
 	pal.setColor(QPalette::Background,Qt::white);
+#endif
 	setPalette(pal);
 	setAutoFillBackground(true);			// drawing background is that
 }

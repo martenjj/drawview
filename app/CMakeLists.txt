@@ -12,7 +12,7 @@ project(drawview)
 #########################################################################
 
 find_package(Qt${QV} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
-find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons XmlGui Auth Crash)
+find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons XmlGui Auth Crash IconThemes)
 
 #########################################################################
 #									#
@@ -102,6 +102,7 @@ add_definitions("-DPACKAGE_NAME=\"DrawView\"")
 add_definitions("-DPACKAGE_URL=\"http://www.keelhaul.me.uk/acorn/drawview\"")
 add_definitions("-DPACKAGE_BUGREPORT=\"jjm@keelhaul.me.uk\"")
 add_definitions("-DDRAWFILTER_DIR=\"${KDE_INSTALL_LIBEXECDIR}\"")
+add_definitions("-DPROJECT_NAME=\"${PN}\"")
 
 add_executable(drawview ${drawview_SRCS})
 add_dependencies(drawview vcsversion)
@@ -115,6 +116,7 @@ target_link_libraries(drawview
   KF${QV}::CoreAddons
   KF${QV}::XmlGui
   KF${QV}::Crash
+  KF${QV}::IconThemes
 )
 
 #########################################################################

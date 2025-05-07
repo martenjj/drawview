@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	13-Feb-22						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -48,6 +48,10 @@
 
 #include <kaboutdata.h>
 #include <klocalizedstring.h>
+#ifdef KF6
+#include <kicontheme.h>
+#include <kstylemanager.h>
+#endif
 
 #include "drawview.h"
 #include "version.h"
@@ -84,6 +88,9 @@ static bool isValidFormat(const QString &fmt)
 
 int main(int argc,char *argv[])
 {
+#ifdef KF5
+    KLocalizedString::setApplicationDomain(PROJECT_NAME);
+#endif
     KAboutData aboutData(PACKAGE,			// componentName
                          i18n(PACKAGE_NAME),		// displayName
 #ifdef VCS_HAVE_VERSION
@@ -104,6 +111,11 @@ int main(int argc,char *argv[])
 
     QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
+#ifdef KF6
+    KIconTheme::initTheme();
+    KStyleManager::initStyle();
+    QGuiApplication::setWindowIcon(QIcon::fromTheme(PROJECT_NAME));
+#endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription(aboutData.shortDescription());

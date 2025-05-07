@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	24-May-21						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -57,7 +57,11 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+#ifdef QT6
+#include <qregularexpression.h>
+#else
 #include <qregexp.h>
+#endif
 #ifdef KF5
 #include <qstandardpaths.h>
 #endif
@@ -174,7 +178,11 @@ const QStringList FileReader::getParsedLine()
 	QString line = getLine();			// get a line from file
 	if (line.isNull()) return (fields);		// end of file, empty result
 
-	const QRegExp ws("^\\s+");			// match whitespace at start
+#ifdef QT6
+	static const QRegularExpression ws("^\\s+");	// match whitespace at start
+#else
+	static const QRegExp ws("^\\s+");		// match whitespace at start
+#endif
 	QString field;					// current field being built
 	bool quote = false;				// within a quoted string
 

@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	23-May-21						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -52,6 +52,11 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qvariant.h>
+#ifdef QT6
+#include <qregularexpression.h>
+#else
+#include <qregexp.h>
+#endif
 
 #include "reader.h"
 #include "coord.h"
@@ -150,7 +155,12 @@ TextAreaDocument::TextAreaDocument(DrawReader &rd,const QByteArray &txt,QColor c
 	text.replace('\t',' ');
 
 	// Any other control character is ignored
-	text.replace(QRegExp("[\\0000-\\0011\\0013-\\0037\\0177-\\0237]"),"");
+#ifdef QT6
+	static const QRegularExpression rp1("[\\0000-\\0011\\0013-\\0037\\0177-\\0237]");
+#else
+	static const QRegExp rp1("[\\0000-\\0011\\0013-\\0037\\0177-\\0237]");
+#endif
+	text.replace(rp1, "");
 
 	vmove = 0;					// cumulative vertical move
 
@@ -162,24 +172,51 @@ TextAreaDocument::TextAreaDocument(DrawReader &rd,const QByteArray &txt,QColor c
 	charfmt.setProperty(TextAreaDocument::ParagraphProperty,QVariant(0));
 	curs->setCharFormat(charfmt);
 
-	QRegExp r4("^\\\\!\\s*(\\d+)[/\\n]");		// parse "!" sequence
+#ifdef QT6
+	// A regular expression which is intended to be used with the
+	// match option QRegularExpression::AnchorAtOffsetMatchOption
+	// to match at an offset must not start with the "^" character;
+	// the regexp is automatically anchored to the offset.
+	static const QRegularExpression r0("(.*?)([\\\\\\n])");
+	static const QRegularExpression r1("\\n+");
+	static const QRegularExpression r4("^\\\\!\\s*(\\d+)[/\\n]");
+#else
+	// search up to code or newline
+	static const QRegExp r0("^(.*?)([\\\\\\n])");
+	// parse sequence of newlines
+	static const QRegExp r1("^\\n+");
+	// parse "!" sequence
+	static const QRegExp r4("^\\\\!\\s*(\\d+)[/\\n]");
+#endif
+
+#ifdef QT6
+	const QRegularExpressionMatch match4 = r4.match(text);
+	if (!match4.hasMatch() || match4.captured(1).toInt()!=1)
+#else
 	if (r4.indexIn(text)<0 || r4.cap(1).toInt()!=1)
+#endif
 	{
 		setError("Bad text area header");
 		return;
 	}
-	ptr = r4.cap(0).length();			// skip past first code
 
-	QRegExp r0("^(.*)([\\\\\\n])");			// search up to code or newline
-	r0.setMinimal(true);
-	QRegExp r1("^\\n+");				// parse sequence of newlines
+#ifdef QT6
+	ptr = match4.capturedLength();
+#else
+	ptr = r4.cap(0).length();			// skip past first code
+#endif
 
 	for (;;)					// until end of text
 	{
-		int i = r0.indexIn(text,ptr,QRegExp::CaretAtOffset);
-		if (i==-1) break;			// end of text
-
+#ifdef QT6
+		const QRegularExpressionMatch match0 = r0.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+		if (!match0.hasMatch()) break;		// end of text
+		QString lead = match0.captured(1);	// leading text before match
+#else
+		int i0 = r0.indexIn(text,ptr,QRegExp::CaretAtOffset);
+		if (i0==-1) break;			// end of text
 		QString lead = r0.cap(1);		// leading text before match
+#endif
 		ptr += lead.length();			// step up to '\' or NL
 
 		char tm = text.at(ptr++).toLatin1();	// backslash or NL character
@@ -187,10 +224,19 @@ TextAreaDocument::TextAreaDocument(DrawReader &rd,const QByteArray &txt,QColor c
 		{					// output text up to that
 			if (!lead.isEmpty()) curs->insertText(lead);
 
-			i = r1.indexIn(text,ptr,QRegExp::CaretAtOffset);
-			if (i>0)			// sequence of newlines
-			{
-				QString ns = r1.cap(0);	// see exactly how many
+#ifdef QT6
+			const QRegularExpressionMatch match1 = r1.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+			if (match1.hasMatch())
+#else
+			int i1 = r1.indexIn(text,ptr,QRegExp::CaretAtOffset);
+			if (i1>0)			// sequence of newlines
+#endif
+			{				// see exactly how many
+#ifdef QT6
+				QString ns = match1.captured(0);
+#else
+				QString ns = r1.cap(0);
+#endif
 				for (int j = 0; j<ns.length(); ++j)
 				{			// insert paragraph breaks
 					curs->insertBlock();
@@ -329,10 +375,14 @@ void TextAreaDocument::skipSequence(bool nlonly)
 
 bool TextAreaDocument::sequenceA()
 {
-	QRegExp reg("^([LRCD])/?");
-	reg.setCaseSensitivity(Qt::CaseInsensitive);
-
+#ifdef QT6
+	static const QRegularExpression reg("([LRCD])/?", QRegularExpression::CaseInsensitiveOption);
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^([LRCD])/?", Qt::CaseInsensitive);
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised align (\\A) code");
 		skipSequence();
@@ -340,120 +390,202 @@ bool TextAreaDocument::sequenceA()
 	}
 
 	if (!curs->atBlockStart()) curs->insertBlock();	// forces a line break
-	switch (reg.cap(1).at(0).toUpper().toLatin1())
+#ifdef QT6
+	const char opt = match.captured(1).at(0).toUpper().toLatin1();
+	ptr += match.capturedLength();
+#else
+	const char opt = reg.cap(1).at(0).toUpper().toLatin1();
+	ptr += reg.cap(0).length();
+#endif
+	switch (opt)
 	{
 case 'L':	blkfmt.setAlignment(Qt::AlignLeft);    break;
 case 'R':	blkfmt.setAlignment(Qt::AlignRight);   break;
 case 'C':	blkfmt.setAlignment(Qt::AlignHCenter); break;
 case 'D':	blkfmt.setAlignment(Qt::AlignJustify); break;
 	}
-	curs->setBlockFormat(blkfmt);
 
-	ptr += reg.cap(0).length();
+	curs->setBlockFormat(blkfmt);
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceBC(char what)
 {
-	QRegExp reg("^\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)[/\\n]");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)[/\\n]");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)[/\\n]");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised colour (\\B/\\C) sequence");
 		skipSequence();
 		return (false);
 	}
 
-	int colr = reg.cap(1).toInt();
-	int colg = reg.cap(2).toInt();
-	int colb = reg.cap(3).toInt();
+#ifdef QT6
+	const int colr = match.captured(1).toInt();
+	const int colg = match.captured(2).toInt();
+	const int colb = match.captured(3).toInt();
+	ptr += match.capturedLength();
+#else
+	const int colr = reg.cap(1).toInt();
+	const int colg = reg.cap(2).toInt();
+	const int colb = reg.cap(3).toInt();
+	ptr += reg.cap(0).length();
+#endif
 	if (what=='C') charfmt.setForeground(QBrush(QColor(colr,colg,colb)));
 	curs->setCharFormat(charfmt);
-
-	ptr += reg.cap(0).length();
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceD()
 {
-	QRegExp reg("^\\s*(\\d+)[/\\n]");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(\\d+)[/\\n]");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(\\d+)[/\\n]");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised columns (\\D) sequence");
 		skipSequence();
 		return (false);
 	}
 
+#ifdef QT6
+	ptr += match.capturedLength(0);
+#else
 	ptr += reg.cap(0).length();
+#endif
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceF()
 {
-	QRegExp reg("^\\s*(\\d\\d?)\\s+(\\S+)\\s+(\\d+)(?:\\s+(\\d+))?[/\\n]");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(\\d\\d?)\\s+(\\S+)\\s+(\\d+)(?:\\s+(\\d+))?[/\\n]");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(\\d\\d?)\\s+(\\S+)\\s+(\\d+)(?:\\s+(\\d+))?[/\\n]");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised font (\\F) sequence");
 		skipSequence();
 		return (false);
 	}
 
-	fontmap.add(reg.cap(1).toInt(),reg.cap(2).toLatin1().constData(),reg.cap(3).toInt(),reg.cap(4).toInt());
-
+#ifdef QT6
+	const int f1 = match.captured(1).toInt();
+	const QByteArray f2 = match.captured(2).toLatin1();
+	const int f3 = match.captured(3).toInt();
+	const int f4 = match.captured(4).toInt();
+	ptr += match.capturedLength();
+#else
+	const int f1 = reg.cap(1).toInt();
+	const QByteArray f2 = reg.cap(2).toLatin1();
+	const int f3 = reg.cap(3).toInt();
+	const int f4 = reg.cap(4).toInt();
 	ptr += reg.cap(0).length();
+#endif
+	fontmap.add(f1, f2.constData(), f3, f4);
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceLP(char what)
 {
-	QRegExp reg("^\\s*(\\d+)[/\\n]");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(\\d+)[/\\n]");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(\\d+)[/\\n]");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised leading/paragraph (\\L/\\P) sequence");
 		skipSequence();
 		return (false);
 	}
 
-	charfmt.setProperty((what=='L' ? TextAreaDocument::LeadingProperty : TextAreaDocument::ParagraphProperty),
-			    QVariant(reg.cap(1).toInt()));
-	curs->setCharFormat(charfmt);
-
+#ifdef QT6
+	const int lp = match.captured(1).toInt();
+	ptr += match.capturedLength();
+#else
+	const int lp = reg.cap(1).toInt();
 	ptr += reg.cap(0).length();
+#endif
+	charfmt.setProperty((what=='L' ? TextAreaDocument::LeadingProperty : TextAreaDocument::ParagraphProperty), lp);
+	curs->setCharFormat(charfmt);
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceM()
 {
-	QRegExp reg("^\\s*(\\d+)\\s+(\\d+)/?");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(\\d+)\\s+(\\d+)/?");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(\\d+)\\s+(\\d+)/?");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised margin (\\M) sequence");
 		skipSequence();
 		return (false);
 	}
 
-	charfmt.setProperty(TextAreaDocument::LeftMarginProperty,QVariant(reg.cap(1).toInt()));
-	charfmt.setProperty(TextAreaDocument::RightMarginProperty,QVariant(reg.cap(2).toInt()));
-	curs->setCharFormat(charfmt);
-
+#ifdef QT6
+	const int lm = match.captured(1).toInt();
+	const int rm = match.captured(2).toInt();
+	ptr += match.capturedLength();
+#else
+	const int lm = reg.cap(1).toInt();
+	const int rm = reg.cap(2).toInt();
 	ptr += reg.cap(0).length();
+#endif
+	charfmt.setProperty(TextAreaDocument::LeftMarginProperty, lm);
+	charfmt.setProperty(TextAreaDocument::RightMarginProperty, rm);
+
+	curs->setCharFormat(charfmt);
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceU()
 {
-	QRegExp reg1("^\\s*(-?\\d+)\\s+(\\d+)/?");
-	QRegExp reg2("^\\s*\\./?");
+#ifdef QT6
+	static const QRegularExpression reg1("\\s*(-?\\d+)\\s+(\\d+)/?");
+	static const QRegularExpression reg2("\\s*\\./?");
+	const QRegularExpressionMatch match1 = reg1.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	const QRegularExpressionMatch match2 = reg2.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+
+	if (match2.hasMatch())
+	{
+		charfmt.setFontUnderline(false);
+		ptr += match2.capturedLength();
+	}
+	else if (match1.hasMatch())
+	{
+		int thickness = match1.captured(2).toInt();
+		charfmt.setFontUnderline(thickness!=0);
+		ptr += match1.capturedLength();
+	}
+#else
+	static const QRegExp reg1("^\\s*(-?\\d+)\\s+(\\d+)/?");
+	static const QRegExp reg2("^\\s*\\./?");
 
 	if (reg2.indexIn(text,ptr,QRegExp::CaretAtOffset)>=0)
 	{
@@ -466,6 +598,7 @@ bool TextAreaDocument::sequenceU()
 		charfmt.setFontUnderline(thickness!=0);
 		ptr += reg1.cap(0).length();
 	}
+#endif
 	else
 	{
 		setError("Unrecognised underline (\\U) sequence");
@@ -479,16 +612,27 @@ bool TextAreaDocument::sequenceU()
 
 bool TextAreaDocument::sequenceV()
 {
-	QRegExp reg("^\\s*(-?\\d+)/?");
-
+#ifdef QT6
+	static const QRegularExpression reg("\\s*(-?\\d+)/?");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^\\s*(-?\\d+)/?");
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised vertical move (\\V) sequence");
 		skipSequence();
 		return (false);
 	}
 
+#ifdef QT6
+	vmove += match.captured(1).toInt();
+	ptr += match.capturedLength();
+#else
 	vmove += reg.cap(1).toInt();			// accumulate total move
+	ptr += reg.cap(0).length();
+#endif
 
 	QTextCharFormat::VerticalAlignment aln;		// select appropriate format
 	if (vmove<0) aln = QTextCharFormat::AlignSubScript;
@@ -496,30 +640,37 @@ bool TextAreaDocument::sequenceV()
 	else aln = QTextCharFormat::AlignNormal;
 	charfmt.setVerticalAlignment(aln);
 	curs->setCharFormat(charfmt);
-
-	ptr += reg.cap(0).length();
 	return (true);
 }
 
 
 bool TextAreaDocument::sequenceNumber(char first)
 {
-	QRegExp reg("^(\\d?)/?");			// maximum 2 digits (same in 'F')
-
+#ifdef QT6
+	static const QRegularExpression reg("(\\d?)/?");
+	const QRegularExpressionMatch match = reg.match(text, ptr, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+	if (!match.hasMatch())
+#else
+	static const QRegExp reg("^(\\d?)/?");		// maximum 2 digits (same in 'F')
 	if (reg.indexIn(text,ptr,QRegExp::CaretAtOffset)<0)
+#endif
 	{
 		setError("Unrecognised font number (\\digit) sequence");
 		skipSequence();
 		return (false);
 	}
 
+#ifdef QT6
+	Draw::fontid ref = QString(first+match.captured(1)).toInt();
+	ptr += match.capturedLength();
+#else
 	Draw::fontid ref = QString(QString(first)+reg.cap(1)).toInt();
+	ptr += reg.cap(0).length();
+#endif
 
 	QFont f = fontmap.findFont(ref);
 	charfmt.setFont(f);
 	curs->setCharFormat(charfmt);
-
-	ptr += reg.cap(0).length();
 	return (true);
 }
 

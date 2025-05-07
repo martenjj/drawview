@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	13-Feb-22						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -44,7 +44,6 @@
 #include <qapplication.h>
 #include <qtextstream.h>
 #include <qfile.h>
-#include <qregexp.h>
 #include <qaction.h>
 #include <qgridlayout.h>
 #include <qscrollarea.h>
@@ -56,6 +55,12 @@
 #include <qpagesetupdialog.h>
 #include <qsvggenerator.h>
 #include <qstatusbar.h>
+
+#ifdef QT6
+#include <qregularexpression.h>
+#else
+#include <qregexp.h>
+#endif
 
 #include <klocalizedstring.h>
 #include <kstandardaction.h>
@@ -96,7 +101,9 @@ DrawView::DrawView(const QString &file)
 
 	QGridLayout *lay = new QGridLayout(wFrame);	// layout for that border
 	lay->setSpacing(0);				// minimal spacing outside
+#ifndef QT6
 	lay->setMargin(2);				// minimal spacing inside
+#endif
 
 	wDrawing = new DrawWidget(wFrame);		// the actual drawing
 	wDrawing->setCursor(Qt::CrossCursor);
@@ -257,7 +264,7 @@ bool DrawView::loadFile(const QString &file)
 	{
 		if (guiMode)				// running as a GUI application
 		{
-			KMessageBox::sorry(this,
+			KMessageBox::error(this,
 					   drawErrorDisplay(xi18ncp("@info with placeholder near end",
 								    "Error loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
 								    "Errors loading drawing file<nl/><filename>%2</filename><nl/><nl/><emphasis>###</emphasis>",
@@ -327,7 +334,11 @@ bool DrawView::loadFile(const QString &file)
 	QPageLayout::Orientation orient;		// guess a page size
 	if (PaperUtil::guessSize(mDiagram->boundingBox(),&size,&orient)) setDrawingSize(size,orient);
 
+#ifdef QT6
+	mDocname = infile.remove(QRegularExpression("^.*/"));
+#else
 	mDocname = infile.remove(QRegExp("^.*/"));	// save for possible printing
+#endif
 	setWindowTitle(mDocname);
 
 	if (!errors->isEmpty())				// some errors, but not fatal
@@ -438,8 +449,14 @@ void DrawView::fileExport()
 
 	const QString sf = d.selectedNameFilter();	// see which filter was used
 	QString ext = "";
-	QRegExp rx("\\(\\*\\.(\\w+)");
+#ifdef QT6
+	static const QRegularExpression rx("\\(\\*\\.(\\w+)");
+	const QRegularExpressionMatch match = rx.match(sf);
+	if (match.hasMatch()) ext = match.captured(1);
+#else
+	static const QRegExp rx("\\(\\*\\.(\\w+)");
 	if (sf.indexOf(rx)>=0) ext = rx.cap(1);		// extract extension from that
+#endif
 	if (!ext.isNull() && !expfile.endsWith("."+ext)) expfile += "."+ext;
 
 	const QString formatName = fileExportTo(ext, expfile);

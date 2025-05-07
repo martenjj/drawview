@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Objects					//
 //  SCCS:	<%Z% %M% %I%>				//
-//  Edit:	22-May-21						//
+//  Edit:	07-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -50,7 +50,6 @@
 #include "global.h"
 
 #include <qpainter.h>
-#include <qmatrix.h>
 #include <qtextstream.h>
 #include <qlist.h>
 #include <qalgorithms.h>
