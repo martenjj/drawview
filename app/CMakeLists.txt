@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Application				#
-#  Edit:		25-May-21					#
+#  Edit:		07-May-25					#
 #########################################################################
 
 project(drawview)
@@ -11,8 +11,8 @@ project(drawview)
 #									#
 #########################################################################
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n XmlGui Auth Crash)
+find_package(Qt${QV} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
+find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons XmlGui Auth Crash)
 
 #########################################################################
 #									#
@@ -30,6 +30,7 @@ add_definitions("-DQT_DEPRECATED_WARNINGS")
 
 remove_definitions("-DQT_NO_CAST_FROM_ASCII")
 remove_definitions("-DQT_NO_SIGNALS_SLOTS_KEYWORDS")
+remove_definitions("-DQT_NO_KEYWORDS")
 
 #########################################################################
 #									#
@@ -81,31 +82,39 @@ set(drawview_SRCS
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
+# These version conditionals are assumed to be comulative
 add_definitions("-DQT4")
-add_definitions("-DQT5")
-add_definitions("-DKF5")
+if (${QV} GREATER_EQUAL 5)
+  add_definitions("-DQT5")
+  add_definitions("-DKF5")
+endif ()
+if (${QV} GREATER_EQUAL 6)
+  add_definitions("-DQT6")
+  add_definitions("-DKF6")
+endif ()
 
 add_definitions("-DHAVE_VERSION_H")
 add_definitions("-DHAVE_MATH_H")
 
-add_definitions("-DPACKAGE=\\\"${CMAKE_PROJECT_NAME}\\\"")
-add_definitions("-DPACKAGE_VERSION=\\\"${VERSION}\\\"")
-add_definitions("-DPACKAGE_NAME=\\\"DrawView\\\"")
-add_definitions("-DPACKAGE_URL=\\\"http://www.keelhaul.me.uk/acorn/drawview\\\"")
-add_definitions("-DPACKAGE_BUGREPORT=\\\"jjm@keelhaul.me.uk\\\"")
-add_definitions("-DDRAWFILTER_DIR=\\\"${KDE_INSTALL_LIBEXECDIR}\\\"")
+add_definitions("-DPACKAGE=\"${CMAKE_PROJECT_NAME}\"")
+add_definitions("-DPACKAGE_VERSION=\"${VERSION}\"")
+add_definitions("-DPACKAGE_NAME=\"DrawView\"")
+add_definitions("-DPACKAGE_URL=\"http://www.keelhaul.me.uk/acorn/drawview\"")
+add_definitions("-DPACKAGE_BUGREPORT=\"jjm@keelhaul.me.uk\"")
+add_definitions("-DDRAWFILTER_DIR=\"${KDE_INSTALL_LIBEXECDIR}\"")
 
 add_executable(drawview ${drawview_SRCS})
 add_dependencies(drawview vcsversion)
 target_link_libraries(drawview
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
-  Qt5::PrintSupport
-  Qt5::Svg
-  KF5::I18n
-  KF5::XmlGui
-  KF5::Crash
+  Qt${QV}::Core
+  Qt${QV}::Gui
+  Qt${QV}::Widgets
+  Qt${QV}::PrintSupport
+  Qt${QV}::Svg
+  KF${QV}::I18n
+  KF${QV}::CoreAddons
+  KF${QV}::XmlGui
+  KF${QV}::Crash
 )
 
 #########################################################################

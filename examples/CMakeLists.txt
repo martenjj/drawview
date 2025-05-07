@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Examples				#
-#  Edit:		22-May-21					#
+#  Edit:		07-May-25					#
 #########################################################################
 
 project(drawview)
@@ -32,5 +32,5 @@ set(drawview_EXAMPLES
 )
 
 if (INSTALL_EXAMPLES)
-  install(FILES ${drawview_EXAMPLES} DESTINATION ${KDE_INSTALL_DATADIR}/drawview/examples)
+  install(FILES ${drawview_EXAMPLES} DESTINATION ${KDE_INSTALL_DATADIR}/${PN}/examples)
 endif (INSTALL_EXAMPLES)

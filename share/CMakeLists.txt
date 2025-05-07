@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Support files			#
-#  Edit:		22-May-21					#
+#  Edit:		07-May-25					#
 #########################################################################
 
 project(drawview)
@@ -11,6 +11,6 @@ project(drawview)
 #									#
 #########################################################################
 
-install(FILES fontmap DESTINATION ${KDE_INSTALL_DATADIR}/drawview/share)
-install(FILES modes DESTINATION ${KDE_INSTALL_DATADIR}/drawview/share)
-install(FILES palette DESTINATION ${KDE_INSTALL_DATADIR}/drawview/share)
+install(FILES fontmap DESTINATION ${KDE_INSTALL_DATADIR}/${PN}/share)
+install(FILES modes DESTINATION ${KDE_INSTALL_DATADIR}/${PN}/share)
+install(FILES palette DESTINATION ${KDE_INSTALL_DATADIR}/${PN}/share)

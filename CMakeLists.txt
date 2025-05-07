@@ -1,14 +1,35 @@
 #########################################################################
 #  Project:		DrawView					#
-#  Edit:		23-May-21					#
+#  Edit:		07-May-25					#
 #########################################################################
 #									#
 #									#
 #########################################################################
 
 project(drawview)
-set(VERSION "2.00")
-message(STATUS "Configuring for DrawView version ${VERSION}")
+cmake_minimum_required(VERSION 3.6)
+
+if (NOT DEFINED QT_MAJOR_VERSION)
+  set(QT_MAJOR_VERSION 6)
+endif ()
+
+if (QT_MAJOR_VERSION EQUAL 6)
+  set(QT_MIN_VERSION "6.5.0")
+  set(KF_MIN_VERSION "6.1.0")
+else ()
+  if (QT_MAJOR_VERSION EQUAL 5)
+    set(QT_MIN_VERSION "5.10.0")
+    set(KF_MIN_VERSION "5.68.0")
+  else ()
+    message(FATAL_ERROR "Expecting to build for either Qt5 or Qt6")
+  endif ()
+endif ()
+
+set(QV ${QT_MAJOR_VERSION})
+set(PN ${CMAKE_PROJECT_NAME})
+
+set(VERSION "${QV}.3.0")
+message(STATUS "Configuring for project '${CMAKE_PROJECT_NAME}' version ${VERSION}")
 
 #########################################################################
 #									#
@@ -16,18 +37,15 @@ message(STATUS "Configuring for DrawView version ${VERSION}")
 #									#
 #########################################################################
 
-set(QT_MIN_VERSION "5.10.0")
-set(KF5_MIN_VERSION "5.68.0")
-set(ECM_MIN_VERSION "5.68.0")
-
 find_package(ECM ${ECM_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 include(ECMSetupVersion)
 include(FeatureSummary)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings)
+include(KDECompilerSettings)
 include(ECMQtDeclareLoggingCategory)
 
 #########################################################################
@@ -58,11 +76,9 @@ add_custom_target(vcsversion
 #									#
 #########################################################################
 
-add_subdirectory(utils)
 add_subdirectory(desktop)
 add_subdirectory(filter)
 add_subdirectory(app)
-add_subdirectory(po)
 add_subdirectory(share)
 add_subdirectory(examples)
 
