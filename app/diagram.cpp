@@ -2,7 +2,7 @@
 //									//
 //  Project:	DrawView - Library					//
 //  SCCS:	<%Z% %M% %I%>					//
-//  Edit:	11-Feb-22						//
+//  Edit:	08-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -98,9 +98,9 @@ static void locateDecompFilter()
 #else
 	paths.append(here+"/../libexec");
 	paths.append(here+"/../lib");
-	paths.append(here+"/../filter");
 	paths.append(QDir::currentPath());
 #endif
+	paths.append(here+"/../filter");
 	for (QStringList::const_iterator it = paths.constBegin(); it!=paths.constEnd(); ++it)
 	{
 		QFile exe((*it)+"/"+filtername);

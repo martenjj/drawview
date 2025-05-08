@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Application				#
-#  Edit:		07-May-25					#
+#  Edit:		08-May-25					#
 #########################################################################
 
 project(drawview)
@@ -101,7 +101,7 @@ add_definitions("-DPACKAGE_VERSION=\"${VERSION}\"")
 add_definitions("-DPACKAGE_NAME=\"DrawView\"")
 add_definitions("-DPACKAGE_URL=\"http://www.keelhaul.me.uk/acorn/drawview\"")
 add_definitions("-DPACKAGE_BUGREPORT=\"jjm@keelhaul.me.uk\"")
-add_definitions("-DDRAWFILTER_DIR=\"${KDE_INSTALL_LIBEXECDIR}\"")
+add_definitions("-DDRAWFILTER_DIR=\"${KDE_INSTALL_FULL_LIBEXECDIR}\"")
 add_definitions("-DPROJECT_NAME=\"${PN}\"")
 
 add_executable(drawview ${drawview_SRCS})
