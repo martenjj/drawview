@@ -53,9 +53,12 @@ with the arguments:
 
 ------------------------------------------------------------------------
 
-DrawView requires the Qt 5 (version 5.10 or later, available from
-www.qt.io) and the KDE Frameworks (version 5.68 or later, available
-from www.kde.org) libraries.  These are already included in many Linux
+DrawView requires the Qt 5 (version 5.10 or later) or Qt 6 (version 6.5.0
+or later) libraries, available from <www.qt.io>.  It also requires the KDE
+Frameworks 5 (version 5.68 or later) or Frameworks 6 (version 6.1.0 or later)
+libraries, available from <www.kde.org>.  The Plasma desktop is not required;
+DrawView can be built and run in any desktop environment as long as the
+libraries above are available, which are already included in many Linux
 distributions.  Qt/X11 is free for use and development of open-source
 applications.  The 'qt4' branch works with the older Qt 4, while the
 'qt5' branch works with Qt 5 alone (no need for Frameworks).
@@ -71,13 +74,13 @@ More information and documentation is available from the home page:
 
 To build and install the application, you will need CMake to configure
 and generate build information.  Assuming that you have this and the
-Qt and Frameworks libraries as above, build the application as
+Qt 6 and Frameworks 6 libraries as above, build the application as
 follows:
 
     # Clone the source repository from GitHub
     git clone https://github.com/martenjj/drawview.git
     cd drawview
-    git checkout frameworks5
+    git checkout frameworks6
     # Generate the required configuration files and scripts
     mkdir BUILD
     cd BUILD
@@ -86,6 +89,10 @@ follows:
     make
     make install
     drawview [file...]
+
+To build for Qt 5 and KDE Frameworks 5, either use 'frameworks5' as the
+branch name for the 'git checkout' or use 'frameworks6' as above and
+run the cmake(1) command with the option `-DQT_MAJOR_VERSION=5`.
 
 The Qt-only branch ('qt5') still uses GNU autotools.  To build this
 version, do:
