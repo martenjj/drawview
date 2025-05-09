@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	07-May-25						//
+//  Edit:	09-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -51,6 +51,7 @@
 #ifdef KF6
 #include <kicontheme.h>
 #include <kstylemanager.h>
+#include <kcrash.h>
 #endif
 
 #include "drawview.h"
@@ -100,7 +101,7 @@ int main(int argc,char *argv[])
 #endif
                          i18n("RiscOS Draw file viewer"),
                          KAboutLicense::GPL_V2,
-                         i18n("Copyright (c) 2006-2022 Jonathan Marten"),
+                         i18n("Copyright (c) 2006-2025 Jonathan Marten"),
                          "",				// otherText
                          PACKAGE_URL,			// homePageAddress
                          PACKAGE_BUGREPORT);		// bugsEmailAddress
@@ -115,6 +116,7 @@ int main(int argc,char *argv[])
     KIconTheme::initTheme();
     KStyleManager::initStyle();
     QGuiApplication::setWindowIcon(QIcon::fromTheme(PROJECT_NAME));
+    KCrash::setDrKonqiEnabled(true);
 #endif
 
     QCommandLineParser parser;

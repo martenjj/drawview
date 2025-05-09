@@ -1,6 +1,6 @@
 #########################################################################
 #  Project:		DrawView - Application				#
-#  Edit:		08-May-25					#
+#  Edit:		09-May-25					#
 #########################################################################
 
 project(drawview)
@@ -12,7 +12,10 @@ project(drawview)
 #########################################################################
 
 find_package(Qt${QV} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Svg DBus)
-find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons XmlGui Auth Crash IconThemes)
+find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n CoreAddons XmlGui Crash IconThemes)
+if (${QV} EQUAL 5)
+  find_package(KF${QV} ${KF_MIN_VERSION} REQUIRED COMPONENTS Auth)
+endif ()
 
 #########################################################################
 #									#
