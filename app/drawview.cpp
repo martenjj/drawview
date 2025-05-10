@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	07-May-25						//
+//  Edit:	10-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -122,12 +122,8 @@ DrawView::DrawView(const QString &file)
 							// default page settings
 	setDrawingSize(QPageSize(QPageSize::A4), QPageLayout::Landscape);
 
-	if (!file.isNull())				// file to load specified
-	{
-		if (!loadFile(file)) deleteLater();	// load it, give up if error
-	}
-
-	show();						// show us as window
+	if (!file.isNull()) loadFile(file);		// file to load specified
+							// load it, ignore if error
 	debugmsg(0) << funcinfo << "done" << Qt::endl;
 }
 

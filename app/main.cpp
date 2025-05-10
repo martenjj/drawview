@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //									//
 //  Project:	DrawView - Application					//
-//  Edit:	09-May-25						//
+//  Edit:	10-May-25						//
 //									//
 //////////////////////////////////////////////////////////////////////////
 //									//
@@ -279,8 +279,8 @@ int main(int argc,char *argv[])
         v->show();					// not export, normal display
     }
 
-    if (!exportArg.isEmpty()) exit(EXIT_SUCCESS);	// export finished, all done
-    if (args.isEmpty())					// no arguments, just a window
+    if (!guiMode) QCoreApplication::exit(EXIT_SUCCESS);	// export finished, all done
+    else if (args.isEmpty())				// no arguments, just a window
     {
         DrawView *v = new DrawView(QString());
         v->show();
